@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load humanize static %}
+
+{% block title %}analytics{% endblock %}
+{% block topbar_title %}analytics / patterns{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom:18px;">
+  <div class="card__header">
+    <h3 class="card__title">12-month flow</h3>
+    <span class="dim mono" style="font-size:0.72rem;">income vs expense</span>
+  </div>
+  <div style="height: 280px; position: relative;">
+    <canvas id="chart-trend"></canvas>
+  </div>
+</div>
+
+<div class="grid grid--2">
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">day-of-week patterns</h3>
+      <span class="dim mono" style="font-size:0.72rem;">all-time</span>
+    </div>
+    <div style="height: 260px; position: relative;">
+      <canvas id="chart-dow"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">top categories</h3>
+      <span class="dim mono" style="font-size:0.72rem;">all-time</span>
+    </div>
+    <div style="height: 260px; position: relative;">
+      <canvas id="chart-top"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:18px;">
+  <div class="card__header">
+    <h3 class="card__title">category evolution</h3>
+    <span class="dim mono" style="font-size:0.72rem;">top {{ chart_data.evolution.datasets|length }} · last 12 months</span>
+  </div>
+  <div style="height: 320px; position: relative;">
+    <canvas id="chart-evolution"></canvas>
+  </div>
+</div>
+
+{{ chart_data|json_script:"chart-data" }}
+{% endblock %}
+
+{% block body_extra %}
+  <script src="{% static 'js/charts.js' %}"></script>
+{% endblock %}

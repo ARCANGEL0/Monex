@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "dashboard",
     "transactions",
     "recurring",
+    "analytics",
 ]
 
 MIDDLEWARE = [
