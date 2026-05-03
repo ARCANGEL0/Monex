@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}transactions{% endblock %}
+{% block topbar_title %}transactions / ledger{% endblock %}
+
+{% block topbar_actions %}
+  <a class="btn btn--primary" href="#">+ Add</a>
+  <a class="btn btn--ghost btn--sm" href="#">CSV</a>
+  <a class="btn btn--ghost btn--sm" href="#">PDF</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="page-head__left">
+    <div class="month-picker">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
+      <form method="get" id="monthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+          {% for m in month_options %}
+            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid--3" style="margin-bottom:18px;">
+  <div class="kpi">
+    <div class="kpi__label">Income</div>
+    <div class="kpi__value kpi__value--income">€{{ income_total|floatformat:2|intcomma }}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Expense</div>
+    <div class="kpi__value kpi__value--expense">€{{ expense_total|floatformat:2|intcomma }}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Net</div>
+    <div class="kpi__value">€{{ net|floatformat:2|intcomma }}</div>
+  </div>
+</div>
+
+{% if transactions %}
+<div class="card" style="padding:0;overflow:hidden;">
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width:90px;">Date</th>
+        <th>Name</th>
+        <th style="width:100px;">Kind</th>
+        <th style="width:130px;">Bank</th>
+        <th style="width:150px;">Category</th>
+        <th class="num" style="width:130px;">Amount</th>
+        <th style="width:60px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in transactions %}
+        <tr>
+          <td class="mono dim">{{ t.occurred_on|date:'d M' }}</td>
+          <td>{{ t.name }}</td>
+          <td>
+            <span class="chip chip--{{ t.kind }}"><span class="chip__dot"></span>{{ t.kind }}</span>
+          </td>
+          <td>
+            <span class="chip" style="border-color:{{ t.bank.color }};color:{{ t.bank.color }};">{{ t.bank.name }}</span>
+          </td>
+          <td>
+            {% if t.category %}
+              <span class="chip" style="border-color:{{ t.category.color }};color:{{ t.category.color }};">{{ t.category.name }}</span>
+            {% else %}
+              <span class="dim">—</span>
+            {% endif %}
+          </td>
+          <td class="num {% if t.kind == 'expense' %}num--neg{% else %}num--pos{% endif %}">
+            {% if t.kind == 'expense' %}-{% else %}+{% endif %}€{{ t.amount|floatformat:2|intcomma }}
+          </td>
+          <td class="num">
+            <a href="#" class="btn btn--ghost btn--sm">edit</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">
+  <div class="empty__icon">◇</div>
+  <h3>no entries logged</h3>
+  <p class="dim">no transactions for {{ selected|date:'F Y' }}</p>
+</div>
+{% endif %}
+
+{% endblock %}
