@@ -23,7 +23,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "core",
     "accounts",
+    "dashboard",
     "transactions",
     "recurring",
 ]

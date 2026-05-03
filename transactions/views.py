@@ -6,44 +6,15 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
+from core.utils import month_bounds, month_options, selected_month
+
 from .forms import TransactionForm
 from .models import Transaction
 
 
-def _parse_month(s):
-    # accepts YYYY-MM, returns first-of-month
-    try:
-        y, m = s.split("-")
-        return date(int(y), int(m), 1)
-    except (ValueError, AttributeError, TypeError):
-        return None
-
-
-def _month_bounds(d):
-    if d.month == 12:
-        nxt = date(d.year + 1, 1, 1)
-    else:
-        nxt = date(d.year, d.month + 1, 1)
-    return d, nxt
-
-
-def _month_options(months_back=24):
-    today = date.today()
-    y, m = today.year, today.month
-    out = []
-    for _ in range(months_back):
-        out.append(date(y, m, 1))
-        m -= 1
-        if m == 0:
-            m = 12
-            y -= 1
-    return out
-
-
 def transaction_list(request):
-    today = date.today()
-    selected = _parse_month(request.GET.get("month")) or date(today.year, today.month, 1)
-    start, end = _month_bounds(selected)
+    selected = selected_month(request.GET)
+    start, end = month_bounds(selected)
 
     qs = (
         Transaction.objects
@@ -58,7 +29,7 @@ def transaction_list(request):
     return render(request, "transactions/list.html", {
         "transactions": qs,
         "selected": selected,
-        "month_options": _month_options(),
+        "month_options": month_options(),
         "income_total": income_total,
         "expense_total": expense_total,
         "net": income_total - expense_total,

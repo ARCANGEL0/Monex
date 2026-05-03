@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}dashboard{% endblock %}
+{% block topbar_title %}dashboard / overview{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div class="page-head__left">
+    <div class="month-picker">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
+      <form method="get" id="monthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+          {% for m in month_options %}
+            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid--4">
+  <div class="kpi">
+    <div class="kpi__label">Income</div>
+    <div class="kpi__value kpi__value--income">€{{ income|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">credits in</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Expense</div>
+    <div class="kpi__value kpi__value--expense">€{{ expense|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">debits out</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Net</div>
+    <div class="kpi__value">€{{ net|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">balance delta</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Savings rate</div>
+    <div class="kpi__value">{{ savings_rate|floatformat:1 }}%</div>
+    <div class="kpi__sub">of income retained</div>
+  </div>
+</div>
+
+<div class="hexrule"></div>
+
+<div class="grid grid--2" style="margin-top:18px;">
+  <div class="card">
+    <div class="card__header"><h3 class="card__title">expenses by category</h3></div>
+    <p class="dim">// chart wiring next</p>
+  </div>
+  <div class="card">
+    <div class="card__header"><h3 class="card__title">bank movement</h3></div>
+    <p class="dim">// chart wiring next</p>
+  </div>
+</div>
+
+{% endblock %}
