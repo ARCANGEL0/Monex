@@ -1,0 +1,39 @@
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# env
+.env
+.env.local
+
+# editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# coverage / pytest
+.coverage
+.pytest_cache/
+htmlcov/
+
+# uv
+uv.lock
