@@ -20,6 +20,9 @@ def home(request):
     expense = qs.filter(kind=Transaction.EXPENSE).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     net = income - expense
     savings_rate = (net / income * 100) if income > 0 else Decimal("0")
+    # gauge fill clamps at 0..100 even if you overspent or saved more than income (hopefully)
+    gauge_pct = max(0.0, min(100.0, float(savings_rate)))
+    tx_count = qs.count()
 
     chart_data = {
         "by_category": _by_category(qs),
@@ -33,6 +36,8 @@ def home(request):
         "expense": expense,
         "net": net,
         "savings_rate": savings_rate,
+        "gauge_pct": gauge_pct,
+        "tx_count": tx_count,
         "chart_data": chart_data,
     })
 
