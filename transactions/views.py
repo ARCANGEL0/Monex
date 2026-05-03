@@ -1,3 +1,4 @@
+import csv
 from datetime import date
 from decimal import Decimal
 
@@ -79,6 +80,37 @@ def transaction_edit(request, pk):
         "submit_url": request.path,
         "submit_label": "Update",
     })
+
+
+def transaction_csv(request):
+    selected = selected_month(request.GET)
+    start, end = month_bounds(selected)
+
+    qs = (
+        Transaction.objects
+        .filter(occurred_on__gte=start, occurred_on__lt=end)
+        .select_related("bank", "category")
+        .order_by("occurred_on", "id")
+    )
+
+    response = HttpResponse(content_type="text/csv; charset=utf-8")
+    response["Content-Disposition"] = f'attachment; filename="monex-{selected:%Y-%m}.csv"'
+
+    w = csv.writer(response)
+    w.writerow(["date", "name", "kind", "amount", "currency", "bank", "category", "notes"])
+    for t in qs:
+        w.writerow([
+            t.occurred_on.isoformat(),
+            t.name,
+            t.kind,
+            f"{t.amount:.2f}",
+            "EUR",
+            t.bank.name,
+            t.category.name if t.category else "",
+            t.notes,
+        ])
+
+    return response
 
 
 @require_http_methods(["GET", "POST"])

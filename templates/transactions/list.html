@@ -9,7 +9,7 @@
      hx-get="{% url 'transactions:create' %}"
      hx-target="#modal-slot"
      hx-swap="innerHTML">+ Add</a>
-  <a class="btn btn--ghost btn--sm" href="#">CSV</a>
+  <a class="btn btn--ghost btn--sm" href="{% url 'transactions:csv' %}?month={{ selected|date:'Y-m' }}">CSV</a>
   <a class="btn btn--ghost btn--sm" href="#">PDF</a>
 {% endblock %}
 
