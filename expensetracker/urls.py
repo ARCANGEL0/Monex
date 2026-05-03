@@ -6,5 +6,6 @@ urlpatterns = [
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("transactions/", include("transactions.urls", namespace="transactions")),
     path("analytics/", include("analytics.urls", namespace="analytics")),
+    path("recurring/", include("recurring.urls", namespace="recurring")),
     path("", include("dashboard.urls", namespace="dashboard")),
 ]

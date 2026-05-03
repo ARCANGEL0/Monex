@@ -1,3 +1,4 @@
+from datetime import date
 from decimal import Decimal
 
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -37,3 +38,14 @@ class RecurringTransaction(models.Model):
 
     def __str__(self):
         return f"{self.name} (day {self.day_of_month})"
+
+    @property
+    def next_run(self):
+        today = date.today()
+        target = date(today.year, today.month, self.day_of_month)
+        if target <= today:
+            # already passed this month, push to next
+            if today.month == 12:
+                return date(today.year + 1, 1, self.day_of_month)
+            return date(today.year, today.month + 1, self.day_of_month)
+        return target

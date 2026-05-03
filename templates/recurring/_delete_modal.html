@@ -1,0 +1,24 @@
+{% load humanize %}
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="$root.remove()"
+     @keydown.escape.window="$root.remove()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title" style="color: var(--red-glow); border-bottom-color: var(--red);">erase rule</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+
+    <p style="margin: 8px 0 12px;">delete <strong class="gold">{{ rule.name }}</strong>?</p>
+    <p class="dim mono" style="font-size: 0.82rem;">
+      €{{ rule.amount|floatformat:2|intcomma }} · day {{ rule.day_of_month }} · {{ rule.kind }}
+    </p>
+    <p class="dim" style="font-size: 0.72rem; margin-top: 14px;">// already-materialized entries will stay. only the rule is removed.</p>
+
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+      {% csrf_token %}
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
+        <button type="submit" class="btn btn--danger">Confirm Erase</button>
+      </div>
+    </form>
+  </div>
+</div>
