@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.shortcuts import render
 
 from core.utils import month_bounds, month_options, selected_month
-from transactions.models import Transaction
+from transactions.models import Budget, Transaction
 
 CATEGORY_DONUT_TOP = 7
 OTHER_COLOR = "#7a7466"
@@ -39,7 +39,25 @@ def home(request):
         "gauge_pct": gauge_pct,
         "tx_count": tx_count,
         "chart_data": chart_data,
+        "budget": _budget_status(selected, expense),
     })
+
+
+def _budget_status(month, expense):
+    b = Budget.objects.filter(month=month).first()
+    if not b or not b.overall_cap:
+        return None
+    cap = b.overall_cap
+    pct = float(expense / cap * 100) if cap > 0 else 0
+    return {
+        "cap": cap,
+        "spent": expense,
+        "pct": pct,
+        "bar_width": min(100.0, pct),
+        "remaining": max(Decimal("0"), cap - expense),
+        "over": pct >= 100,
+        "warn": 80 <= pct < 100,
+    }
 
 
 def _by_category(qs):

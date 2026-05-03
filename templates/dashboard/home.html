@@ -20,6 +20,39 @@
   </div>
 </div>
 
+{% if budget %}
+  {% if budget.over %}
+    <div class="warn-bar">
+      over budget — {{ budget.pct|floatformat:0 }}% of €{{ budget.cap|floatformat:2|intcomma }} cap consumed
+    </div>
+  {% endif %}
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card__header">
+      <h3 class="card__title">monthly cap</h3>
+      <span class="dim mono" style="font-size:0.8rem;">
+        €{{ budget.spent|floatformat:2|intcomma }} / €{{ budget.cap|floatformat:2|intcomma }}
+        <span class="{% if budget.over %}red{% elif budget.warn %}gold{% else %}dim{% endif %}">
+          ({{ budget.pct|floatformat:0 }}%)
+        </span>
+      </span>
+    </div>
+    <div class="progress {% if budget.over %}progress--over{% elif budget.warn %}progress--warn{% endif %}">
+      <div class="progress__fill" style="width: {{ budget.bar_width|floatformat:1 }}%;"></div>
+    </div>
+    <p class="dim mono" style="font-size:0.72rem;margin-top:8px;">
+      {% if budget.over %}
+        // overspent by €{{ budget.spent|floatformat:2 }} − €{{ budget.cap|floatformat:2 }} = <span class="red">€{{ budget.spent|floatformat:2 }}</span>
+      {% else %}
+        // €{{ budget.remaining|floatformat:2|intcomma }} remaining in cycle
+      {% endif %}
+    </p>
+  </div>
+{% else %}
+  <div class="info-bar" style="margin-bottom:18px;">
+    no spend cap set for this cycle · <a href="/settings/" class="gold">configure budget</a>
+  </div>
+{% endif %}
+
 <div class="grid grid--4">
   <div class="kpi">
     <div class="kpi__label">Income</div>
