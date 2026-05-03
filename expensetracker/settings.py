@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "accounts",
+    "transactions",
+    "recurring",
 ]
 
 MIDDLEWARE = [
