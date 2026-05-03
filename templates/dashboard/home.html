@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load humanize %}
+{% load humanize static %}
 
 {% block title %}dashboard{% endblock %}
 {% block topbar_title %}dashboard / overview{% endblock %}
@@ -48,12 +48,21 @@
 <div class="grid grid--2" style="margin-top:18px;">
   <div class="card">
     <div class="card__header"><h3 class="card__title">expenses by category</h3></div>
-    <p class="dim">// chart wiring next</p>
+    <div style="height: 280px; position: relative;">
+      <canvas id="chart-category"></canvas>
+    </div>
   </div>
   <div class="card">
     <div class="card__header"><h3 class="card__title">bank movement</h3></div>
-    <p class="dim">// chart wiring next</p>
+    <div style="height: 280px; position: relative;">
+      <canvas id="chart-bank"></canvas>
+    </div>
   </div>
 </div>
 
+{{ chart_data|json_script:"chart-data" }}
+{% endblock %}
+
+{% block body_extra %}
+  <script src="{% static 'js/charts.js' %}"></script>
 {% endblock %}

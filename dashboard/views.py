@@ -6,6 +6,9 @@ from django.shortcuts import render
 from core.utils import month_bounds, month_options, selected_month
 from transactions.models import Transaction
 
+CATEGORY_DONUT_TOP = 7
+OTHER_COLOR = "#7a7466"
+
 
 def home(request):
     selected = selected_month(request.GET)
@@ -18,6 +21,11 @@ def home(request):
     net = income - expense
     savings_rate = (net / income * 100) if income > 0 else Decimal("0")
 
+    chart_data = {
+        "by_category": _by_category(qs),
+        "by_bank": _by_bank(qs),
+    }
+
     return render(request, "dashboard/home.html", {
         "selected": selected,
         "month_options": month_options(),
@@ -25,4 +33,47 @@ def home(request):
         "expense": expense,
         "net": net,
         "savings_rate": savings_rate,
+        "chart_data": chart_data,
     })
+
+
+def _by_category(qs):
+    rows = list(
+        qs.filter(kind=Transaction.EXPENSE)
+        .values("category__name", "category__color")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+    )
+    top = rows[:CATEGORY_DONUT_TOP]
+    rest = rows[CATEGORY_DONUT_TOP:]
+    out = [
+        {
+            "label": r["category__name"] or "Uncategorized",
+            "color": r["category__color"] or OTHER_COLOR,
+            "value": float(r["total"]),
+        }
+        for r in top
+    ]
+    if rest:
+        out.append({
+            "label": "Other",
+            "color": OTHER_COLOR,
+            "value": float(sum(r["total"] for r in rest)),
+        })
+    return out
+
+
+def _by_bank(qs):
+    # group bank rows into one entry per bank with both kinds
+    rows = (
+        qs.values("bank__name", "bank__color", "kind")
+        .annotate(total=Sum("amount"))
+        .order_by("bank__name")
+    )
+    banks = {}
+    for r in rows:
+        name = r["bank__name"]
+        if name not in banks:
+            banks[name] = {"label": name, "color": r["bank__color"] or "#c9a227", "income": 0.0, "expense": 0.0}
+        banks[name][r["kind"]] = float(r["total"])
+    return list(banks.values())
