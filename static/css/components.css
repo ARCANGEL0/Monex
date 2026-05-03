@@ -281,6 +281,46 @@
 
 .modal__actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 
+/* kind toggle (radio styled as 2-segment switch) */
+.kind-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  position: relative;
+}
+
+.kind-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+
+.kind-toggle label {
+  display: grid;
+  place-items: center;
+  padding: 9px 12px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 120ms linear, background 120ms linear;
+  border-right: 1px solid var(--border);
+}
+.kind-toggle label:last-of-type { border-right: none; }
+.kind-toggle label:hover { color: var(--text); }
+
+.kind-toggle input:checked + label {
+  background: linear-gradient(180deg, var(--gold-dim), rgba(110,86,20,0.5));
+  color: var(--gold-glow);
+  box-shadow: inset 0 0 12px rgba(252, 211, 77, 0.18);
+}
+
+.field__err {
+  color: var(--red-glow);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  margin-top: 4px;
+}
+
 /* progress */
 .progress {
   width: 100%;

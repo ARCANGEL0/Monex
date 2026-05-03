@@ -2,8 +2,11 @@ from datetime import date
 from decimal import Decimal
 
 from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 
+from .forms import TransactionForm
 from .models import Transaction
 
 
@@ -25,7 +28,6 @@ def _month_bounds(d):
 
 
 def _month_options(months_back=24):
-    # last N months including current, newest first
     today = date.today()
     y, m = today.year, today.month
     out = []
@@ -60,4 +62,28 @@ def transaction_list(request):
         "income_total": income_total,
         "expense_total": expense_total,
         "net": income_total - expense_total,
+    })
+
+
+@require_http_methods(["GET", "POST"])
+def transaction_create(request):
+    if request.method == "POST":
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # tells htmx to reload the page so kpis + table update
+            response = HttpResponse(status=204)
+            response["HX-Refresh"] = "true"
+            return response
+    else:
+        form = TransactionForm(initial={
+            "kind": Transaction.EXPENSE,
+            "occurred_on": date.today(),
+        })
+
+    return render(request, "transactions/_form_modal.html", {
+        "form": form,
+        "title": "log entry",
+        "submit_url": request.path,
+        "submit_label": "Log Entry",
     })

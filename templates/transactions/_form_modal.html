@@ -1,0 +1,71 @@
+{% load static %}
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="$root.remove()"
+     @keydown.escape.window="$root.remove()">
+  <div class="modal">
+    <h3 class="modal__title">{{ title }}</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="warn-bar">{{ form.non_field_errors|join:' ' }}</div>
+      {% endif %}
+
+      <div class="field">
+        <label class="field__label">type</label>
+        <div class="kind-toggle">
+          <input type="radio" name="kind" value="expense" id="kind_expense" {% if form.kind.value|default:'expense' != 'income' %}checked{% endif %}>
+          <label for="kind_expense">Expense</label>
+          <input type="radio" name="kind" value="income" id="kind_income" {% if form.kind.value == 'income' %}checked{% endif %}>
+          <label for="kind_income">Income</label>
+        </div>
+        {% if form.kind.errors %}<div class="field__err">{{ form.kind.errors|join:', ' }}</div>{% endif %}
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="id_name">name</label>
+        {{ form.name }}
+        {% if form.name.errors %}<div class="field__err">{{ form.name.errors|join:', ' }}</div>{% endif %}
+      </div>
+
+      <div class="grid grid--2">
+        <div class="field">
+          <label class="field__label" for="id_amount">amount (€)</label>
+          {{ form.amount }}
+          {% if form.amount.errors %}<div class="field__err">{{ form.amount.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="field">
+          <label class="field__label" for="id_occurred_on">date</label>
+          {{ form.occurred_on }}
+          {% if form.occurred_on.errors %}<div class="field__err">{{ form.occurred_on.errors|join:', ' }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="grid grid--2">
+        <div class="field">
+          <label class="field__label" for="id_bank">bank</label>
+          {{ form.bank }}
+          {% if form.bank.errors %}<div class="field__err">{{ form.bank.errors|join:', ' }}</div>{% endif %}
+        </div>
+        <div class="field">
+          <label class="field__label" for="id_category">category</label>
+          {{ form.category }}
+          {% if form.category.errors %}<div class="field__err">{{ form.category.errors|join:', ' }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="id_notes">notes</label>
+        {{ form.notes }}
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
+        <button type="submit" class="btn btn--primary">{{ submit_label }}</button>
+      </div>
+    </form>
+  </div>
+</div>

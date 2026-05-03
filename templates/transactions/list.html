@@ -5,7 +5,10 @@
 {% block topbar_title %}transactions / ledger{% endblock %}
 
 {% block topbar_actions %}
-  <a class="btn btn--primary" href="#">+ Add</a>
+  <a class="btn btn--primary" href="#"
+     hx-get="{% url 'transactions:create' %}"
+     hx-target="#modal-slot"
+     hx-swap="innerHTML">+ Add</a>
   <a class="btn btn--ghost btn--sm" href="#">CSV</a>
   <a class="btn btn--ghost btn--sm" href="#">PDF</a>
 {% endblock %}

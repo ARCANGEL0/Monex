@@ -6,4 +6,5 @@ app_name = "transactions"
 
 urlpatterns = [
     path("", views.transaction_list, name="list"),
+    path("new/", views.transaction_create, name="create"),
 ]
