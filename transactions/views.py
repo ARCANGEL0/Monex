@@ -1,11 +1,13 @@
 import csv
-from datetime import date
+from datetime import datetime
 from decimal import Decimal
 
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
+from weasyprint import HTML
 
 from core.utils import month_bounds, month_options, selected_month
 
@@ -80,6 +82,35 @@ def transaction_edit(request, pk):
         "submit_url": request.path,
         "submit_label": "Update",
     })
+
+
+def transaction_pdf(request):
+    selected = selected_month(request.GET)
+    start, end = month_bounds(selected)
+
+    qs = (
+        Transaction.objects
+        .filter(occurred_on__gte=start, occurred_on__lt=end)
+        .select_related("bank", "category")
+        .order_by("occurred_on", "id")
+    )
+    income = qs.filter(kind=Transaction.INCOME).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    expense = qs.filter(kind=Transaction.EXPENSE).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+
+    html = render_to_string("transactions/extract.html", {
+        "month": selected,
+        "transactions": qs,
+        "income": income,
+        "expense": expense,
+        "net": income - expense,
+        "operator": request.user.username,
+        "generated": datetime.now(),
+    })
+
+    pdf = HTML(string=html, base_url=request.build_absolute_uri("/")).write_pdf()
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="monex-{selected:%Y-%m}.pdf"'
+    return response
 
 
 def transaction_csv(request):

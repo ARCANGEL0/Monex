@@ -10,4 +10,5 @@ urlpatterns = [
     path("<int:pk>/edit/", views.transaction_edit, name="edit"),
     path("<int:pk>/delete/", views.transaction_delete, name="delete"),
     path("export.csv", views.transaction_csv, name="csv"),
+    path("export.pdf", views.transaction_pdf, name="pdf"),
 ]
