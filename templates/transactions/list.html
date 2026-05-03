@@ -55,7 +55,7 @@
         <th style="width:130px;">Bank</th>
         <th style="width:150px;">Category</th>
         <th class="num" style="width:130px;">Amount</th>
-        <th style="width:60px;"></th>
+        <th style="width:120px;"></th>
       </tr>
     </thead>
     <tbody>
@@ -79,8 +79,14 @@
           <td class="num {% if t.kind == 'expense' %}num--neg{% else %}num--pos{% endif %}">
             {% if t.kind == 'expense' %}-{% else %}+{% endif %}€{{ t.amount|floatformat:2|intcomma }}
           </td>
-          <td class="num">
-            <a href="#" class="btn btn--ghost btn--sm">edit</a>
+          <td class="num" style="white-space: nowrap;">
+            <a href="#" class="btn btn--ghost btn--sm"
+               hx-get="{% url 'transactions:edit' t.pk %}"
+               hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+            <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
+               hx-get="{% url 'transactions:delete' t.pk %}"
+               hx-target="#modal-slot" hx-swap="innerHTML"
+               aria-label="delete">×</a>
           </td>
         </tr>
       {% endfor %}

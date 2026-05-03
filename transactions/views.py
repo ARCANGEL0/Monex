@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
 from .forms import TransactionForm
@@ -86,4 +86,40 @@ def transaction_create(request):
         "title": "log entry",
         "submit_url": request.path,
         "submit_label": "Log Entry",
+    })
+
+
+@require_http_methods(["GET", "POST"])
+def transaction_edit(request, pk):
+    t = get_object_or_404(Transaction, pk=pk)
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=t)
+        if form.is_valid():
+            form.save()
+            response = HttpResponse(status=204)
+            response["HX-Refresh"] = "true"
+            return response
+    else:
+        form = TransactionForm(instance=t)
+
+    return render(request, "transactions/_form_modal.html", {
+        "form": form,
+        "title": "edit entry",
+        "submit_url": request.path,
+        "submit_label": "Update",
+    })
+
+
+@require_http_methods(["GET", "POST"])
+def transaction_delete(request, pk):
+    t = get_object_or_404(Transaction, pk=pk)
+    if request.method == "POST":
+        t.delete()
+        response = HttpResponse(status=204)
+        response["HX-Refresh"] = "true"
+        return response
+
+    return render(request, "transactions/_delete_modal.html", {
+        "transaction": t,
+        "submit_url": request.path,
     })
