@@ -4,6 +4,29 @@
   border: 1px solid var(--border);
   padding: 18px 20px;
   position: relative;
+  transition: border-color 200ms linear, box-shadow 260ms linear;
+  animation: panel-in 380ms cubic-bezier(0.22, 0.6, 0.36, 1) backwards;
+}
+.card:hover {
+  border-color: var(--border-hot);
+  box-shadow: 0 0 22px rgba(232, 185, 35, 0.06);
+}
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, var(--gold-hot), var(--gold-dim) 60%, transparent 80%);
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .card__header {
@@ -32,7 +55,18 @@
   padding: 18px 20px;
   position: relative;
   overflow: hidden;
+  transition: border-color 200ms linear, box-shadow 260ms linear;
+  animation: panel-in 420ms cubic-bezier(0.22, 0.6, 0.36, 1) backwards;
 }
+.kpi:hover {
+  border-top-color: var(--gold-hot);
+  box-shadow: 0 0 24px rgba(232, 185, 35, 0.08);
+}
+
+.grid--4 > .kpi:nth-child(1), .grid--3 > .kpi:nth-child(1), .grid--2 > .kpi:nth-child(1) { animation-delay: 0ms; }
+.grid--4 > .kpi:nth-child(2), .grid--3 > .kpi:nth-child(2), .grid--2 > .kpi:nth-child(2) { animation-delay: 60ms; }
+.grid--4 > .kpi:nth-child(3), .grid--3 > .kpi:nth-child(3) { animation-delay: 120ms; }
+.grid--4 > .kpi:nth-child(4) { animation-delay: 180ms; }
 
 .kpi::before {
   content: '';
@@ -118,7 +152,8 @@
 .btn--primary:hover {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-hot) 100%);
   color: var(--bg-0);
-  box-shadow: var(--glow-gold-hot);
+  box-shadow: 0 0 24px rgba(252, 211, 77, 0.55), inset 0 0 8px rgba(252, 211, 77, 0.2);
+  filter: brightness(1.1);
 }
 
 .btn--danger {

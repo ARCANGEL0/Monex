@@ -40,15 +40,24 @@
 html, body { margin: 0; padding: 0; }
 
 body {
-  background: var(--bg-0);
   color: var(--text);
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
   min-height: 100vh;
-  /* faint scanlines */
-  background-image: linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.012) 50%);
-  background-size: 100% 3px;
+  background-color: var(--bg-0);
+  /* layered: scanlines + faint hex grid in gold */
+  background-image:
+    linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.012) 50%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'><polygon points='30,2 58,17 58,35 30,50 2,35 2,17' fill='none' stroke='%23c9a227' stroke-width='0.5' opacity='0.05'/></svg>");
+  background-size: 100% 3px, 60px 52px;
+  background-attachment: fixed, fixed;
+  animation: boot 360ms ease-out;
+}
+
+@keyframes boot {
+  from { opacity: 0; filter: brightness(1.4); }
+  to { opacity: 1; filter: brightness(1); }
 }
 
 a { color: var(--gold); text-decoration: none; }

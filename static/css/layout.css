@@ -37,6 +37,12 @@
   font-weight: 700;
   font-size: 1.1rem;
   box-shadow: var(--glow-gold);
+  animation: logo-pulse 3.4s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(232, 185, 35, 0.3); filter: brightness(1); }
+  50% { box-shadow: 0 0 22px rgba(252, 211, 77, 0.65); filter: brightness(1.1); }
 }
 
 .sidebar__title {
@@ -87,7 +93,12 @@
   color: var(--gold-hot);
   border-left-color: var(--gold-hot);
   background: rgba(232, 185, 35, 0.06);
-  box-shadow: inset 4px 0 12px -8px var(--gold-glow);
+  animation: nav-active-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes nav-active-pulse {
+  0%, 100% { box-shadow: inset 4px 0 12px -8px var(--gold-glow); }
+  50% { box-shadow: inset 4px 0 22px -8px var(--gold-hot); }
 }
 
 .nav-item__icon {
