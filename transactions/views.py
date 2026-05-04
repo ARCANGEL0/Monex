@@ -1,5 +1,5 @@
 import csv
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from django.db.models import Sum
