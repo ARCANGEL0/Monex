@@ -31,7 +31,8 @@
 </div>
 
 {% if rules %}
-<div class="card" style="padding:0;overflow:hidden;">
+<div class="card" style="padding:0;">
+  <div class="table-wrap">
   <table class="table">
     <thead>
       <tr>
@@ -84,6 +85,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
 </div>
 <p class="dim mono" style="font-size:0.72rem;margin-top:14px;">
   // run `python manage.py materialize_recurring` daily (cron / systemd timer) to auto-create due entries.

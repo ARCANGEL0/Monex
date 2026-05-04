@@ -45,7 +45,8 @@
 </div>
 
 {% if transactions %}
-<div class="card" style="padding:0;overflow:hidden;">
+<div class="card" style="padding:0;">
+  <div class="table-wrap">
   <table class="table">
     <thead>
       <tr>
@@ -92,6 +93,7 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
 </div>
 {% else %}
 <div class="empty">

@@ -18,6 +18,7 @@
 </head>
 <body>
   <div class="app" x-data="{ menu: false }">
+    <div class="sidebar__backdrop" :data-open="menu" @click="menu=false"></div>
     {% include '_partials/sidebar.html' %}
     <div class="main">
       <header class="topbar">
