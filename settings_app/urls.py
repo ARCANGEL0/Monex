@@ -13,4 +13,7 @@ urlpatterns = [
     path("categories/new/", views.category_create, name="cat_create"),
     path("categories/<int:pk>/edit/", views.category_edit, name="cat_edit"),
     path("categories/<int:pk>/delete/", views.category_delete, name="cat_delete"),
+    path("users/new/", views.user_create, name="user_create"),
+    path("users/<int:pk>/edit/", views.user_edit, name="user_edit"),
+    path("users/<int:pk>/delete/", views.user_delete, name="user_delete"),
 ]

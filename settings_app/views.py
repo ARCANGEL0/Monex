@@ -1,15 +1,28 @@
 from decimal import Decimal, InvalidOperation
+from functools import wraps
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
 from core.utils import month_options, selected_month
 from transactions.models import Bank, Budget, Category, CategoryBudget
 
-from .forms import BankForm, CategoryForm
+from .forms import BankForm, CategoryForm, OperatorForm
+
+User = get_user_model()
+
+
+def superuser_required(view):
+    @wraps(view)
+    def wrapped(request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_superuser:
+            return HttpResponseForbidden("superadmin only")
+        return view(request, *args, **kwargs)
+    return wrapped
 
 
 def home(request):
@@ -23,6 +36,7 @@ def home(request):
 
     banks = Bank.objects.all()
     categories = Category.objects.all()
+    users = User.objects.order_by("username") if request.user.is_superuser else User.objects.none()
 
     return render(request, "settings/home.html", {
         "tab": tab,
@@ -32,6 +46,7 @@ def home(request):
         "cat_rows": cat_rows,
         "banks": banks,
         "categories": categories,
+        "users": users,
     })
 
 
@@ -174,3 +189,59 @@ def _refresh():
     response = HttpResponse(status=204)
     response["HX-Refresh"] = "true"
     return response
+
+
+# users (superadmin only) ---------------------------------------------
+
+@superuser_required
+@require_http_methods(["GET", "POST"])
+def user_create(request):
+    if request.method == "POST":
+        form = OperatorForm(request.POST, creating=True)
+        if form.is_valid():
+            form.save()
+            return _refresh()
+    else:
+        form = OperatorForm(creating=True)
+    return render(request, "settings/_user_form.html", {
+        "form": form, "title": "new operator",
+        "submit_url": request.path, "submit_label": "Create",
+    })
+
+
+@superuser_required
+@require_http_methods(["GET", "POST"])
+def user_edit(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == "POST":
+        form = OperatorForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return _refresh()
+    else:
+        form = OperatorForm(instance=user)
+    return render(request, "settings/_user_form.html", {
+        "form": form, "title": "edit operator",
+        "submit_url": request.path, "submit_label": "Update",
+    })
+
+
+@superuser_required
+@require_http_methods(["GET", "POST"])
+def user_delete(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if user.pk == request.user.pk:
+        return render(request, "settings/_delete_modal.html", {
+            "subject": user.username,
+            "submit_url": request.path,
+            "error": "you can't delete your own account.",
+            "title": "delete operator",
+        })
+    if request.method == "POST":
+        user.delete()
+        return _refresh()
+    return render(request, "settings/_delete_modal.html", {
+        "subject": user.username,
+        "submit_url": request.path,
+        "title": "delete operator",
+    })

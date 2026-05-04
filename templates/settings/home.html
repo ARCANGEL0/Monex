@@ -11,6 +11,9 @@
     <button @click="tab='budget'" :class="tab==='budget' && 'tab--active'">Budget</button>
     <button @click="tab='banks'" :class="tab==='banks' && 'tab--active'">Banks</button>
     <button @click="tab='categories'" :class="tab==='categories' && 'tab--active'">Categories</button>
+    {% if request.user.is_superuser %}
+    <button @click="tab='users'" :class="tab==='users' && 'tab--active'">Users</button>
+    {% endif %}
   </div>
 
   {# ---- BUDGET ---- #}
@@ -112,6 +115,59 @@
       </div>
     </div>
   </div>
+
+  {# ---- USERS ---- #}
+  {% if request.user.is_superuser %}
+  <div x-show="tab==='users'" x-cloak>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <a href="#" class="btn btn--primary"
+         hx-get="{% url 'settings_app:user_create' %}" hx-target="#modal-slot" hx-swap="innerHTML">+ New Operator</a>
+    </div>
+    <div class="card" style="padding:0;">
+      <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Operator ID</th>
+            <th>Email</th>
+            <th style="width:130px;">Role</th>
+            <th style="width:140px;">Last Login</th>
+            <th style="width:140px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+          <tr {% if not u.is_active %}style="opacity:0.55;"{% endif %}>
+            <td>
+              <span class="mono gold">{{ u.username }}</span>
+              {% if u.pk == request.user.pk %}<span class="chip chip--gold" style="margin-left:6px;">you</span>{% endif %}
+            </td>
+            <td class="dim">{{ u.email|default:"—" }}</td>
+            <td>
+              {% if u.is_superuser %}
+                <span class="chip chip--gold"><span class="chip__dot"></span>superadmin</span>
+              {% else %}
+                <span class="chip">operator</span>
+              {% endif %}
+            </td>
+            <td class="mono dim">{% if u.last_login %}{{ u.last_login|date:'d M Y' }}{% else %}—{% endif %}</td>
+            <td class="num" style="white-space:nowrap;">
+              <a href="#" class="btn btn--ghost btn--sm"
+                 hx-get="{% url 'settings_app:user_edit' u.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+              {% if u.pk != request.user.pk %}
+              <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
+                 hx-get="{% url 'settings_app:user_delete' u.pk %}" hx-target="#modal-slot" hx-swap="innerHTML"
+                 aria-label="delete">×</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
   {# ---- CATEGORIES ---- #}
   <div x-show="tab==='categories'" x-cloak>
