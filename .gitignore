@@ -11,6 +11,7 @@ env/
 .eggs/
 build/
 dist/
+.python-version
 
 # django
 *.log
@@ -28,12 +29,17 @@ staticfiles/
 .vscode/
 .idea/
 *.swp
+*.swo
 .DS_Store
 
-# coverage / pytest
+# coverage / tests
 .coverage
 .pytest_cache/
 htmlcov/
 
-# uv
+# uv / node (future-proof)
 uv.lock
+node_modules/
+
+# generated extracts
+*.pdf

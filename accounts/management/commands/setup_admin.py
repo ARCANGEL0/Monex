@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **opts):
         User = get_user_model()
         username = os.getenv("ADMIN_USERNAME", "admin")
-        password = os.getenv("ADMIN_PASSWORD", "changeme")
+        password = os.getenv("ADMIN_PASSWORD", "admin")
 
         user, created = User.objects.get_or_create(
             username=username,
