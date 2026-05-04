@@ -1,0 +1,26 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="$root.remove()"
+     @keydown.escape.window="$root.remove()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title" style="color: var(--red-glow); border-bottom-color: var(--red);">{{ title }}</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+
+    {% if error %}
+      <div class="warn-bar" style="margin-bottom:10px;">{{ error }}</div>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="$root.remove()">Close</button>
+      </div>
+    {% else %}
+      <p style="margin: 8px 0 12px;">delete <strong class="gold">{{ subject }}</strong>?</p>
+      <p class="dim" style="font-size: 0.72rem; margin-top: 14px;">// this cannot be undone.</p>
+      <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+        {% csrf_token %}
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
+          <button type="submit" class="btn btn--danger">Confirm Erase</button>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+</div>

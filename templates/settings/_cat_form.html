@@ -1,0 +1,44 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="$root.remove()"
+     @keydown.escape.window="$root.remove()">
+  <div class="modal" style="max-width: 420px;">
+    <h3 class="modal__title">{{ title }}</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+      {% csrf_token %}
+
+      <div class="field">
+        <label class="field__label" for="id_name">name</label>
+        {{ form.name }}
+        {% if form.name.errors %}<div class="field__err">{{ form.name.errors|join:', ' }}</div>{% endif %}
+      </div>
+
+      <div class="field">
+        <label class="field__label">kind</label>
+        <div class="kind-toggle">
+          <input type="radio" name="kind" value="expense" id="kind_expense" {% if form.kind.value|default:'expense' != 'income' %}checked{% endif %}>
+          <label for="kind_expense">Expense</label>
+          <input type="radio" name="kind" value="income" id="kind_income" {% if form.kind.value == 'income' %}checked{% endif %}>
+          <label for="kind_income">Income</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="id_color">color</label>
+        {{ form.color }}
+      </div>
+
+      <div class="field" style="flex-direction:row;align-items:center;gap:10px;">
+        {{ form.archived }}
+        <label for="id_archived" class="field__label" style="margin:0;cursor:pointer;">archived</label>
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
+        <button type="submit" class="btn btn--primary">{{ submit_label }}</button>
+      </div>
+    </form>
+  </div>
+</div>

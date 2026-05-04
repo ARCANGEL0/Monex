@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}settings{% endblock %}
+{% block topbar_title %}settings / config{% endblock %}
+
+{% block content %}
+<div x-data="{ tab: '{{ tab }}' }">
+
+  <div class="tabs">
+    <button @click="tab='budget'" :class="tab==='budget' && 'tab--active'">Budget</button>
+    <button @click="tab='banks'" :class="tab==='banks' && 'tab--active'">Banks</button>
+    <button @click="tab='categories'" :class="tab==='categories' && 'tab--active'">Categories</button>
+  </div>
+
+  {# ---- BUDGET ---- #}
+  <div x-show="tab==='budget'">
+    <form method="get" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
+      <input type="hidden" name="tab" value="budget">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">cycle</span>
+      <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+        {% for m in month_options %}
+          <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <form method="post" action="{% url 'settings_app:budget_save' %}">
+      {% csrf_token %}
+      <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card__header"><h3 class="card__title">overall monthly cap</h3></div>
+        <div class="field" style="margin:0;">
+          <label class="field__label" for="overall_cap">cap (€)</label>
+          <input type="number" name="overall_cap" id="overall_cap" class="input"
+                 value="{{ budget.overall_cap|default_if_none:'' }}"
+                 step="0.01" min="0" placeholder="leave empty for no cap" style="max-width:280px;">
+          <p class="dim" style="font-size:0.72rem;margin-top:6px;">// when expenses exceed this, the dashboard goes red.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__header"><h3 class="card__title">per-category caps</h3></div>
+        <table class="table" style="margin: -6px -6px 0;">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th class="num" style="width: 220px;">Cap (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cat, current in cat_rows %}
+              <tr>
+                <td>
+                  <span class="chip" style="border-color:{{ cat.color }};color:{{ cat.color }}">{{ cat.name }}</span>
+                </td>
+                <td class="num">
+                  <input type="number" name="cap_{{ cat.pk }}" class="input"
+                         value="{{ current|default_if_none:'' }}"
+                         step="0.01" min="0" placeholder="—"
+                         style="max-width: 200px; text-align: right;">
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:18px;display:flex;justify-content:flex-end;">
+        <button type="submit" class="btn btn--primary">Save Budget</button>
+      </div>
+    </form>
+  </div>
+
+  {# ---- BANKS ---- #}
+  <div x-show="tab==='banks'" x-cloak>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <a href="#" class="btn btn--primary"
+         hx-get="{% url 'settings_app:bank_create' %}" hx-target="#modal-slot" hx-swap="innerHTML">+ New Bank</a>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:40px;"></th>
+            <th>Name</th>
+            <th style="width:120px;">Hex</th>
+            <th style="width:110px;">Status</th>
+            <th style="width:120px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for b in banks %}
+          <tr {% if b.archived %}style="opacity:0.55;"{% endif %}>
+            <td><span class="dot" style="background: {{ b.color }};"></span></td>
+            <td>{{ b.name }}</td>
+            <td class="mono dim">{{ b.color }}</td>
+            <td>
+              {% if b.archived %}<span class="chip">archived</span>{% else %}<span class="chip chip--gold"><span class="chip__dot"></span>active</span>{% endif %}
+            </td>
+            <td class="num" style="white-space:nowrap;">
+              <a href="#" class="btn btn--ghost btn--sm" hx-get="{% url 'settings_app:bank_edit' b.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+              <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
+                 hx-get="{% url 'settings_app:bank_delete' b.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">×</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {# ---- CATEGORIES ---- #}
+  <div x-show="tab==='categories'" x-cloak>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <a href="#" class="btn btn--primary"
+         hx-get="{% url 'settings_app:cat_create' %}" hx-target="#modal-slot" hx-swap="innerHTML">+ New Category</a>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:40px;"></th>
+            <th>Name</th>
+            <th style="width:90px;">Kind</th>
+            <th style="width:120px;">Hex</th>
+            <th style="width:110px;">Status</th>
+            <th style="width:120px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in categories %}
+          <tr {% if c.archived %}style="opacity:0.55;"{% endif %}>
+            <td><span class="dot" style="background:{{ c.color }};"></span></td>
+            <td>{{ c.name }}</td>
+            <td><span class="chip chip--{{ c.kind }}"><span class="chip__dot"></span>{{ c.kind }}</span></td>
+            <td class="mono dim">{{ c.color }}</td>
+            <td>
+              {% if c.archived %}<span class="chip">archived</span>{% else %}<span class="chip chip--gold"><span class="chip__dot"></span>active</span>{% endif %}
+            </td>
+            <td class="num" style="white-space:nowrap;">
+              <a href="#" class="btn btn--ghost btn--sm" hx-get="{% url 'settings_app:cat_edit' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+              <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
+                 hx-get="{% url 'settings_app:cat_delete' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">×</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
