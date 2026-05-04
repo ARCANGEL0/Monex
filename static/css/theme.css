@@ -46,12 +46,16 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   background-color: var(--bg-0);
-  /* layered: scanlines + faint hex grid in gold */
+  /* stack: ambient gold radials + scanlines + hex grid */
   background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(232, 185, 35, 0.08), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(201, 162, 39, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(201, 162, 39, 0.04), transparent 60%),
     linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.012) 50%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'><polygon points='30,2 58,17 58,35 30,50 2,35 2,17' fill='none' stroke='%23c9a227' stroke-width='0.5' opacity='0.05'/></svg>");
-  background-size: 100% 3px, 60px 52px;
-  background-attachment: fixed, fixed;
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'><polygon points='30,2 58,17 58,35 30,50 2,35 2,17' fill='none' stroke='%23c9a227' stroke-width='0.6' opacity='0.07'/></svg>");
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 3px, 60px 52px;
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
   animation: boot 360ms ease-out;
 }
 

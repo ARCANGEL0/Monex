@@ -6,7 +6,7 @@
 
 .sidebar {
   background: var(--bg-1);
-  border-right: 1px solid var(--border);
+  border-right: none;
   padding: 24px 0 16px;
   display: flex;
   flex-direction: column;
@@ -14,6 +14,16 @@
   top: 0;
   height: 100vh;
   overflow-y: auto;
+}
+/* glowing right-edge separator, replaces plain border */
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--gold-dim) 20%, var(--gold-dim) 80%, transparent);
+  box-shadow: 0 0 10px rgba(232, 185, 35, 0.25);
+  pointer-events: none;
 }
 
 .sidebar__brand {
@@ -26,23 +36,32 @@
 }
 
 .sidebar__logo {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, var(--gold-hot) 0%, var(--gold-dim) 100%);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  display: grid;
-  place-items: center;
-  color: var(--bg-0);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: var(--glow-gold);
+  width: 38px;
+  height: 38px;
+  flex: none;
+  filter: drop-shadow(0 0 10px rgba(232, 185, 35, 0.55));
   animation: logo-pulse 3.4s ease-in-out infinite;
 }
 
 @keyframes logo-pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(232, 185, 35, 0.3); filter: brightness(1); }
-  50% { box-shadow: 0 0 22px rgba(252, 211, 77, 0.65); filter: brightness(1.1); }
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(232, 185, 35, 0.45)); }
+  50% { filter: drop-shadow(0 0 24px rgba(252, 211, 77, 0.95)); }
+}
+
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold-hot);
+  margin-right: 6px;
+  vertical-align: middle;
+  box-shadow: 0 0 8px var(--gold-hot);
+  animation: live-blink 1.6s ease-in-out infinite;
+}
+@keyframes live-blink {
+  0%, 100% { opacity: 0.35; box-shadow: 0 0 4px var(--gold-hot); }
+  50% { opacity: 1; box-shadow: 0 0 14px var(--gold-glow); }
 }
 
 .sidebar__title {
@@ -133,9 +152,24 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-1);
+  border-bottom: 1px solid var(--gold-dim);
+  background:
+    linear-gradient(180deg, rgba(232, 185, 35, 0.04), transparent 80%),
+    var(--bg-1);
   gap: 16px;
+  position: relative;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 22px rgba(232, 185, 35, 0.04);
+}
+.topbar::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-hot), transparent);
+  filter: blur(0.5px);
+  opacity: 0.6;
 }
 
 .topbar__title {
