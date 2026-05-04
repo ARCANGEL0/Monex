@@ -12,21 +12,36 @@
 {% endblock %}
 
 {% block content %}
+<div class="page-head">
+  <div class="page-head__left">
+    <div class="month-picker">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
+      <form method="get" id="monthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+          {% for m in month_options %}
+            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
-    <div class="kpi__label">Recurring Income</div>
-    <div class="kpi__value kpi__value--income">€{{ income_monthly|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">per cycle (active)</div>
+    <div class="kpi__label">To Pay</div>
+    <div class="kpi__value kpi__value--expense">€{{ to_pay|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">paid €{{ paid_so_far|floatformat:2|intcomma }} so far</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Recurring Expense</div>
-    <div class="kpi__value kpi__value--expense">€{{ expense_monthly|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">per cycle (active)</div>
+    <div class="kpi__label">To Receive</div>
+    <div class="kpi__value kpi__value--income">€{{ to_receive|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">received €{{ received_so_far|floatformat:2|intcomma }} so far</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Net Monthly</div>
-    <div class="kpi__value">€{{ net_monthly|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">projected delta</div>
+    <div class="kpi__label">Net Remaining</div>
+    <div class="kpi__value">€{{ net_remaining|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">income − expense (pending)</div>
   </div>
 </div>
 
@@ -36,20 +51,33 @@
   <table class="table">
     <thead>
       <tr>
+        <th style="width:120px;">Status</th>
         <th>Name</th>
         <th style="width:90px;">Kind</th>
-        <th style="width:80px;">Day</th>
+        <th style="width:70px;">Day</th>
         <th style="width:130px;">Bank</th>
         <th style="width:140px;">Category</th>
         <th class="num" style="width:120px;">Amount</th>
-        <th style="width:110px;">Last run</th>
-        <th style="width:110px;">Status</th>
         <th style="width:120px;"></th>
       </tr>
     </thead>
     <tbody>
       {% for r in rules %}
-        <tr {% if not r.active %}style="opacity:0.5;"{% endif %}>
+        <tr {% if not r.active %}style="opacity:0.45;"{% endif %}>
+          <td>
+            {% if r.active %}
+              <form hx-post="{% url 'recurring:toggle_done' r.pk %}" hx-swap="none" style="margin:0;">
+                {% csrf_token %}
+                <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
+                <button type="submit" class="paid-toggle {% if r.done %}paid-toggle--done{% endif %} {% if r.kind == 'income' %}paid-toggle--income{% endif %}">
+                  <span class="paid-toggle__check">{% if r.done %}✓{% endif %}</span>
+                  {% if r.kind == 'income' %}{% if r.done %}received{% else %}pending{% endif %}{% else %}{% if r.done %}paid{% else %}pay{% endif %}{% endif %}
+                </button>
+              </form>
+            {% else %}
+              <span class="chip">paused</span>
+            {% endif %}
+          </td>
           <td>{{ r.name }}</td>
           <td><span class="chip chip--{{ r.kind }}"><span class="chip__dot"></span>{{ r.kind }}</span></td>
           <td class="mono">{{ r.day_of_month }}</td>
@@ -63,14 +91,6 @@
           </td>
           <td class="num {% if r.kind == 'expense' %}num--neg{% else %}num--pos{% endif %}">
             {% if r.kind == 'expense' %}-{% else %}+{% endif %}€{{ r.amount|floatformat:2|intcomma }}
-          </td>
-          <td class="mono dim">{% if r.last_materialized_on %}{{ r.last_materialized_on|date:'d M Y' }}{% else %}—{% endif %}</td>
-          <td>
-            {% if r.active %}
-              <span class="chip chip--gold"><span class="chip__dot"></span>active</span>
-            {% else %}
-              <span class="chip">paused</span>
-            {% endif %}
           </td>
           <td class="num" style="white-space:nowrap;">
             <a href="#" class="btn btn--ghost btn--sm"
@@ -88,7 +108,7 @@
   </div>
 </div>
 <p class="dim mono" style="font-size:0.72rem;margin-top:14px;">
-  // run `python manage.py materialize_recurring` daily (cron / systemd timer) to auto-create due entries.
+  // toggle a row to mark paid/received for the selected cycle. you can also run `python manage.py materialize_recurring` daily to auto-tick rules whose day has arrived.
 </p>
 {% else %}
 <div class="empty">

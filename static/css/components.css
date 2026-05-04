@@ -333,6 +333,56 @@
   margin-top: 4px;
 }
 
+/* paid/received toggle for recurring rows */
+.paid-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px 5px 6px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-hot);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 120ms linear, border-color 120ms linear, background 120ms linear, box-shadow 160ms linear;
+}
+.paid-toggle:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+.paid-toggle__check {
+  width: 14px;
+  height: 14px;
+  border: 1px solid currentColor;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  line-height: 1;
+  flex: none;
+}
+
+.paid-toggle--done {
+  background: rgba(122, 154, 71, 0.1);
+  border-color: var(--green);
+  color: var(--green-hot);
+  box-shadow: 0 0 12px rgba(122, 154, 71, 0.18);
+}
+.paid-toggle--done:hover {
+  background: rgba(122, 154, 71, 0.18);
+  color: var(--green-hot);
+  border-color: var(--green-hot);
+}
+.paid-toggle--done .paid-toggle__check {
+  background: var(--green);
+  color: var(--bg-0);
+  border-color: var(--green);
+  box-shadow: 0 0 6px rgba(155, 184, 77, 0.6);
+}
+
 /* checkbox + color inputs - styled to match the panel */
 input[type="checkbox"] {
   appearance: none;

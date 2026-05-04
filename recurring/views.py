@@ -1,25 +1,49 @@
+from datetime import date
 from decimal import Decimal
 
-from django.db.models import Sum
+from django.db.models import Exists, OuterRef, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
+
+from core.utils import month_bounds, month_options, selected_month
+from transactions.models import Transaction
 
 from .forms import RecurringForm
 from .models import RecurringTransaction
 
 
 def home(request):
-    rules = RecurringTransaction.objects.select_related("bank", "category").all()
+    selected = selected_month(request.GET)
+    start, end = month_bounds(selected)
 
-    income_monthly = rules.filter(active=True, kind=RecurringTransaction.INCOME).aggregate(s=Sum("amount"))["s"] or Decimal("0")
-    expense_monthly = rules.filter(active=True, kind=RecurringTransaction.EXPENSE).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    # is there a materialized tx for this rule in the selected month?
+    done_sub = Transaction.objects.filter(
+        recurring=OuterRef("pk"),
+        occurred_on__gte=start,
+        occurred_on__lt=end,
+    )
+    rules = (
+        RecurringTransaction.objects
+        .annotate(done=Exists(done_sub))
+        .select_related("bank", "category")
+    )
+
+    active = rules.filter(active=True)
+    to_pay = active.filter(kind=RecurringTransaction.EXPENSE, done=False).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    to_receive = active.filter(kind=RecurringTransaction.INCOME, done=False).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    paid_so_far = active.filter(kind=RecurringTransaction.EXPENSE, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    received_so_far = active.filter(kind=RecurringTransaction.INCOME, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
 
     return render(request, "recurring/list.html", {
         "rules": rules,
-        "income_monthly": income_monthly,
-        "expense_monthly": expense_monthly,
-        "net_monthly": income_monthly - expense_monthly,
+        "selected": selected,
+        "month_options": month_options(),
+        "to_pay": to_pay,
+        "to_receive": to_receive,
+        "paid_so_far": paid_so_far,
+        "received_so_far": received_so_far,
+        "net_remaining": to_receive - to_pay,
     })
 
 
@@ -29,9 +53,7 @@ def create(request):
         form = RecurringForm(request.POST)
         if form.is_valid():
             form.save()
-            response = HttpResponse(status=204)
-            response["HX-Refresh"] = "true"
-            return response
+            return _refresh()
     else:
         form = RecurringForm(initial={"kind": RecurringTransaction.EXPENSE, "active": True, "day_of_month": 1})
 
@@ -50,9 +72,7 @@ def edit(request, pk):
         form = RecurringForm(request.POST, instance=rule)
         if form.is_valid():
             form.save()
-            response = HttpResponse(status=204)
-            response["HX-Refresh"] = "true"
-            return response
+            return _refresh()
     else:
         form = RecurringForm(instance=rule)
 
@@ -69,10 +89,53 @@ def delete(request, pk):
     rule = get_object_or_404(RecurringTransaction, pk=pk)
     if request.method == "POST":
         rule.delete()
-        response = HttpResponse(status=204)
-        response["HX-Refresh"] = "true"
-        return response
+        return _refresh()
     return render(request, "recurring/_delete_modal.html", {
         "rule": rule,
         "submit_url": request.path,
     })
+
+
+@require_http_methods(["POST"])
+def toggle_done(request, pk):
+    rule = get_object_or_404(RecurringTransaction, pk=pk)
+    month = selected_month(request.POST)
+    start, end = month_bounds(month)
+
+    existing = Transaction.objects.filter(
+        recurring=rule,
+        occurred_on__gte=start, occurred_on__lt=end,
+    ).first()
+
+    if existing:
+        existing.delete()
+    else:
+        # if marking the current month, use today (real moment of payment).
+        # otherwise fall back to the scheduled day_of_month for that cycle.
+        today = date.today()
+        if start <= today < end:
+            target = today
+        else:
+            target = date(month.year, month.month, rule.day_of_month)
+
+        Transaction.objects.create(
+            name=rule.name,
+            kind=rule.kind,
+            amount=rule.amount,
+            bank=rule.bank,
+            category=rule.category,
+            occurred_on=target,
+            notes=rule.notes,
+            recurring=rule,
+        )
+        if not rule.last_materialized_on or rule.last_materialized_on < target:
+            rule.last_materialized_on = target
+            rule.save(update_fields=["last_materialized_on"])
+
+    return _refresh()
+
+
+def _refresh():
+    response = HttpResponse(status=204)
+    response["HX-Refresh"] = "true"
+    return response
