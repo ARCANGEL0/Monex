@@ -35,13 +35,24 @@
   </nav>
   <div class="sidebar__foot">
     {% if request.user.is_authenticated %}
-      <div class="sidebar__operator">
-        <span class="live-dot"></span> operator: {{ request.user.username }}
+      <div class="op-wrap" x-data="{ open: false }">
+        <button type="button" class="op-trigger" :class="open && 'op-trigger--open'" @click="open = !open">
+          <span class="live-dot"></span>
+          operator: <span class="gold">{{ request.user.username }}</span>
+          <span class="op-trigger__chev" :class="open && 'op-trigger__chev--open'">▾</span>
+        </button>
+        <div x-show="open" x-cloak @click.outside="open = false" class="op-menu">
+          <a href="#" class="btn btn--ghost btn--sm op-menu__item"
+             hx-get="{% url 'accounts:passcode' %}"
+             hx-target="#modal-slot"
+             hx-swap="innerHTML"
+             @click="open = false">Change Passcode</a>
+          <form method="post" action="/accounts/logout/" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn--danger btn--sm op-menu__item" style="width:100%;justify-content:center;">Disconnect</button>
+          </form>
+        </div>
       </div>
-      <form method="post" action="/accounts/logout/">
-        {% csrf_token %}
-        <button type="submit" class="btn btn--ghost btn--sm" style="width:100%;justify-content:center;">Disconnect</button>
-      </form>
     {% endif %}
     <div class="sidebar__build">v0.1 / sarif-os</div>
   </div>

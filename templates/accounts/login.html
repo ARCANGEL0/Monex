@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/theme.css' %}">
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+  <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>
     body {
       display: grid;
@@ -97,6 +100,12 @@
       text-transform: uppercase;
       margin-top: 22px;
     }
+    .auth__forgot-row {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
   </style>
 </head>
 <body>
@@ -130,7 +139,15 @@
     <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:6px;">Authenticate</button>
     <input type="hidden" name="next" value="{{ next }}">
 
+    <div class="auth__forgot-row">
+      <a href="#" class="auth__forgot"
+         hx-get="{% url 'accounts:forgot' %}"
+         hx-target="#modal-slot"
+         hx-swap="innerHTML">// forgot your passcode?</a>
+    </div>
+
     <div class="auth__hint">sarif // tracker v0.1</div>
   </form>
+  <div id="modal-slot"></div>
 </body>
 </html>

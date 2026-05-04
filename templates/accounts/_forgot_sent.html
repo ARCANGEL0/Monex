@@ -1,0 +1,16 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="$root.remove()"
+     @keydown.escape.window="$root.remove()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title" style="color: var(--green-hot); border-bottom-color: var(--green);">link dispatched</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+
+    <p style="margin: 8px 0 12px;">if an operator with that email exists, a reset link is on its way.</p>
+    <p class="dim mono" style="font-size: 0.72rem; margin-bottom: 14px;">// link expires in 3 days · check spam.</p>
+
+    <div class="modal__actions">
+      <button type="button" class="btn btn--primary" @click="$root.remove()">Close</button>
+    </div>
+  </div>
+</div>

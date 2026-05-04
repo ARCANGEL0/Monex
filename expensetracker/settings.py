@@ -96,6 +96,10 @@ LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "dashboard:home"
 LOGOUT_REDIRECT_URL = "accounts:login"
 
+# email - dev prints to console. swap to smtp in prod.
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "monex-tracker@localhost"
+
 # app currency (single)
 CURRENCY_SYMBOL = "€"
 CURRENCY_CODE = "EUR"
