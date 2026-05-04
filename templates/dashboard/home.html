@@ -5,6 +5,14 @@
 {% block topbar_title %}dashboard / overview{% endblock %}
 
 {% block content %}
+<div class="hero3d">
+  <canvas id="hero-3d"></canvas>
+  <div class="hero3d__overlay">
+    <div class="hero3d__title">// system online</div>
+    <div class="hero3d__sub">{{ request.user.username }} · cycle {{ selected|date:'M Y'|lower }}</div>
+  </div>
+</div>
+
 <div class="page-head">
   <div class="page-head__left">
     <div class="month-picker">
@@ -118,4 +126,12 @@
 
 {% block body_extra %}
   <script src="{% static 'js/charts.js' %}"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+  <script type="module" src="{% static 'js/hero3d.js' %}"></script>
 {% endblock %}
