@@ -482,8 +482,9 @@
 /* modal (htmx target) */
 .modal-backdrop {
   position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 100;
   display: grid;
   place-items: center;
@@ -491,13 +492,23 @@
 }
 
 .modal {
-  background: var(--bg-1);
-  border: 1px solid var(--gold-dim);
+  background: linear-gradient(145deg, rgba(14, 14, 14, 0.94) 0%, rgba(6, 6, 6, 0.97) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   width: 100%;
   max-width: 480px;
   padding: 24px;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6), var(--glow-gold);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 28px rgba(212, 175, 55, 0.15), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+  pointer-events: none;
 }
 
 .modal__title {
@@ -508,14 +519,14 @@
   color: var(--gold-hot);
   margin: 0 0 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .modal__close {
   position: absolute;
   top: 12px; right: 12px;
   background: transparent;
-  border: 1px solid var(--border-hot);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   color: var(--text-muted);
   width: 28px; height: 28px;
   display: grid; place-items: center;
@@ -524,7 +535,7 @@
 }
 .modal__close:hover { color: var(--gold); border-color: var(--gold-dim); }
 
-.modal__actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+.modal__actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(212, 175, 55, 0.15); }
 
 /* kind toggle (radio styled as 2-segment switch) */
 .kind-toggle {
