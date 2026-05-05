@@ -3,15 +3,18 @@ from datetime import date
 
 from django.db.models import Sum
 from django.db.models.functions import ExtractIsoWeekDay, TruncMonth
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from transactions.models import Transaction
-
 
 TREND_MONTHS = 12
 TOP_CATS = 6
 TOP_ALL = 10
 DEFAULT_COLOR = "#7a7466"
+
+
+def _htmx(request):
+    return bool(request.headers.get("HX-Request"))
 
 
 def _months_range(n=TREND_MONTHS):
@@ -32,17 +35,22 @@ def _to_date(v):
 
 
 def home(request):
+    if not _htmx(request):
+        return redirect("core:root")
     months = _months_range()
     start = months[0]
 
-    qs = Transaction.objects.filter(occurred_on__gte=start)
+    qs = Transaction.objects.filter(
+        owner=request.user,
+        occurred_on__gte=start,
+    )
 
-    return render(request, "analytics/home.html", {
+    return render(request, "analytics/_fragment.html", {
         "chart_data": {
             "trend": _trend(qs, months),
-            "dow": _dow(),
+            "dow": _dow(request.user),
             "evolution": _evolution(qs, months),
-            "top": _top_all(),
+            "top": _top_all(request.user),
         },
     })
 
@@ -64,9 +72,9 @@ def _trend(qs, months):
     }
 
 
-def _dow():
+def _dow(user):
     rows = (
-        Transaction.objects.filter(kind=Transaction.EXPENSE)
+        Transaction.objects.filter(owner=user, kind=Transaction.EXPENSE)
         .annotate(dow=ExtractIsoWeekDay("occurred_on"))
         .values("dow")
         .annotate(total=Sum("amount"))
@@ -80,9 +88,8 @@ def _dow():
 
 
 def _evolution(qs, months):
-    # top N categories all-time, then evolution for those over the last N months
     top = list(
-        Transaction.objects.filter(kind=Transaction.EXPENSE)
+        qs.filter(kind=Transaction.EXPENSE)
         .values("category__name", "category__color")
         .annotate(total=Sum("amount"))
         .order_by("-total")[:TOP_CATS]
@@ -114,9 +121,9 @@ def _evolution(qs, months):
     }
 
 
-def _top_all():
+def _top_all(user):
     rows = list(
-        Transaction.objects.filter(kind=Transaction.EXPENSE)
+        Transaction.objects.filter(owner=user, kind=Transaction.EXPENSE)
         .values("category__name", "category__color")
         .annotate(total=Sum("amount"))
         .order_by("-total")[:TOP_ALL]

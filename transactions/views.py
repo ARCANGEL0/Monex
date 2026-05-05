@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
 from weasyprint import HTML
@@ -15,12 +15,22 @@ from .forms import TransactionForm
 from .models import Transaction
 
 
+def _htmx(request):
+    return bool(request.headers.get("HX-Request"))
+
+
+def _user_tx(request):
+    return Transaction.objects.filter(owner=request.user)
+
+
 def transaction_list(request):
+    if not _htmx(request):
+        return redirect("core:root")
     selected = selected_month(request.GET)
     start, end = month_bounds(selected)
 
     qs = (
-        Transaction.objects
+        _user_tx(request)
         .filter(occurred_on__gte=start, occurred_on__lt=end)
         .select_related("bank", "category")
         .order_by("-occurred_on", "-id")
@@ -29,7 +39,7 @@ def transaction_list(request):
     income_total = qs.filter(kind=Transaction.INCOME).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     expense_total = qs.filter(kind=Transaction.EXPENSE).aggregate(s=Sum("amount"))["s"] or Decimal("0")
 
-    return render(request, "transactions/list.html", {
+    return render(request, "transactions/_fragment.html", {
         "transactions": qs,
         "selected": selected,
         "month_options": month_options(),
@@ -41,11 +51,14 @@ def transaction_list(request):
 
 @require_http_methods(["GET", "POST"])
 def transaction_create(request):
+    if not _htmx(request):
+        return redirect("core:root")
     if request.method == "POST":
         form = TransactionForm(request.POST)
         if form.is_valid():
-            form.save()
-            # tells htmx to reload the page so kpis + table update
+            tx = form.save(commit=False)
+            tx.owner = request.user
+            tx.save()
             response = HttpResponse(status=204)
             response["HX-Refresh"] = "true"
             return response
@@ -65,7 +78,9 @@ def transaction_create(request):
 
 @require_http_methods(["GET", "POST"])
 def transaction_edit(request, pk):
-    t = get_object_or_404(Transaction, pk=pk)
+    if not _htmx(request):
+        return redirect("core:root")
+    t = get_object_or_404(_user_tx(request), pk=pk)
     if request.method == "POST":
         form = TransactionForm(request.POST, instance=t)
         if form.is_valid():
@@ -89,7 +104,7 @@ def transaction_pdf(request):
     start, end = month_bounds(selected)
 
     qs = (
-        Transaction.objects
+        _user_tx(request)
         .filter(occurred_on__gte=start, occurred_on__lt=end)
         .select_related("bank", "category")
         .order_by("occurred_on", "id")
@@ -118,7 +133,7 @@ def transaction_csv(request):
     start, end = month_bounds(selected)
 
     qs = (
-        Transaction.objects
+        _user_tx(request)
         .filter(occurred_on__gte=start, occurred_on__lt=end)
         .select_related("bank", "category")
         .order_by("occurred_on", "id")
@@ -146,7 +161,9 @@ def transaction_csv(request):
 
 @require_http_methods(["GET", "POST"])
 def transaction_delete(request, pk):
-    t = get_object_or_404(Transaction, pk=pk)
+    if not _htmx(request):
+        return redirect("core:root")
+    t = get_object_or_404(_user_tx(request), pk=pk)
     if request.method == "POST":
         t.delete()
         response = HttpResponse(status=204)

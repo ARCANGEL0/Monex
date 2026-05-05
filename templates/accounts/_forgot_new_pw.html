@@ -1,0 +1,33 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="closeModal()"
+     @keydown.escape.window="closeModal()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title" style="color: var(--green-hot); border-bottom-color: var(--green);">set new passcode</h3>
+    <button type="button" class="modal__close" @click="closeModal()" aria-label="close">×</button>
+
+    {% if errors %}
+      <div class="warn-bar">{{ errors.0 }}</div>
+    {% endif %}
+
+    <form hx-post="{% url 'accounts:forgot' %}" hx-target="#modal-slot" hx-swap="innerHTML" autocomplete="off">
+      {% csrf_token %}
+      <div class="field">
+        <label class="field__label" for="id_forgot_password">new passcode</label>
+        <input type="password" name="password" id="id_forgot_password" class="input" required minlength="4" autocomplete="new-password" autofocus>
+      </div>
+      <div class="field">
+        <label class="field__label" for="id_forgot_password2">confirm passcode</label>
+        <input type="password" name="password2" id="id_forgot_password2" class="input" required minlength="4" autocomplete="new-password">
+      </div>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn--primary">Reset Passcode</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function closeModal() { document.getElementById('modal-slot').innerHTML = ''; }
+</script>

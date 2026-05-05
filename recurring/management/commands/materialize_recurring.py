@@ -26,6 +26,7 @@ class Command(BaseCommand):
 
             with db_tx.atomic():
                 Transaction.objects.create(
+                    owner=rule.owner,
                     name=rule.name,
                     kind=rule.kind,
                     amount=rule.amount,

@@ -1,0 +1,27 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="{}"
+     @click.self="closeModal()"
+     @keydown.escape.window="closeModal()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title" style="color: var(--green-hot); border-bottom-color: var(--green);">passcode reset</h3>
+    <button type="button" class="modal__close" @click="closeModal()" aria-label="close">×</button>
+
+    <div style="text-align:center;margin:16px 0;">
+      <div style="width:48px;height:48px;margin:0 auto;border:2px solid var(--green-hot);border-radius:50%;display:grid;place-items:center;animation:check-pop 400ms ease-out;">
+        <div style="width:14px;height:24px;border:solid var(--green-hot);border-width:0 3px 3px 0;transform:rotate(45deg);margin-top:-4px;"></div>
+      </div>
+      <p style="margin-top:14px;color:var(--green-hot);font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;">passcode updated</p>
+      <p class="dim mono" style="font-size:0.68rem;margin-top:6px;">// login with your new passcode.</p>
+    </div>
+
+    <div class="modal__actions">
+      <a href="{% url 'accounts:login' %}" class="btn btn--primary" style="width:100%;justify-content:center;text-decoration:none;">
+        Go to Login
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeModal() { document.getElementById('modal-slot').innerHTML = ''; }
+</script>

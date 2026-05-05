@@ -1,0 +1,131 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>operator ready // tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <style>
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 24px;
+      background-color: var(--bg-0);
+      background-image:
+        radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.10) 0%, transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.06) 0%, transparent 60%),
+        linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.012) 50%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='52' viewBox='0 0 60 52'><polygon points='30,2 58,17 58,35 30,50 2,35 2,17' fill='none' stroke='%23c9a227' stroke-width='0.5' opacity='0.07'/></svg>");
+      background-size: 100% 100%, 100% 100%, 100% 3px, 60px 52px;
+      background-attachment: fixed, fixed, fixed, fixed;
+      background-repeat: no-repeat, no-repeat, repeat, repeat;
+    }
+    .auth {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-1);
+      border: 1px solid var(--green);
+      padding: 36px 32px 28px;
+      position: relative;
+      animation: auth-aura-green 4s ease-in-out infinite;
+      text-align: center;
+    }
+    @keyframes auth-aura-green {
+      0%, 100% { box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 24px rgba(34, 197, 94, 0.3); }
+      50% { box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 50px rgba(34, 197, 94, 0.55); }
+    }
+    .auth::before {
+      content: "";
+      position: absolute;
+      top: -1px; left: -1px; right: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green-hot), transparent);
+      box-shadow: 0 0 12px var(--green-hot);
+    }
+    .auth__logo {
+      width: 64px; height: 64px;
+      display: block;
+      margin: 0 auto 18px;
+      filter: drop-shadow(0 0 18px rgba(34, 197, 94, 0.7));
+    }
+    .auth__sub {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin: 0 0 16px;
+    }
+    .auth__sub::before { content: "> "; color: var(--green-hot); text-shadow: 0 0 8px var(--green-hot); }
+    .auth__success-msg {
+      color: var(--green-hot);
+      font-family: var(--font-display);
+      letter-spacing: 0.12em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      margin: 16px 0 24px;
+      text-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+    }
+    .auth__hint {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: 22px;
+    }
+    .checkmark {
+      width: 48px; height: 48px;
+      margin: 0 auto 18px;
+      border: 2px solid var(--green-hot);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      animation: check-pop 400ms ease-out;
+    }
+    @keyframes check-pop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .checkmark::after {
+      content: "";
+      width: 14px; height: 24px;
+      border: solid var(--green-hot);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+      margin-top: -4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth">
+    <svg class="auth__logo" viewBox="0 0 40 40" aria-hidden="true">
+      <defs>
+        <linearGradient id="logo-grad-auth" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#22c55e"/>
+          <stop offset="100%" stop-color="#145e14"/>
+        </linearGradient>
+      </defs>
+      <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="url(#logo-grad-auth)"/>
+      <polygon points="20,8 31,14.5 31,25.5 20,32 9,25.5 9,14.5" fill="#0a0a0a"/>
+      <polygon points="20,14 25.5,17.25 25.5,22.75 20,26 14.5,22.75 14.5,17.25" fill="#22c55e"/>
+    </svg>
+    <div class="auth__sub">master operator created</div>
+    <div class="checkmark"></div>
+    <div class="auth__success-msg">
+      welcome, {{ username }}<br>
+      your tracker is online.
+    </div>
+    <a href="{% url 'accounts:login' %}" class="btn btn--primary" style="width:100%;justify-content:center;text-decoration:none;">
+      Go to Login
+    </a>
+    <div class="auth__hint">MonEx — initialised</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<div class="modal-backdrop" id="modal-backdrop"
+     x-data="forgotCodeInput()"
+     @click.self="closeModal()"
+     @keydown.escape.window="closeModal()">
+  <div class="modal" style="max-width: 400px;">
+    <h3 class="modal__title">verify identity</h3>
+    <button type="button" class="modal__close" @click="closeModal()" aria-label="close">×</button>
+
+    <p class="dim mono" style="font-size:0.72rem;margin:0 0 8px;">// 6-digit code sent to <strong style="color:var(--gold);">{{ email }}</strong></p>
+    <p class="dim mono" style="font-size:0.65rem;margin:0 0 16px;">// expires in 10 minutes.</p>
+
+    {% if errors %}
+      <div class="warn-bar">{{ errors.0 }}</div>
+    {% endif %}
+
+    <form hx-post="{% url 'accounts:forgot_verify' %}" hx-target="#modal-slot" hx-swap="innerHTML">
+      {% csrf_token %}
+      <div class="code-inputs" style="display:flex;gap:8px;justify-content:center;margin:20px 0;">
+        <template x-for="(slot, i) in slots" :key="i">
+          <input type="text" class="code-input" maxlength="1" inputmode="numeric"
+                 x-model="slots[i]"
+                 @input="onInput($event, i)"
+                 @keydown="onKeydown($event, i)"
+                 @paste="onPaste($event)"
+                 :ref="'c'+i"
+                 :class="{ 'wrong': wrongCode }"
+                 style="width:48px;height:56px;text-align:center;font-family:var(--font-mono);font-size:1.4rem;font-weight:600;color:var(--gold-hot);background:var(--bg-2);border:1px solid var(--border-hot);outline:none;transition:border-color 120ms linear,box-shadow 160ms linear;">
+        </template>
+        <input type="hidden" name="code" :value="fullCode">
+      </div>
+
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" @click="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn--primary">Verify Code</button>
+      </div>
+    </form>
+
+    <button type="button" class="btn btn--ghost" style="width:100%;justify-content:center;margin-top:10px;font-size:0.7rem;"
+            hx-get="{% url 'accounts:forgot' %}"
+            hx-target="#modal-slot"
+            hx-swap="innerHTML">
+      resend code
+    </button>
+  </div>
+</div>
+
+<style>
+  .code-input:focus {
+    border-color: var(--gold-hot);
+    box-shadow: 0 0 14px rgba(252, 211, 77, 0.4), inset 0 0 8px rgba(232, 185, 35, 0.1);
+  }
+  .code-input.wrong {
+    border-color: var(--red-hot);
+    box-shadow: 0 0 14px rgba(220, 38, 38, 0.5);
+    animation: shake 400ms ease;
+    color: var(--red-hot);
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+</style>
+
+<script>
+  function forgotCodeInput() {
+    return {
+      slots: Array(6).fill(''),
+      wrongCode: {% if wrong_code %}true{% else %}false{% endif %},
+      get fullCode() { return this.slots.join('') },
+      closeModal() { document.getElementById('modal-slot').innerHTML = ''; },
+      onInput(e, i) {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        this.slots[i] = val;
+        if (val && i < 5) this.$refs['c' + (i + 1)].focus();
+      },
+      onKeydown(e, i) {
+        if (e.key === 'Backspace' && !this.slots[i] && i > 0) {
+          this.slots[i - 1] = '';
+          this.$refs['c' + (i - 1)].focus();
+        }
+      },
+      onPaste(e) {
+        e.preventDefault();
+        const data = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+        for (let j = 0; j < data.length; j++) this.slots[j] = data[j];
+        this.$nextTick(() => { this.$refs['c' + Math.min(data.length, 5)]?.focus(); });
+      }
+    }
+  }
+</script>

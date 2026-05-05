@@ -21,11 +21,11 @@
     <form method="get" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
       <input type="hidden" name="tab" value="budget">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">cycle</span>
-      <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
         {% for m in month_options %}
           <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
         {% endfor %}
-      </select>
+      </select></div>
     </form>
 
     <form method="post" action="{% url 'settings_app:budget_save' %}">

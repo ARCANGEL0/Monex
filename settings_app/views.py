@@ -4,8 +4,8 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
-from django.http import HttpResponse, HttpResponseForbidden, redirect
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
 from core.context_processors import CURRENCIES

@@ -1,6 +1,7 @@
 from datetime import date
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -42,9 +43,12 @@ class Transaction(models.Model):
     EXPENSE = "expense"
     KIND_CHOICES = [(INCOME, "income"), (EXPENSE, "expense")]
 
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name="transactions", null=True,
+    )
     name = models.CharField(max_length=120)
     kind = models.CharField(max_length=10, choices=KIND_CHOICES)
-    # always positive - kind tells us direction
     amount = models.DecimalField(
         max_digits=12, decimal_places=2,
         validators=[MinValueValidator(Decimal("0.01"))],
@@ -74,26 +78,33 @@ class Transaction(models.Model):
 
     @property
     def signed_amount(self):
-        # for display - negative on expenses
         return -self.amount if self.kind == self.EXPENSE else self.amount
 
 
 class Budget(models.Model):
-    # one row per month for the overall cap
-    month = models.DateField(unique=True)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name="budgets", null=True,
+    )
+    month = models.DateField()
     overall_cap = models.DecimalField(
         max_digits=12, decimal_places=2, null=True, blank=True,
         validators=[MinValueValidator(Decimal("0"))],
     )
 
     class Meta:
+        unique_together = ("owner", "month")
         ordering = ["-month"]
 
     def __str__(self):
-        return f"budget {self.month:%Y-%m}"
+        return f"budget {self.owner.username} {self.month:%Y-%m}"
 
 
 class CategoryBudget(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name="category_budgets", null=True,
+    )
     month = models.DateField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="budgets")
     cap = models.DecimalField(
@@ -102,8 +113,8 @@ class CategoryBudget(models.Model):
     )
 
     class Meta:
-        unique_together = ("month", "category")
+        unique_together = ("owner", "month", "category")
         ordering = ["-month", "category__name"]
 
     def __str__(self):
-        return f"{self.category.name} {self.cap} ({self.month:%Y-%m})"
+        return f"{self.owner.username} / {self.category.name} {self.cap} ({self.month:%Y-%m})"

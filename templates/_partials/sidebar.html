@@ -13,23 +13,38 @@
     </svg>
     <div class="sidebar__title">
       {{ request.user.username|default:"operator" }}
-      <small>tracker</small>
+      <small>MonEx tracker</small>
     </div>
   </div>
   <nav class="sidebar__nav">
-    <a href="/" class="nav-item {% if request.path == '/' %}nav-item--active{% endif %}">
+    <a href="#" class="nav-item nav-item--active"
+       hx-get="/_/d/" hx-target="#content" hx-push-url="false"
+       @click="menu = false"
+       id="nav-dashboard">
       <span class="nav-item__icon">◆</span> Dashboard
     </a>
-    <a href="/transactions/" class="nav-item {% if '/transactions' in request.path %}nav-item--active{% endif %}">
+    <a href="#" class="nav-item"
+       hx-get="/_/t/" hx-target="#content" hx-push-url="false"
+       @click="menu = false"
+       id="nav-transactions">
       <span class="nav-item__icon">≡</span> Transactions
     </a>
-    <a href="/analytics/" class="nav-item {% if '/analytics' in request.path %}nav-item--active{% endif %}">
+    <a href="#" class="nav-item"
+       hx-get="/_/a/" hx-target="#content" hx-push-url="false"
+       @click="menu = false"
+       id="nav-analytics">
       <span class="nav-item__icon">▲</span> Analytics
     </a>
-    <a href="/recurring/" class="nav-item {% if '/recurring' in request.path %}nav-item--active{% endif %}">
+    <a href="#" class="nav-item"
+       hx-get="/_/r/" hx-target="#content" hx-push-url="false"
+       @click="menu = false"
+       id="nav-recurring">
       <span class="nav-item__icon">↻</span> Recurring
     </a>
-    <a href="/settings/" class="nav-item {% if '/settings' in request.path %}nav-item--active{% endif %}">
+    <a href="#" class="nav-item"
+       hx-get="/_/s/" hx-target="#content" hx-push-url="false"
+       @click="menu = false"
+       id="nav-settings">
       <span class="nav-item__icon">⚙</span> Settings
     </a>
   </nav>
@@ -42,18 +57,35 @@
           <span class="op-trigger__chev" :class="open && 'op-trigger__chev--open'">▾</span>
         </button>
         <div x-show="open" x-cloak @click.outside="open = false" class="op-menu">
-          <a href="#" class="btn btn--ghost btn--sm op-menu__item"
+          <a style="justify-content: center;" href="#" class="btn btn--ghost btn--sm op-menu__item"
              hx-get="{% url 'accounts:passcode' %}"
              hx-target="#modal-slot"
              hx-swap="innerHTML"
              @click="open = false">Change Passcode</a>
-          <form method="post" action="/accounts/logout/" style="margin:0;">
+          <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
             {% csrf_token %}
             <button type="submit" class="btn btn--danger btn--sm op-menu__item" style="width:100%;justify-content:center;">Disconnect</button>
           </form>
         </div>
       </div>
     {% endif %}
-    <div class="sidebar__build">v0.1 / sarif-os</div>
+    <div class="sidebar__build"> <a style="color: inherit" href="https://arcangelo.net"> 
+       develoed by: ARCANGELO
+         </a> 
+   </div>
   </div>
 </aside>
+
+<script>
+  function setActiveNav(path) {
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-item--active'));
+    const map = { '/_/d/': 'nav-dashboard', '/_/t/': 'nav-transactions', '/_/a/': 'nav-analytics', '/_/r/': 'nav-recurring', '/_/s/': 'nav-settings' };
+    const id = map[path];
+    if (id) document.getElementById(id)?.classList.add('nav-item--active');
+  }
+  document.body.addEventListener('htmx:afterSwap', function(e) {
+    if (e.detail.target.id === 'content') {
+      setActiveNav(e.detail.requestConfig.path);
+    }
+  });
+</script>

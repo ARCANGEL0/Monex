@@ -30,7 +30,7 @@
           {% block topbar_actions %}{% endblock %}
         </div>
       </header>
-      <main class="content">
+      <main id="content" class="content">
         {% if messages %}
           {% for m in messages %}
             <div class="info-bar">{{ m }}</div>
@@ -43,5 +43,9 @@
     <div id="modal-slot"></div>
   </div>
   {% block body_extra %}{% endblock %}
+  <script>
+    document.addEventListener('focusin', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.add('focused') });
+    document.addEventListener('focusout', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.remove('focused') });
+  </script>
 </body>
 </html>

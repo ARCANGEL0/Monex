@@ -136,6 +136,10 @@
       <label class="field__label" for="id_password">passcode</label>
       <input class="input" type="password" name="password" id="id_password" autocomplete="current-password" required>
     </div>
+    <label class="field__label" style="display:flex;align-items:center;gap:8px;margin-top:4px;cursor:pointer;">
+      <input type="checkbox" name="remember_me" id="id_remember_me" style="accent-color:var(--gold-hot);width:16px;height:16px;">
+      keep me logged in
+    </label>
     <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:6px;">Authenticate</button>
     <input type="hidden" name="next" value="{{ next }}">
 
@@ -146,7 +150,7 @@
          hx-swap="innerHTML">// forgot your passcode?</a>
     </div>
 
-    <div class="auth__hint">sarif // tracker v0.1</div>
+    <div class="auth__hint">MonEx</div>
   </form>
   <div id="modal-slot"></div>
 </body>

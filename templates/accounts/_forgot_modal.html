@@ -6,7 +6,7 @@
     <h3 class="modal__title">reset passcode</h3>
     <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
 
-    <p class="dim mono" style="font-size:0.78rem;margin:0 0 16px;">// we'll send a reset link to your email if an operator with that address exists.</p>
+    <p class="dim mono" style="font-size:0.78rem;margin:0 0 16px;">// enter your email. we'll send a 6-digit verification code.</p>
 
     <form method="post" hx-post="{% url 'accounts:forgot' %}" hx-target="#modal-backdrop" hx-swap="outerHTML">
       {% csrf_token %}
@@ -19,7 +19,7 @@
 
       <div class="modal__actions">
         <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
-        <button type="submit" class="btn btn--primary">Send Reset Link</button>
+        <button type="submit" class="btn btn--primary">Send Code</button>
       </div>
     </form>
   </div>

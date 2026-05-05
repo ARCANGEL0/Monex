@@ -45,7 +45,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "expensetracker.urls"
+ROOT_URLCONF = "monextracker.urls"
 
 TEMPLATES = [
     {
@@ -63,8 +63,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "expensetracker.wsgi.application"
-ASGI_APPLICATION = "expensetracker.asgi.application"
+WSGI_APPLICATION = "monextracker.wsgi.application"
+ASGI_APPLICATION = "monextracker.asgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(

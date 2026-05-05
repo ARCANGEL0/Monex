@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django.db.models import Exists, OuterRef, Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
 from core.utils import month_bounds, month_options, selected_month
@@ -13,21 +13,29 @@ from .forms import RecurringForm
 from .models import RecurringTransaction
 
 
+def _htmx(request):
+    return bool(request.headers.get("HX-Request"))
+
+
+def _user_rules(request):
+    return RecurringTransaction.objects.filter(owner=request.user)
+
+
 def home(request):
+    if not _htmx(request):
+        return redirect("core:root")
     selected = selected_month(request.GET)
     start, end = month_bounds(selected)
 
-    # is there a materialized tx for this rule in the selected month?
+    rules = _user_rules(request)
+
     done_sub = Transaction.objects.filter(
+        owner=request.user,
         recurring=OuterRef("pk"),
         occurred_on__gte=start,
         occurred_on__lt=end,
     )
-    rules = (
-        RecurringTransaction.objects
-        .annotate(done=Exists(done_sub))
-        .select_related("bank", "category")
-    )
+    rules = rules.annotate(done=Exists(done_sub)).select_related("bank", "category")
 
     active = rules.filter(active=True)
     to_pay = active.filter(kind=RecurringTransaction.EXPENSE, done=False).aggregate(s=Sum("amount"))["s"] or Decimal("0")
@@ -35,7 +43,7 @@ def home(request):
     paid_so_far = active.filter(kind=RecurringTransaction.EXPENSE, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     received_so_far = active.filter(kind=RecurringTransaction.INCOME, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
 
-    return render(request, "recurring/list.html", {
+    return render(request, "recurring/_fragment.html", {
         "rules": rules,
         "selected": selected,
         "month_options": month_options(),
@@ -49,10 +57,14 @@ def home(request):
 
 @require_http_methods(["GET", "POST"])
 def create(request):
+    if not _htmx(request):
+        return redirect("core:root")
     if request.method == "POST":
         form = RecurringForm(request.POST)
         if form.is_valid():
-            form.save()
+            rule = form.save(commit=False)
+            rule.owner = request.user
+            rule.save()
             return _refresh()
     else:
         form = RecurringForm(initial={"kind": RecurringTransaction.EXPENSE, "active": True, "day_of_month": 1})
@@ -67,7 +79,9 @@ def create(request):
 
 @require_http_methods(["GET", "POST"])
 def edit(request, pk):
-    rule = get_object_or_404(RecurringTransaction, pk=pk)
+    if not _htmx(request):
+        return redirect("core:root")
+    rule = get_object_or_404(_user_rules(request), pk=pk)
     if request.method == "POST":
         form = RecurringForm(request.POST, instance=rule)
         if form.is_valid():
@@ -86,7 +100,9 @@ def edit(request, pk):
 
 @require_http_methods(["GET", "POST"])
 def delete(request, pk):
-    rule = get_object_or_404(RecurringTransaction, pk=pk)
+    if not _htmx(request):
+        return redirect("core:root")
+    rule = get_object_or_404(_user_rules(request), pk=pk)
     if request.method == "POST":
         rule.delete()
         return _refresh()
@@ -98,11 +114,14 @@ def delete(request, pk):
 
 @require_http_methods(["POST"])
 def toggle_done(request, pk):
-    rule = get_object_or_404(RecurringTransaction, pk=pk)
+    if not _htmx(request):
+        return redirect("core:root")
+    rule = get_object_or_404(_user_rules(request), pk=pk)
     month = selected_month(request.POST)
     start, end = month_bounds(month)
 
     existing = Transaction.objects.filter(
+        owner=request.user,
         recurring=rule,
         occurred_on__gte=start, occurred_on__lt=end,
     ).first()
@@ -110,8 +129,6 @@ def toggle_done(request, pk):
     if existing:
         existing.delete()
     else:
-        # if marking the current month, use today (real moment of payment).
-        # otherwise fall back to the scheduled day_of_month for that cycle.
         today = date.today()
         if start <= today < end:
             target = today
@@ -119,6 +136,7 @@ def toggle_done(request, pk):
             target = date(month.year, month.month, rule.day_of_month)
 
         Transaction.objects.create(
+            owner=request.user,
             name=rule.name,
             kind=rule.kind,
             amount=rule.amount,
