@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}settings{% endblock %}
-{% block topbar_title %}settings / config{% endblock %}
+<div hx-swap-oob="innerHTML:.topbar__title">settings / config</div>
 
-{% block content %}
 <div x-data="{ tab: '{{ tab }}' }">
 
   <div class="tabs">
@@ -18,12 +15,23 @@
 
   {# ---- BUDGET ---- #}
   <div x-show="tab==='budget'">
-    <form method="get" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
+    <form hx-get="/_/s/" hx-target="#content" hx-push-url="false" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
       <input type="hidden" name="tab" value="budget">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">cycle</span>
       <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
         {% for m in month_options %}
           <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <form method="post" action="{% url 'settings_app:currency_save' %}" style="display:inline-flex;gap:8px;align-items:center;margin-left:12px;margin-bottom:14px;">
+      {% csrf_token %}
+      <input type="hidden" name="back" value="/_/s/?tab=budget">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">currency</span>
+      <select name="currency_code" class="select" onchange="this.form.submit()">
+        {% for code, sym in currencies.items %}
+          <option value="{{ code }}" {% if currency_code == code %}selected{% endif %}>{{ code }} ({{ sym }})</option>
         {% endfor %}
       </select>
     </form>
@@ -116,6 +124,48 @@
     </div>
   </div>
 
+  {# ---- CATEGORIES ---- #}
+  <div x-show="tab==='categories'" x-cloak>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <a href="#" class="btn btn--primary"
+         hx-get="{% url 'settings_app:cat_create' %}" hx-target="#modal-slot" hx-swap="innerHTML">+ New Category</a>
+    </div>
+    <div class="card" style="padding:0;">
+      <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width:40px;"></th>
+            <th>Name</th>
+            <th style="width:90px;">Kind</th>
+            <th style="width:120px;">Hex</th>
+            <th style="width:110px;">Status</th>
+            <th style="width:120px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for c in categories %}
+          <tr {% if c.archived %}style="opacity:0.55;"{% endif %}>
+            <td><span class="dot" style="background:{{ c.color }};"></span></td>
+            <td>{{ c.name }}</td>
+            <td><span class="chip chip--{{ c.kind }}"><span class="chip__dot"></span>{{ c.kind }}</span></td>
+            <td class="mono dim">{{ c.color }}</td>
+            <td>
+              {% if c.archived %}<span class="chip">archived</span>{% else %}<span class="chip chip--gold"><span class="chip__dot"></span>active</span>{% endif %}
+            </td>
+            <td class="num" style="white-space:nowrap;">
+              <a href="#" class="btn btn--ghost btn--sm" hx-get="{% url 'settings_app:cat_edit' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+              <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
+                 hx-get="{% url 'settings_app:cat_delete' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">×</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
   {# ---- USERS ---- #}
   {% if request.user.is_superuser %}
   <div x-show="tab==='users'" x-cloak>
@@ -169,47 +219,4 @@
   </div>
   {% endif %}
 
-  {# ---- CATEGORIES ---- #}
-  <div x-show="tab==='categories'" x-cloak>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
-      <a href="#" class="btn btn--primary"
-         hx-get="{% url 'settings_app:cat_create' %}" hx-target="#modal-slot" hx-swap="innerHTML">+ New Category</a>
-    </div>
-    <div class="card" style="padding:0;">
-      <div class="table-wrap">
-      <table class="table">
-        <thead>
-          <tr>
-            <th style="width:40px;"></th>
-            <th>Name</th>
-            <th style="width:90px;">Kind</th>
-            <th style="width:120px;">Hex</th>
-            <th style="width:110px;">Status</th>
-            <th style="width:120px;"></th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for c in categories %}
-          <tr {% if c.archived %}style="opacity:0.55;"{% endif %}>
-            <td><span class="dot" style="background:{{ c.color }};"></span></td>
-            <td>{{ c.name }}</td>
-            <td><span class="chip chip--{{ c.kind }}"><span class="chip__dot"></span>{{ c.kind }}</span></td>
-            <td class="mono dim">{{ c.color }}</td>
-            <td>
-              {% if c.archived %}<span class="chip">archived</span>{% else %}<span class="chip chip--gold"><span class="chip__dot"></span>active</span>{% endif %}
-            </td>
-            <td class="num" style="white-space:nowrap;">
-              <a href="#" class="btn btn--ghost btn--sm" hx-get="{% url 'settings_app:cat_edit' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
-              <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
-                 hx-get="{% url 'settings_app:cat_delete' c.pk %}" hx-target="#modal-slot" hx-swap="innerHTML">×</a>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      </div>
-    </div>
-  </div>
-
 </div>
-{% endblock %}

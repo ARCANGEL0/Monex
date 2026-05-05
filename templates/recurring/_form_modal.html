@@ -32,7 +32,7 @@
 
       <div class="grid grid--2">
         <div class="field">
-          <label class="field__label" for="id_amount">amount (€)</label>
+          <label class="field__label" for="id_amount">amount ({{ currency_symbol }})</label>
           {{ form.amount }}
           {% if form.amount.errors %}<div class="field__err">{{ form.amount.errors|join:', ' }}</div>{% endif %}
         </div>

@@ -1,25 +1,22 @@
-{% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}transactions{% endblock %}
-{% block topbar_title %}transactions / ledger{% endblock %}
+<div hx-swap-oob="innerHTML:.topbar__title">transactions / ledger</div>
 
-{% block topbar_actions %}
+<div hx-swap-oob="innerHTML:.topbar__actions">
   <a class="btn btn--primary" href="#"
-     hx-get="{% url 'transactions:create' %}"
+     hx-get="/_/t/new/"
      hx-target="#modal-slot"
      hx-swap="innerHTML">+ Add</a>
-  <a class="btn btn--ghost btn--sm" href="{% url 'transactions:csv' %}?month={{ selected|date:'Y-m' }}">CSV</a>
-  <a class="btn btn--ghost btn--sm" href="{% url 'transactions:pdf' %}?month={{ selected|date:'Y-m' }}">PDF</a>
-{% endblock %}
+  <a class="btn btn--ghost btn--sm" href="/_/t/export.csv?month={{ selected|date:'Y-m' }}">CSV</a>
+  <a class="btn btn--ghost btn--sm" href="/_/t/export.pdf?month={{ selected|date:'Y-m' }}">PDF</a>
+</div>
 
-{% block content %}
 <div class="page-head">
   <div class="page-head__left">
     <div class="month-picker">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form method="get" id="monthForm" style="margin:0;">
-        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <form hx-get="/_/t/" hx-target="#content" hx-push-url="false" id="txMonthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('txMonthForm').submit()">
           {% for m in month_options %}
             <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
           {% endfor %}
@@ -82,10 +79,10 @@
           </td>
           <td class="num" style="white-space: nowrap;">
             <a href="#" class="btn btn--ghost btn--sm"
-               hx-get="{% url 'transactions:edit' t.pk %}"
+               hx-get="/_/t/{{ t.pk }}/edit/"
                hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
             <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
-               hx-get="{% url 'transactions:delete' t.pk %}"
+               hx-get="/_/t/{{ t.pk }}/delete/"
                hx-target="#modal-slot" hx-swap="innerHTML"
                aria-label="delete">×</a>
           </td>
@@ -102,5 +99,3 @@
   <p class="dim">no transactions for {{ selected|date:'F Y' }}</p>
 </div>
 {% endif %}
-
-{% endblock %}

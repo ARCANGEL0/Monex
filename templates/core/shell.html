@@ -57,7 +57,7 @@
   </div>
 {% else %}
   <div class="info-bar" style="margin-bottom:18px;">
-    no spend cap set for this cycle · <a href="/settings/" class="gold">configure budget</a>
+    no spend cap set for this cycle · <a href="#" class="gold" hx-get="/_/s/?tab=budget" hx-target="#content" hx-push-url="false">configure budget</a>
   </div>
 {% endif %}
 

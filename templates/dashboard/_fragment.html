@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
 {% load humanize static %}
 
-{% block title %}dashboard{% endblock %}
-{% block topbar_title %}dashboard / overview{% endblock %}
+<div hx-swap-oob="innerHTML:.topbar__title">dashboard / overview</div>
 
-{% block content %}
 <div class="hero3d">
   <canvas id="hero-3d"></canvas>
   <div class="hero3d__overlay">
@@ -17,8 +14,8 @@
   <div class="page-head__left">
     <div class="month-picker">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form method="get" id="monthForm" style="margin:0;">
-        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <form hx-get="/_/d/" hx-target="#content" hx-push-url="false" id="dashMonthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('dashMonthForm').submit()">
           {% for m in month_options %}
             <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
           {% endfor %}
@@ -57,7 +54,7 @@
   </div>
 {% else %}
   <div class="info-bar" style="margin-bottom:18px;">
-    no spend cap set for this cycle · <a href="/settings/" class="gold">configure budget</a>
+    no spend cap set for this cycle · <a href="#" class="gold" hx-get="/_/s/?tab=budget" hx-target="#content" hx-push-url="false">configure budget</a>
   </div>
 {% endif %}
 
@@ -122,16 +119,5 @@
 </div>
 
 {{ chart_data|json_script:"chart-data" }}
-{% endblock %}
 
-{% block body_extra %}
-  <script src="{% static 'js/charts.js' %}"></script>
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-    }
-  }
-  </script>
-  <script type="module" src="{% static 'js/hero3d.js' %}"></script>
-{% endblock %}
+<script src="{% static 'js/charts.js' %}"></script>

@@ -57,6 +57,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.currency_ctx",
             ],
         },
     },
@@ -96,15 +97,26 @@ LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "dashboard:home"
 LOGOUT_REDIRECT_URL = "accounts:login"
 
-# email - dev prints to console. swap to smtp in prod.
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "monex-tracker@localhost"
+# email - smtp when credentials set, console fallback for dev.
+_smtp_user = os.getenv("EMAIL_HOST_USER", "")
+if _smtp_user:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+    EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "1") == "1"
+    EMAIL_HOST_USER = _smtp_user
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEFAULT_FROM_EMAIL = f"MonEx <{os.getenv('DEFAULT_FROM_EMAIL', 'noreply@monex.app')}>"
 
 # app currency (single)
 CURRENCY_SYMBOL = "€"
 CURRENCY_CODE = "EUR"
 
-# session - keep tight on a single-user app
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+# session - persistent 30-day login
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG

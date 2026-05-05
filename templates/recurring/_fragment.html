@@ -1,23 +1,20 @@
-{% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}recurring{% endblock %}
-{% block topbar_title %}recurring / scheduled{% endblock %}
+<div hx-swap-oob="innerHTML:.topbar__title">recurring / scheduled</div>
 
-{% block topbar_actions %}
+<div hx-swap-oob="innerHTML:.topbar__actions">
   <a class="btn btn--primary" href="#"
-     hx-get="{% url 'recurring:create' %}"
+     hx-get="/_/r/new/"
      hx-target="#modal-slot"
      hx-swap="innerHTML">+ New Rule</a>
-{% endblock %}
+</div>
 
-{% block content %}
 <div class="page-head">
   <div class="page-head__left">
     <div class="month-picker">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form method="get" id="monthForm" style="margin:0;">
-        <select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <form hx-get="/_/r/" hx-target="#content" hx-push-url="false" id="recMonthForm" style="margin:0;">
+        <select name="month" class="select" onchange="document.getElementById('recMonthForm').submit()">
           {% for m in month_options %}
             <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
           {% endfor %}
@@ -66,7 +63,7 @@
         <tr {% if not r.active %}style="opacity:0.45;"{% endif %}>
           <td>
             {% if r.active %}
-              <form hx-post="{% url 'recurring:toggle_done' r.pk %}" hx-swap="none" style="margin:0;">
+              <form hx-post="/_/r/{{ r.pk }}/toggle/" hx-swap="none" style="margin:0;">
                 {% csrf_token %}
                 <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
                 <button type="submit" class="paid-toggle {% if r.done %}paid-toggle--done{% endif %} {% if r.kind == 'income' %}paid-toggle--income{% endif %}">
@@ -94,10 +91,10 @@
           </td>
           <td class="num" style="white-space:nowrap;">
             <a href="#" class="btn btn--ghost btn--sm"
-               hx-get="{% url 'recurring:edit' r.pk %}"
+               hx-get="/_/r/{{ r.pk }}/edit/"
                hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
             <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
-               hx-get="{% url 'recurring:delete' r.pk %}"
+               hx-get="/_/r/{{ r.pk }}/delete/"
                hx-target="#modal-slot" hx-swap="innerHTML"
                aria-label="delete">×</a>
           </td>
@@ -117,5 +114,3 @@
   <p class="dim">subscriptions, rent, salary — anything that hits monthly. add one to start tracking.</p>
 </div>
 {% endif %}
-
-{% endblock %}

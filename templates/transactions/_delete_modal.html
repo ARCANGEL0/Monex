@@ -9,7 +9,7 @@
 
     <p style="margin: 8px 0 12px;">delete <strong class="gold">{{ transaction.name }}</strong>?</p>
     <p class="dim mono" style="font-size: 0.82rem;">
-      €{{ transaction.amount|floatformat:2|intcomma }} · {{ transaction.kind }} · {{ transaction.occurred_on|date:'d M Y' }}
+      {{ currency_symbol }}{{ transaction.amount|floatformat:2|intcomma }} · {{ transaction.kind }} · {{ transaction.occurred_on|date:'d M Y' }}
     </p>
     <p class="dim" style="font-size: 0.72rem; margin-top: 14px;">// this cannot be undone.</p>
 

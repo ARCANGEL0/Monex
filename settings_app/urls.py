@@ -6,6 +6,7 @@ app_name = "settings_app"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("currency/", views.currency_save, name="currency_save"),
     path("budget/save/", views.budget_save, name="budget_save"),
     path("banks/new/", views.bank_create, name="bank_create"),
     path("banks/<int:pk>/edit/", views.bank_edit, name="bank_edit"),

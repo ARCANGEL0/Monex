@@ -4,16 +4,30 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
-from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, HttpResponseForbidden, redirect
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
 
+from core.context_processors import CURRENCIES
 from core.utils import month_options, selected_month
 from transactions.models import Bank, Budget, Category, CategoryBudget
 
 from .forms import BankForm, CategoryForm, OperatorForm
 
 User = get_user_model()
+
+
+def _htmx(request):
+    return bool(request.headers.get("HX-Request"))
+
+
+def currency_save(request):
+    code = request.POST.get("currency_code", "EUR").strip().upper()
+    sym = CURRENCIES.get(code, "€")
+    request.session["currency"] = sym
+    request.session["currency_code"] = code
+    back = request.POST.get("back", "/_/s/?tab=budget")
+    return redirect(back)
 
 
 def superuser_required(view):
@@ -26,11 +40,16 @@ def superuser_required(view):
 
 
 def home(request):
+    if not _htmx(request):
+        return redirect("core:root")
     selected = selected_month(request.GET)
     tab = request.GET.get("tab", "budget")
 
-    budget = Budget.objects.filter(month=selected).first()
-    cat_caps = {cb.category_id: cb.cap for cb in CategoryBudget.objects.filter(month=selected)}
+    budget = Budget.objects.filter(owner=request.user, month=selected).first()
+    cat_caps = {
+        cb.category_id: cb.cap
+        for cb in CategoryBudget.objects.filter(owner=request.user, month=selected)
+    }
     expense_cats = list(Category.objects.filter(archived=False, kind=Category.EXPENSE).order_by("name"))
     cat_rows = [(c, cat_caps.get(c.pk)) for c in expense_cats]
 
@@ -38,7 +57,7 @@ def home(request):
     categories = Category.objects.all()
     users = User.objects.order_by("username") if request.user.is_superuser else User.objects.none()
 
-    return render(request, "settings/home.html", {
+    return render(request, "settings/_fragment.html", {
         "tab": tab,
         "selected": selected,
         "month_options": month_options(),
@@ -52,28 +71,29 @@ def home(request):
 
 @require_http_methods(["POST"])
 def budget_save(request):
+    if not _htmx(request):
+        return redirect("core:root")
     selected = selected_month(request.POST)
 
     overall_raw = (request.POST.get("overall_cap") or "").strip()
     overall_cap = _parse_decimal(overall_raw)
 
-    budget, _ = Budget.objects.get_or_create(month=selected)
+    budget, _ = Budget.objects.get_or_create(owner=request.user, month=selected)
     budget.overall_cap = overall_cap
     budget.save()
 
-    # per-category
     for cat in Category.objects.filter(archived=False, kind=Category.EXPENSE):
         raw = (request.POST.get(f"cap_{cat.pk}") or "").strip()
         cap = _parse_decimal(raw)
         if cap is None or cap <= 0:
-            CategoryBudget.objects.filter(month=selected, category=cat).delete()
+            CategoryBudget.objects.filter(owner=request.user, month=selected, category=cat).delete()
         else:
             CategoryBudget.objects.update_or_create(
-                month=selected, category=cat, defaults={"cap": cap},
+                owner=request.user, month=selected, category=cat, defaults={"cap": cap},
             )
 
     messages.success(request, "budget updated.")
-    return redirect(f"/settings/?tab=budget&month={selected:%Y-%m}")
+    return redirect(f"/_/s/?tab=budget&month={selected:%Y-%m}")
 
 
 def _parse_decimal(raw):
@@ -89,6 +109,8 @@ def _parse_decimal(raw):
 
 @require_http_methods(["GET", "POST"])
 def bank_create(request):
+    if not _htmx(request):
+        return redirect("core:root")
     if request.method == "POST":
         form = BankForm(request.POST)
         if form.is_valid():
@@ -103,6 +125,8 @@ def bank_create(request):
 
 @require_http_methods(["GET", "POST"])
 def bank_edit(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     bank = get_object_or_404(Bank, pk=pk)
     if request.method == "POST":
         form = BankForm(request.POST, instance=bank)
@@ -118,6 +142,8 @@ def bank_edit(request, pk):
 
 @require_http_methods(["GET", "POST"])
 def bank_delete(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     bank = get_object_or_404(Bank, pk=pk)
     if request.method == "POST":
         try:
@@ -139,6 +165,8 @@ def bank_delete(request, pk):
 
 @require_http_methods(["GET", "POST"])
 def category_create(request):
+    if not _htmx(request):
+        return redirect("core:root")
     if request.method == "POST":
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -153,6 +181,8 @@ def category_create(request):
 
 @require_http_methods(["GET", "POST"])
 def category_edit(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     cat = get_object_or_404(Category, pk=pk)
     if request.method == "POST":
         form = CategoryForm(request.POST, instance=cat)
@@ -168,6 +198,8 @@ def category_edit(request, pk):
 
 @require_http_methods(["GET", "POST"])
 def category_delete(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     cat = get_object_or_404(Category, pk=pk)
     if request.method == "POST":
         try:
@@ -196,6 +228,8 @@ def _refresh():
 @superuser_required
 @require_http_methods(["GET", "POST"])
 def user_create(request):
+    if not _htmx(request):
+        return redirect("core:root")
     if request.method == "POST":
         form = OperatorForm(request.POST, creating=True)
         if form.is_valid():
@@ -212,6 +246,8 @@ def user_create(request):
 @superuser_required
 @require_http_methods(["GET", "POST"])
 def user_edit(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     user = get_object_or_404(User, pk=pk)
     if request.method == "POST":
         form = OperatorForm(request.POST, instance=user)
@@ -229,6 +265,8 @@ def user_edit(request, pk):
 @superuser_required
 @require_http_methods(["GET", "POST"])
 def user_delete(request, pk):
+    if not _htmx(request):
+        return redirect("core:root")
     user = get_object_or_404(User, pk=pk)
     if user.pk == request.user.pk:
         return render(request, "settings/_delete_modal.html", {
