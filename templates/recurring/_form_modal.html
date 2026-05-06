@@ -7,7 +7,7 @@
     <h3 class="modal__title">{{ title }}</h3>
     <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
 
-    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#content" hx-swap="innerHTML">
       {% csrf_token %}
 
       {% if form.non_field_errors %}

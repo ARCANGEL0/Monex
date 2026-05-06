@@ -30,6 +30,40 @@ def currency_save(request):
     return redirect(back)
 
 
+def _settings_ctx(request, tab=None):
+    selected = selected_month(request.POST)
+    if not selected:
+        selected = selected_month(request.GET)
+    tab = tab or (request.POST.get("tab") or request.GET.get("tab") or "budget")
+    budget = Budget.objects.filter(owner=request.user, month=selected).first()
+    cat_caps = {
+        cb.category_id: cb.cap
+        for cb in CategoryBudget.objects.filter(owner=request.user, month=selected)
+    }
+    expense_cats = list(Category.objects.filter(archived=False, kind=Category.EXPENSE).order_by("name"))
+    cat_rows = [(c, cat_caps.get(c.pk)) for c in expense_cats]
+    return {
+        "tab": tab,
+        "selected": selected,
+        "month_options": month_options(),
+        "budget": budget,
+        "cat_rows": cat_rows,
+        "banks": Bank.objects.all(),
+        "categories": Category.objects.all(),
+        "users": User.objects.order_by("username") if request.user.is_superuser else User.objects.none(),
+    }
+
+
+def _refresh(request):
+    return render(request, "settings/_fragment.html", _settings_ctx(request))
+
+
+def _err(request, modal_html):
+    ctx = _settings_ctx(request)
+    ctx["modal_html"] = modal_html
+    return render(request, "settings/_err_wrap.html", ctx)
+
+
 def superuser_required(view):
     @wraps(view)
     def wrapped(request, *args, **kwargs):
@@ -115,9 +149,11 @@ def bank_create(request):
         form = BankForm(request.POST)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = BankForm(initial={"color": "#c9a227"})
+            return _refresh(request)
+        return _err(request, render(request, "settings/_bank_form.html", {
+            "form": form, "title": "new bank", "submit_url": request.path, "submit_label": "Create",
+        }).content.decode())
+    form = BankForm(initial={"color": "#c9a227"})
     return render(request, "settings/_bank_form.html", {
         "form": form, "title": "new bank", "submit_url": request.path, "submit_label": "Create",
     })
@@ -132,9 +168,11 @@ def bank_edit(request, pk):
         form = BankForm(request.POST, instance=bank)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = BankForm(instance=bank)
+            return _refresh(request)
+        return _err(request, render(request, "settings/_bank_form.html", {
+            "form": form, "title": "edit bank", "submit_url": request.path, "submit_label": "Update",
+        }).content.decode())
+    form = BankForm(instance=bank)
     return render(request, "settings/_bank_form.html", {
         "form": form, "title": "edit bank", "submit_url": request.path, "submit_label": "Update",
     })
@@ -148,16 +186,15 @@ def bank_delete(request, pk):
     if request.method == "POST":
         try:
             bank.delete()
-            return _refresh()
+            return _refresh(request)
         except ProtectedError:
-            return render(request, "settings/_delete_modal.html", {
-                "subject": bank.name,
-                "submit_url": request.path,
+            return _err(request, render(request, "settings/_delete_modal.html", {
+                "subject": bank.name, "submit_url": request.path,
                 "error": "this bank has linked transactions. archive it instead.",
-                "title": "delete bank",
-            })
+                "title": "delete bank", "tab": "banks",
+            }).content.decode())
     return render(request, "settings/_delete_modal.html", {
-        "subject": bank.name, "submit_url": request.path, "title": "delete bank",
+        "subject": bank.name, "submit_url": request.path, "title": "delete bank", "tab": "banks",
     })
 
 
@@ -171,9 +208,11 @@ def category_create(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = CategoryForm(initial={"color": "#c9a227", "kind": Category.EXPENSE})
+            return _refresh(request)
+        return _err(request, render(request, "settings/_cat_form.html", {
+            "form": form, "title": "new category", "submit_url": request.path, "submit_label": "Create",
+        }).content.decode())
+    form = CategoryForm(initial={"color": "#c9a227", "kind": Category.EXPENSE})
     return render(request, "settings/_cat_form.html", {
         "form": form, "title": "new category", "submit_url": request.path, "submit_label": "Create",
     })
@@ -188,9 +227,11 @@ def category_edit(request, pk):
         form = CategoryForm(request.POST, instance=cat)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = CategoryForm(instance=cat)
+            return _refresh(request)
+        return _err(request, render(request, "settings/_cat_form.html", {
+            "form": form, "title": "edit category", "submit_url": request.path, "submit_label": "Update",
+        }).content.decode())
+    form = CategoryForm(instance=cat)
     return render(request, "settings/_cat_form.html", {
         "form": form, "title": "edit category", "submit_url": request.path, "submit_label": "Update",
     })
@@ -204,23 +245,16 @@ def category_delete(request, pk):
     if request.method == "POST":
         try:
             cat.delete()
-            return _refresh()
+            return _refresh(request)
         except ProtectedError:
-            return render(request, "settings/_delete_modal.html", {
-                "subject": cat.name,
-                "submit_url": request.path,
+            return _err(request, render(request, "settings/_delete_modal.html", {
+                "subject": cat.name, "submit_url": request.path,
                 "error": "this category has linked transactions. archive it instead.",
-                "title": "delete category",
-            })
+                "title": "delete category", "tab": "categories",
+            }).content.decode())
     return render(request, "settings/_delete_modal.html", {
-        "subject": cat.name, "submit_url": request.path, "title": "delete category",
+        "subject": cat.name, "submit_url": request.path, "title": "delete category", "tab": "categories",
     })
-
-
-def _refresh():
-    response = HttpResponse(status=204)
-    response["HX-Refresh"] = "true"
-    return response
 
 
 # users (superadmin only) ---------------------------------------------
@@ -234,9 +268,12 @@ def user_create(request):
         form = OperatorForm(request.POST, creating=True)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = OperatorForm(creating=True)
+            return _refresh(request)
+        return _err(request, render(request, "settings/_user_form.html", {
+            "form": form, "title": "new operator",
+            "submit_url": request.path, "submit_label": "Create",
+        }).content.decode())
+    form = OperatorForm(creating=True)
     return render(request, "settings/_user_form.html", {
         "form": form, "title": "new operator",
         "submit_url": request.path, "submit_label": "Create",
@@ -253,9 +290,12 @@ def user_edit(request, pk):
         form = OperatorForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return _refresh()
-    else:
-        form = OperatorForm(instance=user)
+            return _refresh(request)
+        return _err(request, render(request, "settings/_user_form.html", {
+            "form": form, "title": "edit operator",
+            "submit_url": request.path, "submit_label": "Update",
+        }).content.decode())
+    form = OperatorForm(instance=user)
     return render(request, "settings/_user_form.html", {
         "form": form, "title": "edit operator",
         "submit_url": request.path, "submit_label": "Update",
@@ -269,17 +309,13 @@ def user_delete(request, pk):
         return redirect("core:root")
     user = get_object_or_404(User, pk=pk)
     if user.pk == request.user.pk:
-        return render(request, "settings/_delete_modal.html", {
-            "subject": user.username,
-            "submit_url": request.path,
-            "error": "you can't delete your own account.",
-            "title": "delete operator",
-        })
+        return _err(request, render(request, "settings/_delete_modal.html", {
+            "subject": user.username, "submit_url": request.path,
+            "error": "you can't delete your own account.", "title": "delete operator", "tab": "users",
+        }).content.decode())
     if request.method == "POST":
         user.delete()
-        return _refresh()
+        return _refresh(request)
     return render(request, "settings/_delete_modal.html", {
-        "subject": user.username,
-        "submit_url": request.path,
-        "title": "delete operator",
+        "subject": user.username, "submit_url": request.path, "title": "delete operator", "tab": "users",
     })

@@ -23,30 +23,41 @@ def _user_tx(request):
     return Transaction.objects.filter(owner=request.user)
 
 
-def transaction_list(request):
-    if not _htmx(request):
-        return redirect("core:root")
-    selected = selected_month(request.GET)
+def _tx_ctx(request):
+    selected = selected_month(request.POST)
     start, end = month_bounds(selected)
-
     qs = (
         _user_tx(request)
         .filter(occurred_on__gte=start, occurred_on__lt=end)
         .select_related("bank", "category")
         .order_by("-occurred_on", "-id")
     )
-
     income_total = qs.filter(kind=Transaction.INCOME).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     expense_total = qs.filter(kind=Transaction.EXPENSE).aggregate(s=Sum("amount"))["s"] or Decimal("0")
-
-    return render(request, "transactions/_fragment.html", {
+    return {
         "transactions": qs,
         "selected": selected,
         "month_options": month_options(),
         "income_total": income_total,
         "expense_total": expense_total,
         "net": income_total - expense_total,
-    })
+    }
+
+
+def _refresh_tx(request):
+    return render(request, "transactions/_fragment.html", _tx_ctx(request))
+
+
+def _tx_err(request, modal_html):
+    ctx = _tx_ctx(request)
+    ctx["modal_html"] = modal_html
+    return render(request, "transactions/_err_wrap.html", ctx)
+
+
+def transaction_list(request):
+    if not _htmx(request):
+        return redirect("core:root")
+    return render(request, "transactions/_fragment.html", _tx_ctx(request))
 
 
 @require_http_methods(["GET", "POST"])
@@ -59,15 +70,17 @@ def transaction_create(request):
             tx = form.save(commit=False)
             tx.owner = request.user
             tx.save()
-            response = HttpResponse(status=204)
-            response["HX-Refresh"] = "true"
-            return response
-    else:
-        form = TransactionForm(initial={
-            "kind": Transaction.EXPENSE,
-            "occurred_on": date.today(),
-        })
-
+            return _refresh_tx(request)
+        return _tx_err(request, render(request, "transactions/_form_modal.html", {
+            "form": form,
+            "title": "log entry",
+            "submit_url": request.path,
+            "submit_label": "Log Entry",
+        }).content.decode())
+    form = TransactionForm(initial={
+        "kind": Transaction.EXPENSE,
+        "occurred_on": date.today(),
+    })
     return render(request, "transactions/_form_modal.html", {
         "form": form,
         "title": "log entry",
@@ -85,12 +98,14 @@ def transaction_edit(request, pk):
         form = TransactionForm(request.POST, instance=t)
         if form.is_valid():
             form.save()
-            response = HttpResponse(status=204)
-            response["HX-Refresh"] = "true"
-            return response
-    else:
-        form = TransactionForm(instance=t)
-
+            return _refresh_tx(request)
+        return _tx_err(request, render(request, "transactions/_form_modal.html", {
+            "form": form,
+            "title": "edit entry",
+            "submit_url": request.path,
+            "submit_label": "Update",
+        }).content.decode())
+    form = TransactionForm(instance=t)
     return render(request, "transactions/_form_modal.html", {
         "form": form,
         "title": "edit entry",
@@ -166,10 +181,7 @@ def transaction_delete(request, pk):
     t = get_object_or_404(_user_tx(request), pk=pk)
     if request.method == "POST":
         t.delete()
-        response = HttpResponse(status=204)
-        response["HX-Refresh"] = "true"
-        return response
-
+        return _refresh_tx(request)
     return render(request, "transactions/_delete_modal.html", {
         "transaction": t,
         "submit_url": request.path,

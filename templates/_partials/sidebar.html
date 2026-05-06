@@ -80,7 +80,12 @@
   function setActiveNav(path) {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-item--active'));
     const map = { '/_/d/': 'nav-dashboard', '/_/t/': 'nav-transactions', '/_/a/': 'nav-analytics', '/_/r/': 'nav-recurring', '/_/s/': 'nav-settings' };
-    const id = map[path];
+    let id = map[path];
+    if (!id) {
+      for (const [prefix, navId] of Object.entries(map)) {
+        if (path.startsWith(prefix)) { id = navId; break; }
+      }
+    }
     if (id) document.getElementById(id)?.classList.add('nav-item--active');
   }
   document.body.addEventListener('htmx:afterSwap', function(e) {

@@ -6,8 +6,9 @@
     <h3 class="modal__title">{{ title }}</h3>
     <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
 
-    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#content" hx-swap="innerHTML">
       {% csrf_token %}
+      <input type="hidden" name="tab" value="categories">
 
       <div class="field">
         <label class="field__label" for="id_name">name</label>

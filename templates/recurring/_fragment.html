@@ -63,7 +63,7 @@
         <tr {% if not r.active %}style="opacity:0.45;"{% endif %}>
           <td>
             {% if r.active %}
-              <form hx-post="/_/r/{{ r.pk }}/toggle/" hx-swap="none" style="margin:0;">
+              <form hx-post="/_/r/{{ r.pk }}/toggle/" hx-target="#content" hx-swap="innerHTML" style="margin:0;">
                 {% csrf_token %}
                 <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
                 <button type="submit" class="paid-toggle {% if r.done %}paid-toggle--done{% endif %} {% if r.kind == 'income' %}paid-toggle--income{% endif %}">
