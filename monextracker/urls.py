@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.conf.urls.i18n import set_language
 from django.urls import include, path
 from django.shortcuts import redirect
 
 urlpatterns = [
+    path("i18n/setlang/", set_language, name="set_language"),
     # auth entry (unavoidable)
     path("accounts/", include("accounts.urls", namespace="accounts")),
 

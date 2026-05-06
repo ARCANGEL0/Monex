@@ -1,0 +1,443 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+msgid "tracker"
+msgstr "monitor"
+
+msgid "language"
+msgstr "język"
+
+msgid "toggle menu"
+msgstr "otwórz menu"
+
+msgid "Finance Tracker"
+msgstr "Monitor Finansów"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Transactions"
+msgstr "Transakcje"
+
+msgid "Analytics"
+msgstr "Analityka"
+
+msgid "Recurring"
+msgstr "Cykliczne"
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "operator"
+msgstr "operator"
+
+msgid "Change Passcode"
+msgstr "Zmień kod"
+
+msgid "Disconnect"
+msgstr "Rozłącz"
+
+msgid "developed by"
+msgstr "stworzone przez"
+
+msgid "dashboard"
+msgstr "panel"
+
+msgid "dashboard / overview"
+msgstr "panel / przegląd"
+
+msgid "// system online"
+msgstr "// system online"
+
+msgid "cycle"
+msgstr "cykl"
+
+msgid "monthly cap"
+msgstr "miesięczny limit"
+
+msgid "no spend cap set for this cycle"
+msgstr "brak limitu wydatków dla tego cyklu"
+
+msgid "configure budget"
+msgstr "skonfiguruj budżet"
+
+msgid "Income"
+msgstr "Przychody"
+
+msgid "credits in"
+msgstr "wpływy"
+
+msgid "Expense"
+msgstr "Wydatek"
+
+msgid "debits out"
+msgstr "wypływy"
+
+msgid "Net"
+msgstr "Netto"
+
+msgid "balance delta"
+msgstr "zmiana salda"
+
+msgid "Entries"
+msgstr "Wpisy"
+
+msgid "events this cycle"
+msgstr "zdarzenia w tym cyklu"
+
+msgid "Recurring Queue"
+msgstr "Kolejka Cykliczna"
+
+msgid "payments left this cycle"
+msgstr "płatności pozostałe w tym cyklu"
+
+msgid "amount left"
+msgstr "pozostała kwota"
+
+msgid "all clear"
+msgstr "wszystko opłacone"
+
+msgid "expenses by category"
+msgstr "wydatki według kategorii"
+
+msgid "bank movement"
+msgstr "ruch bankowy"
+
+msgid "analytics / patterns"
+msgstr "analityka / wzorce"
+
+msgid "// pattern scan"
+msgstr "// skan wzorców"
+
+msgid "flow diagnostics"
+msgstr "diagnostyka przepływu"
+
+msgid "Total Expenses"
+msgstr "Łączne wydatki"
+
+msgid "outflow this cycle"
+msgstr "wydatki w tym cyklu"
+
+msgid "Total Income"
+msgstr "Łączne przychody"
+
+msgid "inflow this cycle"
+msgstr "wpływy w tym cyklu"
+
+msgid "Avg / Day"
+msgstr "Śr. / Dzień"
+
+msgid "daily burn rate"
+msgstr "dzienne tempo wydatków"
+
+msgid "events logged"
+msgstr "zapisane zdarzenia"
+
+msgid "current cycle only"
+msgstr "tylko bieżący cykl"
+
+msgid "no live queue"
+msgstr "brak aktywnej kolejki"
+
+msgid "savings rate"
+msgstr "wskaźnik oszczędzania"
+
+msgid "of income retained"
+msgstr "zachowanego dochodu"
+
+msgid "weekly spend"
+msgstr "wydatki tygodniowe"
+
+msgid "category evolution"
+msgstr "ewolucja kategorii"
+
+msgid "this vs last month"
+msgstr "ten miesiąc vs poprzedni"
+
+msgid "category comparison"
+msgstr "porównanie kategorii"
+
+msgid "category movers"
+msgstr "największe zmiany kategorii"
+
+msgid "vs last month"
+msgstr "vs poprzedni miesiąc"
+
+msgid "spending velocity"
+msgstr "tempo wydatków"
+
+msgid "cumulative vs projected"
+msgstr "skumulowane vs prognozowane"
+
+msgid "12-month flow"
+msgstr "przepływ 12-miesięczny"
+
+msgid "income vs expense"
+msgstr "przychody vs wydatki"
+
+msgid "top spending days"
+msgstr "dni z najwyższymi wydatkami"
+
+msgid "no spending days"
+msgstr "brak dni z wydatkami"
+
+msgid "payment queue"
+msgstr "kolejka płatności"
+
+msgid "remaining this cycle"
+msgstr "pozostałe w tym cyklu"
+
+msgid "day"
+msgstr "dzień"
+
+msgid "total"
+msgstr "suma"
+
+msgid "all recurring payments cleared"
+msgstr "wszystkie płatności cykliczne zostały rozliczone"
+
+msgid "no live payment queue for this cycle"
+msgstr "brak aktywnej kolejki płatności dla tego cyklu"
+
+msgid "largest outflows"
+msgstr "największe wypływy"
+
+msgid "selected cycle"
+msgstr "wybrany cykl"
+
+msgid "name"
+msgstr "nazwa"
+
+msgid "category"
+msgstr "kategoria"
+
+msgid "date"
+msgstr "data"
+
+msgid "amount"
+msgstr "kwota"
+
+msgid "no expense outflows this cycle"
+msgstr "brak wypływów wydatków w tym cyklu"
+
+msgid "transactions / ledger"
+msgstr "transakcje / rejestr"
+
+msgid "// transaction ledger"
+msgstr "// rejestr transakcji"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Kind"
+msgstr "Typ"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "Category"
+msgstr "Kategoria"
+
+msgid "Amount"
+msgstr "Kwota"
+
+msgid "edit"
+msgstr "edytuj"
+
+msgid "no entries logged"
+msgstr "brak zapisanych wpisów"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "brak transakcji dla %(selected_month)s"
+
+msgid "recurring / scheduled"
+msgstr "cykliczne / zaplanowane"
+
+msgid "// recurring queue"
+msgstr "// kolejka cykliczna"
+
+msgid "scheduled flow"
+msgstr "zaplanowany przepływ"
+
+msgid "New Rule"
+msgstr "Nowa reguła"
+
+msgid "To Pay"
+msgstr "Do zapłaty"
+
+msgid "To Receive"
+msgstr "Do otrzymania"
+
+msgid "Net Remaining"
+msgstr "Pozostałe netto"
+
+msgid "income − expense (pending)"
+msgstr "przychody − wydatki (oczekujące)"
+
+msgid "Payments Left"
+msgstr "Pozostałe płatności"
+
+msgid "pending recurring expenses"
+msgstr "oczekujące wydatki cykliczne"
+
+msgid "received"
+msgstr "otrzymano"
+
+msgid "pending"
+msgstr "oczekujące"
+
+msgid "paid"
+msgstr "opłacone"
+
+msgid "pay"
+msgstr "zapłać"
+
+msgid "paused"
+msgstr "wstrzymane"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Day"
+msgstr "Dzień"
+
+msgid "no recurring rules"
+msgstr "brak reguł cyklicznych"
+
+msgid "subscriptions, rent, salary — anything that hits monthly. add one to start tracking."
+msgstr "subskrypcje, czynsz, pensja — wszystko, co pojawia się co miesiąc. dodaj regułę, aby zacząć śledzić."
+
+msgid "settings / config"
+msgstr "ustawienia / konfiguracja"
+
+msgid "Budget"
+msgstr "Budżet"
+
+msgid "Banks"
+msgstr "Banki"
+
+msgid "Categories"
+msgstr "Kategorie"
+
+msgid "Users"
+msgstr "Użytkownicy"
+
+msgid "currency"
+msgstr "waluta"
+
+msgid "overall monthly cap"
+msgstr "ogólny miesięczny limit"
+
+msgid "cap"
+msgstr "limit"
+
+msgid "leave empty for no cap"
+msgstr "pozostaw puste, aby nie ustawiać limitu"
+
+msgid "Save Budget"
+msgstr "Zapisz budżet"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// gdy wydatki to przekroczą, panel staje się czerwony."
+
+msgid "per-category caps"
+msgstr "limity dla kategorii"
+
+msgid "Cap"
+msgstr "Limit"
+
+msgid "New Bank"
+msgstr "Nowy bank"
+
+msgid "New Category"
+msgstr "Nowa kategoria"
+
+msgid "New Operator"
+msgstr "Nowy operator"
+
+msgid "auth"
+msgstr "logowanie"
+
+msgid "identify yourself"
+msgstr "zidentyfikuj się"
+
+msgid "access denied. invalid credentials."
+msgstr "dostęp zabroniony. nieprawidłowe dane logowania."
+
+msgid "operator id"
+msgstr "identyfikator operatora"
+
+msgid "passcode"
+msgstr "kod"
+
+msgid "keep me logged in"
+msgstr "pozostań zalogowany"
+
+msgid "Authenticate"
+msgstr "Zaloguj"
+
+msgid "// forgot your passcode?"
+msgstr "// nie pamiętasz kodu?"
+
+msgid "reset passcode"
+msgstr "zresetuj kod"
+
+msgid "close"
+msgstr "zamknij"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// wpisz swój e-mail. wyślemy 6-cyfrowy kod weryfikacyjny."
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Send Code"
+msgstr "Wyślij kod"
+
+msgid "change passcode"
+msgstr "zmień kod"
+
+msgid "current passcode"
+msgstr "obecny kod"
+
+msgid "new passcode"
+msgstr "nowy kod"
+
+msgid "confirm new passcode"
+msgstr "potwierdź nowy kod"
+
+msgid "Save"
+msgstr "Zapisz"
+
+msgid "e.g. spotify"
+msgstr "np. spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "pozostaw puste, aby zachować obecny kod"
+
+msgid "superadmin only"
+msgstr "tylko superadministrator"
+
+msgid "budget updated."
+msgstr "budżet zaktualizowany."
+
+msgid "incorrect current passcode"
+msgstr "nieprawidłowy obecny kod"
+
+msgid "passcodes do not match"
+msgstr "kody nie są zgodne"

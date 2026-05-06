@@ -1,47 +1,51 @@
-{% load humanize static %}
+{% load humanize static i18n %}
 
-<div hx-swap-oob="innerHTML:.topbar__title">analytics / patterns</div>
+{% trans "analytics / patterns" as topbar_title_text %}
+{% trans "// pattern scan" as hero_title_text %}
+{% trans "flow diagnostics" as hero_prefix_text %}
+
+<div hx-swap-oob="innerHTML:.topbar__title">{{ topbar_title_text }}</div>
 <div hx-swap-oob="innerHTML:.topbar__actions"></div>
 
-{% include "_partials/hero3d.html" with hero_title="// pattern scan" hero_prefix="flow diagnostics" hero_form_id="anMonthForm" hero_action="/_/a/" hero_body_id="analytics-body" hero_push_url="false" %}
+{% include "_partials/hero3d.html" with hero_title=hero_title_text hero_prefix=hero_prefix_text hero_form_id="anMonthForm" hero_action="/_/a/" hero_body_id="analytics-body" hero_push_url="false" %}
 
 <div id="analytics-body">
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
-    <div class="kpi__label">Total Expenses</div>
+    <div class="kpi__label">{% trans "Total Expenses" %}</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ total_expense|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">outflow this cycle</div>
+    <div class="kpi__sub">{% trans "outflow this cycle" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Total Income</div>
+    <div class="kpi__label">{% trans "Total Income" %}</div>
     <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ total_income|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">inflow this cycle</div>
+    <div class="kpi__sub">{% trans "inflow this cycle" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Avg / Day</div>
+    <div class="kpi__label">{% trans "Avg / Day" %}</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ avg_daily|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">daily burn rate</div>
+    <div class="kpi__sub">{% trans "daily burn rate" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Entries</div>
+    <div class="kpi__label">{% trans "Entries" %}</div>
     <div class="kpi__value kpi__value--text">{{ tx_count }}</div>
-    <div class="kpi__sub">events logged</div>
+    <div class="kpi__sub">{% trans "events logged" %}</div>
   </div>
   <div class="kpi kpi--queue">
-    <div class="kpi__label">Recurring Queue</div>
+    <div class="kpi__label">{% trans "Recurring Queue" %}</div>
     <div class="kpi__value kpi__value--text">{{ pending_count }}</div>
-    <div class="kpi__sub">{% if is_current_cycle %}payments left this cycle{% else %}current cycle only{% endif %}</div>
+    <div class="kpi__sub">{% if is_current_cycle %}{% trans "payments left this cycle" %}{% else %}{% trans "current cycle only" %}{% endif %}</div>
     <div class="kpi__meta">
-      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-label">{% trans "amount left" %}</span>
       <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}</span>
     </div>
     <div class="kpi__note">
       {% if pending %}
         {% for rule in pending %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
       {% elif is_current_cycle %}
-        all clear
+        {% trans "all clear" %}
       {% else %}
-        no live queue
+        {% trans "no live queue" %}
       {% endif %}
     </div>
   </div>
@@ -49,7 +53,7 @@
 
 <div class="grid grid--2" style="margin-bottom:18px;">
   <div class="card" style="text-align:center;">
-    <div class="card__header" style="justify-content:center;"><h3 class="card__title">savings rate</h3></div>
+    <div class="card__header" style="justify-content:center;"><h3 class="card__title">{% trans "savings rate" %}</h3></div>
     <div class="gauge">
       <svg class="gauge__svg" viewBox="0 0 100 100" aria-hidden="true">
         <polygon class="gauge__hex" points="50,4 88,27 88,73 50,96 12,73 12,27"/>
@@ -61,7 +65,7 @@
       <div class="gauge__center">
         <div>
           <div class="gauge__pct {% if savings_rate < 0 %}gauge__pct--neg{% endif %}">{{ savings_rate|floatformat:0 }}%</div>
-          <div class="gauge__sub">of income retained</div>
+          <div class="gauge__sub">{% trans "of income retained" %}</div>
         </div>
       </div>
     </div>
@@ -69,7 +73,7 @@
   </div>
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">weekly spend</h3>
+      <h3 class="card__title">{% trans "weekly spend" %}</h3>
       <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
     </div>
     <div style="height: 300px; position: relative;">
@@ -78,9 +82,9 @@
   </div>
 </div>
 
-<div class="card" style="margin-bottom:18px;">
+  <div class="card" style="margin-bottom:18px;">
   <div class="card__header">
-    <h3 class="card__title">category evolution</h3>
+    <h3 class="card__title">{% trans "category evolution" %}</h3>
     <span class="dim mono" style="font-size:0.72rem;">top {{ evo_count }} · 12 months</span>
   </div>
   <div style="height: 300px; position: relative;">
@@ -88,10 +92,10 @@
   </div>
 </div>
 
-<div class="card" style="margin-bottom:18px;">
+  <div class="card" style="margin-bottom:18px;">
   <div class="card__header">
-    <h3 class="card__title">this vs last month</h3>
-    <span class="dim mono" style="font-size:0.72rem;">category comparison</span>
+    <h3 class="card__title">{% trans "this vs last month" %}</h3>
+    <span class="dim mono" style="font-size:0.72rem;">{% trans "category comparison" %}</span>
   </div>
   <div style="height: 300px; position: relative;">
     <canvas id="chart-cat-comparison"></canvas>
@@ -100,8 +104,8 @@
 
 <div class="card" style="margin-bottom:18px;">
     <div class="card__header">
-      <h3 class="card__title">category movers</h3>
-      <span class="dim mono" style="font-size:0.72rem;">vs last month</span>
+      <h3 class="card__title">{% trans "category movers" %}</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{% trans "vs last month" %}</span>
     </div>
   <div style="height: 260px; position: relative;">
     <canvas id="chart-movers"></canvas>
@@ -111,8 +115,8 @@
 <div class="grid grid--2" style="margin-bottom:18px;">
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">spending velocity</h3>
-      <span class="dim mono" style="font-size:0.72rem;">cumulative vs projected</span>
+      <h3 class="card__title">{% trans "spending velocity" %}</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{% trans "cumulative vs projected" %}</span>
     </div>
     <div style="height: 260px; position: relative;">
       <canvas id="chart-burn-rate"></canvas>
@@ -120,8 +124,8 @@
   </div>
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">12-month flow</h3>
-      <span class="dim mono" style="font-size:0.72rem;">income vs expense</span>
+      <h3 class="card__title">{% trans "12-month flow" %}</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{% trans "income vs expense" %}</span>
     </div>
     <div style="height: 260px; position: relative;">
       <canvas id="chart-trend"></canvas>
@@ -132,7 +136,7 @@
 <div class="grid grid--2">
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">top spending days</h3>
+      <h3 class="card__title">{% trans "top spending days" %}</h3>
       <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
     </div>
     {% if top_days %}
@@ -148,14 +152,14 @@
     {% else %}
       <div class="empty" style="padding:20px;">
         <div class="empty__icon">○</div>
-        <p class="dim">no spending days</p>
+        <p class="dim">{% trans "no spending days" %}</p>
       </div>
     {% endif %}
   </div>
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">payment queue</h3>
-      <span class="dim mono" style="font-size:0.72rem;">{% if is_current_cycle %}remaining this cycle{% else %}current cycle only{% endif %}</span>
+      <h3 class="card__title">{% trans "payment queue" %}</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{% if is_current_cycle %}{% trans "remaining this cycle" %}{% else %}{% trans "current cycle only" %}{% endif %}</span>
     </div>
     {% if pending %}
       <ul class="pending-list">
@@ -164,17 +168,17 @@
             <span class="pending-dot" style="background:{{ rule.bank.color }};"></span>
             <span class="pending-name">{{ rule.name }}</span>
             <span class="pending-amt">{{ currency_symbol }}{{ rule.amount|floatformat:2 }}</span>
-            <span class="pending-day dim mono">day {{ rule.day_of_month }}</span>
+            <span class="pending-day dim mono">{% trans "day" %} {{ rule.day_of_month }}</span>
           </li>
         {% endfor %}
       </ul>
       <div class="pending-total">
-        total: {{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}
+        {% trans "total" %}: {{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}
       </div>
     {% else %}
       <div class="empty" style="padding:20px;">
         <div class="empty__icon">✓</div>
-        <p class="dim">{% if is_current_cycle %}all recurring payments cleared{% else %}no live payment queue for this cycle{% endif %}</p>
+        <p class="dim">{% if is_current_cycle %}{% trans "all recurring payments cleared" %}{% else %}{% trans "no live payment queue for this cycle" %}{% endif %}</p>
       </div>
     {% endif %}
   </div>
@@ -182,17 +186,17 @@
 
 <div class="card" style="margin-top:18px;">
   <div class="card__header">
-    <h3 class="card__title">largest outflows</h3>
-    <span class="dim mono" style="font-size:0.72rem;">selected cycle</span>
+    <h3 class="card__title">{% trans "largest outflows" %}</h3>
+    <span class="dim mono" style="font-size:0.72rem;">{% trans "selected cycle" %}</span>
   </div>
   {% if largest_expenses %}
     <table class="table table--compact">
       <thead>
         <tr>
-          <th>name</th>
-          <th>category</th>
-          <th>date</th>
-          <th class="text-right">amount</th>
+          <th>{% trans "name" %}</th>
+          <th>{% trans "category" %}</th>
+          <th>{% trans "date" %}</th>
+          <th class="text-right">{% trans "amount" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -209,7 +213,7 @@
   {% else %}
     <div class="empty" style="padding:20px;">
       <div class="empty__icon">○</div>
-      <p class="dim">no expense outflows this cycle</p>
+      <p class="dim">{% trans "no expense outflows this cycle" %}</p>
     </div>
   {% endif %}
 </div>

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 from transactions.models import Bank, Category
 
@@ -10,7 +11,7 @@ class OperatorForm(forms.ModelForm):
     password = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={"class": "input", "autocomplete": "new-password"}),
-        help_text="leave blank to keep existing passcode",
+        help_text=_("leave blank to keep existing passcode"),
     )
 
     class Meta:

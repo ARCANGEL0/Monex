@@ -73,12 +73,20 @@
   line-height: 1;
 }
 
+.sidebar__title-main {
+  display: block;
+  color: var(--gold-hot);
+  letter-spacing: 0.34em;
+  text-shadow: 0 0 14px rgba(252, 211, 77, 0.45), 0 0 28px rgba(232, 185, 35, 0.18);
+}
+
 .sidebar__title small {
   display: block;
   font-size: 0.65rem;
-  color: var(--text-muted);
+  color: rgba(252, 211, 77, 0.72);
   letter-spacing: 0.3em;
-  margin-top: 4px;
+  margin-top: 6px;
+  text-shadow: 0 0 10px rgba(232, 185, 35, 0.14);
 }
 
 .sidebar__nav {
@@ -258,12 +266,26 @@
 
 .topbar__title small { color: var(--gold); margin-right: 10px; opacity: 0.7; }
 
+.topbar__rail { display: flex; align-items: center; gap: 10px; }
 .topbar__actions { display: flex; align-items: center; gap: 10px; }
+.lang-switch { margin: 0; }
+.lang-switch__select {
+  min-width: 138px;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  background: rgba(0, 0, 0, 0.72);
+  border-color: var(--gold-dim);
+  color: var(--gold-hot);
+}
 
 .content {
   padding: 24px;
   flex: 1;
+  min-width: 0;
+  overflow-x: hidden;
 }
+.content--booting { opacity: 0; }
 
 .topbar__menu {
   display: none;
@@ -303,6 +325,8 @@
   .content { padding: 14px; }
   .topbar { padding: 0 14px; gap: 8px; }
   .topbar__title { font-size: 0.82rem; letter-spacing: 0.14em; }
+  .topbar__rail { gap: 8px; }
   .topbar__actions .btn { font-size: 0.7rem; padding: 6px 10px; letter-spacing: 0.08em; }
   .topbar__actions .btn--sm { padding: 4px 8px; }
+  .lang-switch__select { min-width: 112px; font-size: 0.64rem; padding: 4px 8px; }
 }

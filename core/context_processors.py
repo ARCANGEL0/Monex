@@ -28,7 +28,19 @@ CURRENCIES = {
     "SAR": "﷼",
 }
 
+LANGUAGE_OPTIONS = [
+    {"code": "en", "label": "English", "flag": "🇺🇸"},
+    {"code": "es", "label": "Español", "flag": "🇪🇸"},
+    {"code": "pt", "label": "Português", "flag": "🇵🇹"},
+    {"code": "pl", "label": "Polski", "flag": "🇵🇱"},
+]
+
 def currency_ctx(request):
     sym = request.session.get("currency", settings.CURRENCY_SYMBOL)
     code = request.session.get("currency_code", settings.CURRENCY_CODE)
-    return {"currency_symbol": sym, "currency_code": code, "currencies": CURRENCIES}
+    return {
+        "currency_symbol": sym,
+        "currency_code": code,
+        "currencies": CURRENCIES,
+        "language_options": LANGUAGE_OPTIONS,
+    }

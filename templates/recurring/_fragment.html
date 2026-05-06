@@ -1,46 +1,50 @@
-{% load humanize %}
+{% load humanize i18n %}
 
-<div hx-swap-oob="innerHTML:.topbar__title">recurring / scheduled</div>
+{% trans "recurring / scheduled" as topbar_title_text %}
+{% trans "// recurring queue" as hero_title_text %}
+{% trans "scheduled flow" as hero_prefix_text %}
+
+<div hx-swap-oob="innerHTML:.topbar__title">{{ topbar_title_text }}</div>
 
 <div hx-swap-oob="innerHTML:.topbar__actions">
   <a class="btn btn--primary" href="#"
      hx-get="/_/r/new/"
      hx-target="#modal-slot"
-     hx-swap="innerHTML">+ New Rule</a>
+     hx-swap="innerHTML">+ {% trans "New Rule" %}</a>
 </div>
 
-{% include "_partials/hero3d.html" with hero_title="// recurring queue" hero_prefix="scheduled flow" hero_value=selected|date:'M Y'|lower hero_form_id="recMonthForm" hero_action="/_/r/" hero_body_id="recurring-body" hero_push_url="false" %}
+{% include "_partials/hero3d.html" with hero_title=hero_title_text hero_prefix=hero_prefix_text hero_value=selected|date:'M Y'|lower hero_form_id="recMonthForm" hero_action="/_/r/" hero_body_id="recurring-body" hero_push_url="false" %}
 
 <div id="recurring-body">
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
-    <div class="kpi__label">To Pay</div>
+    <div class="kpi__label">{% trans "To Pay" %}</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ to_pay|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">paid {{ currency_symbol }}{{ paid_so_far|floatformat:2|intcomma }} so far</div>
+    <div class="kpi__sub">{% blocktrans with symbol=currency_symbol amount=paid_so_far|floatformat:2|intcomma %}paid {{ symbol }}{{ amount }} so far{% endblocktrans %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">To Receive</div>
+    <div class="kpi__label">{% trans "To Receive" %}</div>
     <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ to_receive|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">received {{ currency_symbol }}{{ received_so_far|floatformat:2|intcomma }} so far</div>
+    <div class="kpi__sub">{% blocktrans with symbol=currency_symbol amount=received_so_far|floatformat:2|intcomma %}received {{ symbol }}{{ amount }} so far{% endblocktrans %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Net Remaining</div>
+    <div class="kpi__label">{% trans "Net Remaining" %}</div>
     <div class="kpi__value">{{ currency_symbol }}{{ net_remaining|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">income − expense (pending)</div>
+    <div class="kpi__sub">{% trans "income − expense (pending)" %}</div>
   </div>
   <div class="kpi kpi--queue">
-    <div class="kpi__label">Payments Left</div>
+    <div class="kpi__label">{% trans "Payments Left" %}</div>
     <div class="kpi__value kpi__value--text">{{ pending_expense_count }}</div>
-    <div class="kpi__sub">pending recurring expenses</div>
+    <div class="kpi__sub">{% trans "pending recurring expenses" %}</div>
     <div class="kpi__meta">
-      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-label">{% trans "amount left" %}</span>
       <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ to_pay|floatformat:2|intcomma }}</span>
     </div>
     <div class="kpi__note">
       {% if pending_expense_rules %}
         {% for rule in pending_expense_rules %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
       {% else %}
-        all clear
+        {% trans "all clear" %}
       {% endif %}
     </div>
   </div>
@@ -53,12 +57,12 @@
     <thead>
       <tr>
         <th style="width:120px;">Status</th>
-        <th>Name</th>
-        <th style="width:90px;">Kind</th>
-        <th style="width:70px;">Day</th>
-        <th style="width:130px;">Bank</th>
-        <th style="width:140px;">Category</th>
-        <th class="num" style="width:120px;">Amount</th>
+        <th>{% trans "Name" %}</th>
+        <th style="width:90px;">{% trans "Kind" %}</th>
+        <th style="width:70px;">{% trans "Day" %}</th>
+        <th style="width:130px;">{% trans "Bank" %}</th>
+        <th style="width:140px;">{% trans "Category" %}</th>
+        <th class="num" style="width:120px;">{% trans "Amount" %}</th>
         <th style="width:120px;"></th>
       </tr>
     </thead>
@@ -72,11 +76,11 @@
                 <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
                 <button type="submit" class="paid-toggle {% if r.done %}paid-toggle--done{% endif %} {% if r.kind == 'income' %}paid-toggle--income{% endif %}">
                   <span class="paid-toggle__check">{% if r.done %}✓{% endif %}</span>
-                  {% if r.kind == 'income' %}{% if r.done %}received{% else %}pending{% endif %}{% else %}{% if r.done %}paid{% else %}pay{% endif %}{% endif %}
+                  {% if r.kind == 'income' %}{% if r.done %}{% trans "received" %}{% else %}{% trans "pending" %}{% endif %}{% else %}{% if r.done %}{% trans "paid" %}{% else %}{% trans "pay" %}{% endif %}{% endif %}
                 </button>
               </form>
             {% else %}
-              <span class="chip">paused</span>
+              <span class="chip">{% trans "paused" %}</span>
             {% endif %}
           </td>
           <td>{{ r.name }}</td>
@@ -96,7 +100,7 @@
           <td class="num" style="white-space:nowrap;">
             <a href="#" class="btn btn--ghost btn--sm"
                hx-get="/_/r/{{ r.pk }}/edit/"
-               hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+               hx-target="#modal-slot" hx-swap="innerHTML">{% trans "edit" %}</a>
             <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
                hx-get="/_/r/{{ r.pk }}/delete/"
                hx-target="#modal-slot" hx-swap="innerHTML"
@@ -109,13 +113,13 @@
   </div>
 </div>
 <p class="dim mono" style="font-size:0.72rem;margin-top:14px;">
-  // toggle a row to mark paid/received for the selected cycle. you can also run `python manage.py materialize_recurring` daily to auto-tick rules whose day has arrived.
+  {% trans "// toggle a row to mark paid/received for the selected cycle. you can also run `python manage.py materialize_recurring` daily to auto-tick rules whose day has arrived." %}
 </p>
 {% else %}
 <div class="empty">
   <div class="empty__icon">↻</div>
-  <h3>no recurring rules</h3>
-  <p class="dim">subscriptions, rent, salary — anything that hits monthly. add one to start tracking.</p>
+  <h3>{% trans "no recurring rules" %}</h3>
+  <p class="dim">{% trans "subscriptions, rent, salary — anything that hits monthly. add one to start tracking." %}</p>
 </div>
 {% endif %}
 </div>

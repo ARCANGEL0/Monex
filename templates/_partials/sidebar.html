@@ -1,3 +1,4 @@
+{% load i18n %}
 <aside class="sidebar" :class="menu && 'sidebar--open'">
   <div class="sidebar__brand">
     <svg class="sidebar__logo" viewBox="0 0 40 40" aria-hidden="true">
@@ -12,8 +13,8 @@
       <polygon points="20,14 25.5,17.25 25.5,22.75 20,26 14.5,22.75 14.5,17.25" fill="#fcd34d"/>
     </svg>
     <div class="sidebar__title">
-      {{ request.user.username|default:"operator" }}
-      <small>MonEx tracker</small>
+      <span class="sidebar__title-main">M O N E X</span>
+      <small>{% trans "Finance Tracker" %}</small>
     </div>
   </div>
   <nav class="sidebar__nav">
@@ -21,31 +22,31 @@
        hx-get="/_/d/" hx-target="#content" hx-push-url="false"
        @click="menu = false"
        id="nav-dashboard">
-      <span class="nav-item__icon">◆</span> Dashboard
+      <span class="nav-item__icon">◆</span> {% trans "Dashboard" %}
     </a>
     <a href="#" class="nav-item"
        hx-get="/_/t/" hx-target="#content" hx-push-url="false"
        @click="menu = false"
        id="nav-transactions">
-      <span class="nav-item__icon">≡</span> Transactions
+      <span class="nav-item__icon">≡</span> {% trans "Transactions" %}
     </a>
     <a href="#" class="nav-item"
        hx-get="/_/a/" hx-target="#content" hx-push-url="false"
        @click="menu = false"
        id="nav-analytics">
-      <span class="nav-item__icon">▲</span> Analytics
+      <span class="nav-item__icon">▲</span> {% trans "Analytics" %}
     </a>
     <a href="#" class="nav-item"
        hx-get="/_/r/" hx-target="#content" hx-push-url="false"
        @click="menu = false"
        id="nav-recurring">
-      <span class="nav-item__icon">↻</span> Recurring
+      <span class="nav-item__icon">↻</span> {% trans "Recurring" %}
     </a>
     <a href="#" class="nav-item"
        hx-get="/_/s/" hx-target="#content" hx-push-url="false"
        @click="menu = false"
        id="nav-settings">
-      <span class="nav-item__icon">⚙</span> Settings
+      <span class="nav-item__icon">⚙</span> {% trans "Settings" %}
     </a>
   </nav>
   <div class="sidebar__foot">
@@ -53,7 +54,7 @@
       <div class="op-wrap" x-data="{ open: false }">
         <button type="button" class="op-trigger" :class="open && 'op-trigger--open'" @click="open = !open">
           <span class="live-dot"></span>
-          operator: <span class="gold">{{ request.user.username }}</span>
+          {% trans "operator" %}: <span class="gold">{{ request.user.username }}</span>
           <span class="op-trigger__chev" :class="open && 'op-trigger__chev--open'">▾</span>
         </button>
         <div x-show="open" x-cloak @click.outside="open = false" class="op-menu">
@@ -61,16 +62,16 @@
              hx-get="{% url 'accounts:passcode' %}"
              hx-target="#modal-slot"
              hx-swap="innerHTML"
-             @click="open = false">Change Passcode</a>
+             @click="open = false">{% trans "Change Passcode" %}</a>
           <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
             {% csrf_token %}
-            <button type="submit" class="btn btn--danger btn--sm op-menu__item" style="width:100%;justify-content:center;">Disconnect</button>
+            <button type="submit" class="btn btn--danger btn--sm op-menu__item" style="width:100%;justify-content:center;">{% trans "Disconnect" %}</button>
           </form>
         </div>
       </div>
     {% endif %}
     <div class="sidebar__build"> <a style="color: inherit" href="https://arcangelo.net"> 
-       develoed by: ARCANGELO
+       {% trans "developed by" %}: ARCANGELO
          </a> 
    </div>
   </div>

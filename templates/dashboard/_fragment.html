@@ -1,20 +1,24 @@
-{% load humanize static %}
+{% load humanize static i18n %}
 
-<div hx-swap-oob="innerHTML:.topbar__title">dashboard / overview</div>
+{% trans "dashboard / overview" as topbar_title_text %}
+{% trans "// system online" as hero_title_text %}
+{% trans "cycle" as hero_prefix_text %}
+
+<div hx-swap-oob="innerHTML:.topbar__title">{{ topbar_title_text }}</div>
 <div hx-swap-oob="innerHTML:.topbar__actions"></div>
 
-{% include "_partials/hero3d.html" with hero_title="// system online" hero_prefix="cycle" hero_value=selected|date:'M Y'|lower hero_form_id="dashMonthForm" hero_action="/_/d/" hero_body_id="dashboard-body" hero_push_url="false" %}
+{% include "_partials/hero3d.html" with hero_title=hero_title_text hero_prefix=hero_prefix_text hero_value=selected|date:'M Y'|lower hero_form_id="dashMonthForm" hero_action="/_/d/" hero_body_id="dashboard-body" hero_push_url="false" %}
 
 <div id="dashboard-body">
 {% if budget %}
   {% if budget.over %}
     <div class="warn-bar">
-      over budget — {{ budget.pct|floatformat:0 }}% of {{ currency_symbol }}{{ budget.cap|floatformat:2|intcomma }} cap consumed
+      {% blocktrans with pct=budget.pct|floatformat:0 amount=budget.cap|floatformat:2|intcomma symbol=currency_symbol %}over budget — {{ pct }}% of {{ symbol }}{{ amount }} cap consumed{% endblocktrans %}
     </div>
   {% endif %}
   <div class="card" style="margin-bottom:18px;">
     <div class="card__header">
-      <h3 class="card__title">monthly cap</h3>
+      <h3 class="card__title">{% trans "monthly cap" %}</h3>
       <span class="dim mono" style="font-size:0.8rem;">
         {{ currency_symbol }}{{ budget.spent|floatformat:2|intcomma }} / {{ currency_symbol }}{{ budget.cap|floatformat:2|intcomma }}
         <span class="{% if budget.over %}red{% elif budget.warn %}gold{% else %}dim{% endif %}">
@@ -27,52 +31,52 @@
     </div>
     <p class="dim mono" style="font-size:0.72rem;margin-top:8px;">
       {% if budget.over %}
-        // overspent by {{ currency_symbol }}{{ budget.spent|floatformat:2 }} − {{ currency_symbol }}{{ budget.cap|floatformat:2 }} = <span class="red">{{ currency_symbol }}{{ budget.spent|floatformat:2 }}</span>
+        {% blocktrans with spent=budget.spent|floatformat:2 cap=budget.cap|floatformat:2 symbol=currency_symbol %}// overspent by {{ symbol }}{{ spent }} − {{ symbol }}{{ cap }} = {% endblocktrans %}<span class="red">{{ currency_symbol }}{{ budget.spent|floatformat:2 }}</span>
       {% else %}
-        // {{ currency_symbol }}{{ budget.remaining|floatformat:2|intcomma }} remaining in cycle
+        {% blocktrans with remaining=budget.remaining|floatformat:2|intcomma symbol=currency_symbol %}// {{ symbol }}{{ remaining }} remaining in cycle{% endblocktrans %}
       {% endif %}
     </p>
   </div>
 {% else %}
   <div class="info-bar" style="margin-bottom:18px;">
-    no spend cap set for this cycle · <a href="#" class="gold" hx-get="/_/s/?tab=budget" hx-target="#content" hx-push-url="false">configure budget</a>
+    {% trans "no spend cap set for this cycle" %} · <a href="#" class="gold" hx-get="/_/s/?tab=budget" hx-target="#content" hx-push-url="false">{% trans "configure budget" %}</a>
   </div>
 {% endif %}
 
 <div class="grid grid--3">
   <div class="kpi">
-    <div class="kpi__label">Income</div>
+    <div class="kpi__label">{% trans "Income" %}</div>
     <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ income|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">credits in</div>
+    <div class="kpi__sub">{% trans "credits in" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Expense</div>
+    <div class="kpi__label">{% trans "Expense" %}</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ expense|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">debits out</div>
+    <div class="kpi__sub">{% trans "debits out" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Net</div>
+    <div class="kpi__label">{% trans "Net" %}</div>
     <div class="kpi__value">{{ currency_symbol }}{{ net|floatformat:2|intcomma }}</div>
-    <div class="kpi__sub">balance delta</div>
+    <div class="kpi__sub">{% trans "balance delta" %}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Entries</div>
+    <div class="kpi__label">{% trans "Entries" %}</div>
     <div class="kpi__value kpi__value--text">{{ tx_count }}</div>
-    <div class="kpi__sub">events this cycle</div>
+    <div class="kpi__sub">{% trans "events this cycle" %}</div>
   </div>
   <div class="kpi kpi--queue">
-    <div class="kpi__label">Recurring Queue</div>
+    <div class="kpi__label">{% trans "Recurring Queue" %}</div>
     <div class="kpi__value kpi__value--text">{{ pending_count }}</div>
-    <div class="kpi__sub">payments left this cycle</div>
+    <div class="kpi__sub">{% trans "payments left this cycle" %}</div>
     <div class="kpi__meta">
-      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-label">{% trans "amount left" %}</span>
       <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}</span>
     </div>
     <div class="kpi__note">
       {% if pending %}
         {% for rule in pending %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
       {% else %}
-        all clear
+        {% trans "all clear" %}
       {% endif %}
     </div>
   </div>
@@ -82,13 +86,13 @@
 
 <div class="grid grid--2" style="margin-top:18px;">
   <div class="card">
-    <div class="card__header"><h3 class="card__title">expenses by category</h3></div>
+    <div class="card__header"><h3 class="card__title">{% trans "expenses by category" %}</h3></div>
     <div style="height: 280px; position: relative;">
       <canvas id="chart-category"></canvas>
     </div>
   </div>
   <div class="card">
-    <div class="card__header"><h3 class="card__title">bank movement</h3></div>
+    <div class="card__header"><h3 class="card__title">{% trans "bank movement" %}</h3></div>
     <div style="height: 280px; position: relative;">
       <canvas id="chart-bank"></canvas>
     </div>

@@ -1,30 +1,34 @@
-{% load humanize %}
+{% load humanize i18n %}
 
-<div hx-swap-oob="innerHTML:.topbar__title">transactions / ledger</div>
+{% trans "transactions / ledger" as topbar_title_text %}
+{% trans "// transaction ledger" as hero_title_text %}
+{% trans "cycle" as hero_prefix_text %}
+
+<div hx-swap-oob="innerHTML:.topbar__title">{{ topbar_title_text }}</div>
 
 <div hx-swap-oob="innerHTML:.topbar__actions">
   <a class="btn btn--primary" href="#"
      hx-get="/_/t/new/"
      hx-target="#modal-slot"
-     hx-swap="innerHTML">+ Add</a>
+     hx-swap="innerHTML">+ {% trans "Add" %}</a>
   <a class="btn btn--ghost btn--sm" href="/_/t/export.csv?month={{ selected|date:'Y-m' }}">CSV</a>
   <a class="btn btn--ghost btn--sm" href="/_/t/export.pdf?month={{ selected|date:'Y-m' }}">PDF</a>
 </div>
 
-{% include "_partials/hero3d.html" with hero_title="// transaction ledger" hero_prefix="cycle" hero_value=selected|date:'M Y'|lower hero_form_id="txMonthForm" hero_action="/_/t/" hero_body_id="transactions-body" hero_push_url="false" %}
+{% include "_partials/hero3d.html" with hero_title=hero_title_text hero_prefix=hero_prefix_text hero_value=selected|date:'M Y'|lower hero_form_id="txMonthForm" hero_action="/_/t/" hero_body_id="transactions-body" hero_push_url="false" %}
 
 <div id="transactions-body">
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
-    <div class="kpi__label">Income</div>
+    <div class="kpi__label">{% trans "Income" %}</div>
     <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ income_total|floatformat:2|intcomma }}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Expense</div>
+    <div class="kpi__label">{% trans "Expense" %}</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ expense_total|floatformat:2|intcomma }}</div>
   </div>
   <div class="kpi">
-    <div class="kpi__label">Net</div>
+    <div class="kpi__label">{% trans "Net" %}</div>
     <div class="kpi__value">{{ currency_symbol }}{{ net|floatformat:2|intcomma }}</div>
   </div>
 </div>
@@ -34,15 +38,15 @@
   <div class="table-wrap">
   <table class="table">
     <thead>
-      <tr>
-        <th style="width:90px;">Date</th>
-        <th>Name</th>
-        <th style="width:100px;">Kind</th>
-        <th style="width:130px;">Bank</th>
-        <th style="width:150px;">Category</th>
-        <th class="num" style="width:130px;">Amount</th>
-        <th style="width:120px;"></th>
-      </tr>
+        <tr>
+          <th style="width:90px;">{% trans "Date" %}</th>
+          <th>{% trans "Name" %}</th>
+          <th style="width:100px;">{% trans "Kind" %}</th>
+          <th style="width:130px;">{% trans "Bank" %}</th>
+          <th style="width:150px;">{% trans "Category" %}</th>
+          <th class="num" style="width:130px;">{% trans "Amount" %}</th>
+          <th style="width:120px;"></th>
+        </tr>
     </thead>
     <tbody>
       {% for t in transactions %}
@@ -68,7 +72,7 @@
           <td class="num" style="white-space: nowrap;">
             <a href="#" class="btn btn--ghost btn--sm"
                hx-get="/_/t/{{ t.pk }}/edit/"
-               hx-target="#modal-slot" hx-swap="innerHTML">edit</a>
+               hx-target="#modal-slot" hx-swap="innerHTML">{% trans "edit" %}</a>
             <a href="#" class="btn btn--ghost btn--sm" style="padding:5px 8px;color:var(--red-hot);border-color:var(--red);"
                hx-get="/_/t/{{ t.pk }}/delete/"
                hx-target="#modal-slot" hx-swap="innerHTML"
@@ -81,10 +85,10 @@
   </div>
 </div>
 {% else %}
-<div class="empty">
+  <div class="empty">
   <div class="empty__icon">◇</div>
-  <h3>no entries logged</h3>
-  <p class="dim">no transactions for {{ selected|date:'F Y' }}</p>
+  <h3>{% trans "no entries logged" %}</h3>
+  <p class="dim">{% blocktrans with selected_month=selected|date:'F Y' %}no transactions for {{ selected_month }}{% endblocktrans %}</p>
 </div>
 {% endif %}
 </div>

@@ -1,9 +1,10 @@
-{% load static %}<!doctype html>
-<html lang="en">
+{% load static i18n %}<!doctype html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>auth // tracker</title>
+  <title>{% trans "auth" %} // {% trans "tracker" %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -109,6 +110,15 @@
   </style>
 </head>
 <body>
+  <form method="post" action="{% url 'set_language' %}" style="position:fixed;top:16px;right:16px;z-index:20;">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}">
+    <select name="language" class="select lang-switch__select" onchange="this.form.submit()" aria-label="{% trans 'language' %}">
+      {% for lang in language_options %}
+        <option value="{{ lang.code }}" {% if LANGUAGE_CODE == lang.code %}selected{% endif %}>{{ lang.flag }} {{ lang.label }}</option>
+      {% endfor %}
+    </select>
+  </form>
   <form class="auth" method="post" autocomplete="on">
     {% csrf_token %}
     <svg class="auth__logo" viewBox="0 0 40 40" aria-hidden="true">
@@ -122,35 +132,35 @@
       <polygon points="20,8 31,14.5 31,25.5 20,32 9,25.5 9,14.5" fill="#0a0a0a"/>
       <polygon points="20,14 25.5,17.25 25.5,22.75 20,26 14.5,22.75 14.5,17.25" fill="#fcd34d"/>
     </svg>
-    <div class="auth__sub">identify yourself</div>
+    <div class="auth__sub">{% trans "identify yourself" %}</div>
 
     {% if form.errors %}
-      <div class="auth__error">access denied. invalid credentials.</div>
+      <div class="auth__error">{% trans "access denied. invalid credentials." %}</div>
     {% endif %}
 
     <div class="field">
-      <label class="field__label" for="id_username">operator id</label>
+      <label class="field__label" for="id_username">{% trans "operator id" %}</label>
       <input class="input" type="text" name="username" id="id_username" autocomplete="username" required autofocus>
     </div>
     <div class="field">
-      <label class="field__label" for="id_password">passcode</label>
+      <label class="field__label" for="id_password">{% trans "passcode" %}</label>
       <input class="input" type="password" name="password" id="id_password" autocomplete="current-password" required>
     </div>
     <label class="field__label" style="display:flex;align-items:center;gap:8px;margin-top:4px;cursor:pointer;">
       <input type="checkbox" name="remember_me" id="id_remember_me" style="accent-color:var(--gold-hot);width:16px;height:16px;">
-      keep me logged in
+      {% trans "keep me logged in" %}
     </label>
-    <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:6px;">Authenticate</button>
+    <button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;margin-top:6px;">{% trans "Authenticate" %}</button>
     <input type="hidden" name="next" value="{{ next }}">
 
     <div class="auth__forgot-row">
       <a href="#" class="auth__forgot"
          hx-get="{% url 'accounts:forgot' %}"
          hx-target="#modal-slot"
-         hx-swap="innerHTML">// forgot your passcode?</a>
+         hx-swap="innerHTML">{% trans "// forgot your passcode?" %}</a>
     </div>
 
-    <div class="auth__hint">MonEx</div>
+    <div class="auth__hint">{% trans "MonEx" %}</div>
   </form>
   <div id="modal-slot"></div>
 </body>

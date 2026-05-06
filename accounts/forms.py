@@ -1,19 +1,20 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class PasscodeForm(forms.Form):
     current_password = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "input", "autocomplete": "current-password"}),
-        label="current passcode",
+        label=_("current passcode"),
     )
     new_password = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "input", "autocomplete": "new-password"}),
-        label="new passcode",
+        label=_("new passcode"),
         min_length=4,
     )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "input", "autocomplete": "new-password"}),
-        label="confirm passcode",
+        label=_("confirm passcode"),
     )
 
     def __init__(self, user, *args, **kwargs):
@@ -23,14 +24,14 @@ class PasscodeForm(forms.Form):
     def clean_current_password(self):
         cp = self.cleaned_data.get("current_password")
         if not self.user.check_password(cp):
-            raise forms.ValidationError("incorrect current passcode")
+            raise forms.ValidationError(_("incorrect current passcode"))
         return cp
 
     def clean(self):
         data = super().clean()
         if data.get("new_password") and data.get("confirm_password"):
             if data["new_password"] != data["confirm_password"]:
-                self.add_error("confirm_password", "passcodes do not match")
+                self.add_error("confirm_password", _("passcodes do not match"))
         return data
 
     def save(self):

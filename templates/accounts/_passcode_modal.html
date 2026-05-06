@@ -1,10 +1,11 @@
+{% load i18n %}
 <div class="modal-backdrop" id="modal-backdrop"
      x-data="{}"
      @click.self="$root.remove()"
      @keydown.escape.window="$root.remove()">
   <div class="modal" style="max-width: 400px;">
-    <h3 class="modal__title">change passcode</h3>
-    <button type="button" class="modal__close" @click="$root.remove()" aria-label="close">×</button>
+    <h3 class="modal__title">{% trans "change passcode" %}</h3>
+    <button type="button" class="modal__close" @click="$root.remove()" aria-label="{% trans 'close' %}">×</button>
 
     <form method="post" hx-post="{% url 'accounts:passcode' %}" hx-target="#modal-backdrop" hx-swap="outerHTML" autocomplete="off">
       {% csrf_token %}
@@ -14,30 +15,30 @@
       {% endif %}
 
       <div class="field">
-        <label class="field__label" for="id_current_password">current passcode</label>
+        <label class="field__label" for="id_current_password">{% trans "current passcode" %}</label>
         {{ form.current_password }}
         {% if form.current_password.errors %}<div class="field__err">{{ form.current_password.errors|join:', ' }}</div>{% endif %}
       </div>
 
       <div class="field">
-        <label class="field__label" for="id_new_password">new passcode</label>
+        <label class="field__label" for="id_new_password">{% trans "new passcode" %}</label>
         {{ form.new_password }}
         {% if form.new_password.errors %}<div class="field__err">{{ form.new_password.errors|join:', ' }}</div>{% endif %}
       </div>
 
       <div class="field">
-        <label class="field__label" for="id_confirm_password">confirm new passcode</label>
+        <label class="field__label" for="id_confirm_password">{% trans "confirm new passcode" %}</label>
         {{ form.confirm_password }}
         {% if form.confirm_password.errors %}<div class="field__err">{{ form.confirm_password.errors|join:', ' }}</div>{% endif %}
         <a href="#" class="auth__forgot" style="margin-top:6px;display:inline-block;"
            hx-get="{% url 'accounts:forgot' %}"
            hx-target="#modal-backdrop"
-           hx-swap="outerHTML">// forgot your passcode?</a>
+           hx-swap="outerHTML">{% trans "// forgot your passcode?" %}</a>
       </div>
 
       <div class="modal__actions">
-        <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>
-        <button type="submit" class="btn btn--primary">Save</button>
+        <button type="button" class="btn btn--ghost" @click="$root.remove()">{% trans "Cancel" %}</button>
+        <button type="submit" class="btn btn--primary">{% trans "Save" %}</button>
       </div>
     </form>
   </div>

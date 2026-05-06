@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods
 
 from core.context_processors import CURRENCIES
@@ -68,7 +69,7 @@ def superuser_required(view):
     @wraps(view)
     def wrapped(request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_superuser:
-            return HttpResponseForbidden("superadmin only")
+            return HttpResponseForbidden(_("superadmin only"))
         return view(request, *args, **kwargs)
     return wrapped
 
@@ -126,8 +127,10 @@ def budget_save(request):
                 owner=request.user, month=selected, category=cat, defaults={"cap": cap},
             )
 
-    messages.success(request, "budget updated.")
-    return redirect(f"/_/s/?tab=budget&month={selected:%Y-%m}")
+    messages.success(request, _("budget updated."))
+    # HTMX: swap just the budget tab back into #budget-tab
+    ctx = _settings_ctx(request)
+    return render(request, "settings/_budget_tab.html", ctx)
 
 
 def _parse_decimal(raw):

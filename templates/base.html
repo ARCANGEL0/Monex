@@ -1,10 +1,11 @@
-{% load static %}<!doctype html>
-<html lang="en">
+{% load static i18n %}<!doctype html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0a0a">
-  <title>{% block title %}home{% endblock %} // tracker</title>
+  <title>{% block title %}{% trans "home" %}{% endblock %} // {% trans "tracker" %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,7 +14,12 @@
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
   <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="{% static 'js/chart.min.js' %}"></script>
+  <script>
+    if (typeof Chart === "undefined") {
+      console.error("Chart.js failed to load from local file");
+    }
+  </script>
   {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -22,12 +28,23 @@
     {% include '_partials/sidebar.html' %}
     <div class="main">
       <header class="topbar">
-        <button class="topbar__menu" @click="menu = !menu" aria-label="toggle menu">≡</button>
+        <button class="topbar__menu" @click="menu = !menu" aria-label="{% trans 'toggle menu' %}">≡</button>
         <div class="topbar__title">
           <small>//</small>{% block topbar_title %}{% endblock %}
         </div>
-        <div class="topbar__actions">
-          {% block topbar_actions %}{% endblock %}
+        <div class="topbar__rail">
+          <div class="topbar__actions">
+            {% block topbar_actions %}{% endblock %}
+          </div>
+          <form method="post" action="{% url 'set_language' %}" class="lang-switch" id="langSwitchForm">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <select name="language" class="select lang-switch__select" aria-label="{% trans 'language' %}">
+              {% for lang in language_options %}
+                <option value="{{ lang.code }}" {% if LANGUAGE_CODE == lang.code %}selected{% endif %}>{{ lang.flag }} {{ lang.label }}</option>
+              {% endfor %}
+            </select>
+          </form>
         </div>
       </header>
       <main id="content" class="content">
@@ -43,8 +60,39 @@
     <div id="modal-slot"></div>
   </div>
   {% block body_extra %}{% endblock %}
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+  <script type="module" src="{% static 'js/hero3d.js' %}?v=deus-ex-mk-spinner-3"></script>
   <script src="{% static 'js/charts.js' %}"></script>
   <script>
+    const monexContent = document.getElementById('content');
+    const monexLastPane = sessionStorage.getItem('monex:content-path');
+    const monexSwitchingLanguage = sessionStorage.getItem('monex:language-switch') === '1';
+    if (!monexLastPane) {
+      sessionStorage.setItem('monex:content-path', '/_/d/');
+    }
+    if (monexSwitchingLanguage && monexLastPane && monexLastPane !== '/_/d/' && monexContent) {
+      monexContent.classList.add('content--booting');
+      window.addEventListener('load', () => {
+        htmx.ajax('GET', monexLastPane, '#content');
+      }, { once: true });
+    }
+    document.body.addEventListener('htmx:afterSwap', function(e) {
+      if (e.detail.target.id === 'content') {
+        sessionStorage.setItem('monex:content-path', e.detail.requestConfig.path);
+        sessionStorage.removeItem('monex:language-switch');
+        monexContent?.classList.remove('content--booting');
+      }
+    });
+    document.getElementById('langSwitchForm')?.addEventListener('change', function() {
+      sessionStorage.setItem('monex:language-switch', '1');
+      this.submit();
+    });
     document.addEventListener('focusin', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.add('focused') });
     document.addEventListener('focusout', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.remove('focused') });
   </script>
