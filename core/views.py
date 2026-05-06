@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
@@ -36,6 +37,11 @@ def _dashboard_ctx(request):
     gauge_pct = max(0.0, min(100.0, float(savings_rate)))
     tx_count = qs.count()
 
+    chart_data = {
+        "by_category": _by_category(qs),
+        "by_bank": _by_bank(qs),
+    }
+
     return {
         "selected": selected,
         "month_options": month_options(),
@@ -45,10 +51,7 @@ def _dashboard_ctx(request):
         "savings_rate": savings_rate,
         "gauge_pct": gauge_pct,
         "tx_count": tx_count,
-        "chart_data": {
-            "by_category": _by_category(qs),
-            "by_bank": _by_bank(qs),
-        },
+        "chart_data_json": json.dumps(chart_data),
         "budget": _budget_status(request.user, selected, expense),
     }
 

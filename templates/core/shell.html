@@ -121,11 +121,10 @@
   </div>
 </div>
 
-{{ chart_data|json_script:"chart-data" }}
+<script>window.__chartData = {{ chart_data_json|safe }}; if(typeof initCharts==='function')initCharts();</script>
 {% endblock %}
 
 {% block body_extra %}
-  <script src="{% static 'js/charts.js' %}"></script>
   <script type="importmap">
   {
     "imports": {

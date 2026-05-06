@@ -3,13 +3,103 @@
 <div hx-swap-oob="innerHTML:.topbar__title">analytics / patterns</div>
 <div hx-swap-oob="innerHTML:.topbar__actions"></div>
 
+<div class="page-head">
+  <div class="page-head__left">
+    <div class="month-picker">
+      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
+      <form hx-get="/_/a/" hx-target="#content" hx-push-url="false" id="anMonthForm" style="margin:0;">
+        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('anMonthForm').submit()">
+          {% for m in month_options %}
+            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+          {% endfor %}
+        </select></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid--4" style="margin-bottom:18px;">
+  <div class="kpi">
+    <div class="kpi__label">Total Expenses</div>
+    <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ total_expense|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">outflow this cycle</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Total Income</div>
+    <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ total_income|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">inflow this cycle</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Avg / Day</div>
+    <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ avg_daily|floatformat:2|intcomma }}</div>
+    <div class="kpi__sub">daily burn rate</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi__label">Entries</div>
+    <div class="kpi__value kpi__value--text">{{ tx_count }}</div>
+    <div class="kpi__sub">events logged</div>
+  </div>
+</div>
+
+<div class="grid grid--2" style="margin-bottom:18px;">
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">spending breakdown</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
+    </div>
+    <div style="height: 300px; position: relative;">
+      <canvas id="chart-monthly-donut"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">category evolution</h3>
+      <span class="dim mono" style="font-size:0.72rem;">top {{ evo_count }} · 12 months</span>
+    </div>
+    <div style="height: 300px; position: relative;">
+      <canvas id="chart-evolution"></canvas>
+    </div>
+  </div>
+</div>
+
 <div class="card" style="margin-bottom:18px;">
   <div class="card__header">
-    <h3 class="card__title">12-month flow</h3>
-    <span class="dim mono" style="font-size:0.72rem;">income vs expense</span>
+    <h3 class="card__title">this vs last month</h3>
+    <span class="dim mono" style="font-size:0.72rem;">category comparison</span>
   </div>
-  <div style="height: 280px; position: relative;">
-    <canvas id="chart-trend"></canvas>
+  <div style="height: 300px; position: relative;">
+    <canvas id="chart-cat-comparison"></canvas>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:18px;">
+  <div class="card__header">
+    <h3 class="card__title">daily spending</h3>
+    <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'F Y' }}</span>
+  </div>
+  <div style="height: 260px; position: relative;">
+    <canvas id="chart-daily-bars"></canvas>
+  </div>
+</div>
+
+<div class="grid grid--2" style="margin-bottom:18px;">
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">spending velocity</h3>
+      <span class="dim mono" style="font-size:0.72rem;">cumulative vs projected</span>
+    </div>
+    <div style="height: 260px; position: relative;">
+      <canvas id="chart-burn-rate"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">12-month flow</h3>
+      <span class="dim mono" style="font-size:0.72rem;">income vs expense</span>
+    </div>
+    <div style="height: 260px; position: relative;">
+      <canvas id="chart-trend"></canvas>
+    </div>
   </div>
 </div>
 
@@ -26,7 +116,7 @@
   <div class="card">
     <div class="card__header">
       <h3 class="card__title">top categories</h3>
-      <span class="dim mono" style="font-size:0.72rem;">all-time</span>
+      <span class="dim mono" style="font-size:0.72rem;">selected month</span>
     </div>
     <div style="height: 260px; position: relative;">
       <canvas id="chart-top"></canvas>
@@ -34,16 +124,4 @@
   </div>
 </div>
 
-<div class="card" style="margin-top:18px;">
-  <div class="card__header">
-    <h3 class="card__title">category evolution</h3>
-    <span class="dim mono" style="font-size:0.72rem;">top {{ chart_data.evolution.datasets|length }} · last 12 months</span>
-  </div>
-  <div style="height: 320px; position: relative;">
-    <canvas id="chart-evolution"></canvas>
-  </div>
-</div>
-
-{{ chart_data|json_script:"chart-data" }}
-
-<script src="{% static 'js/charts.js' %}"></script>
+<script>window.__chartData = {{ chart_data_json|safe }}; if(typeof initCharts==='function')initCharts();</script>

@@ -1,5 +1,3 @@
-// chart.js theme + helpers - tuned for the deus ex panels
-
 function monexTheme() {
   Chart.defaults.color = "#7a7466";
   Chart.defaults.borderColor = "rgba(110, 86, 20, 0.18)";
@@ -19,9 +17,6 @@ function monexTheme() {
   Chart.defaults.plugins.tooltip.bodyFont = { family: "JetBrains Mono", size: 11 };
 }
 
-// per-dataset neon glow plugin
-// configure via options.plugins.datasetGlow = { enabled, blur, color }
-// if color is omitted, uses the dataset's borderColor (single-color datasets only)
 const datasetGlow = {
   id: "datasetGlow",
   beforeDatasetDraw(chart, args) {
@@ -67,7 +62,6 @@ function emptyState(canvas, msg) {
 const GRID_X = "rgba(110, 86, 20, 0.06)";
 const GRID_Y = "rgba(110, 86, 20, 0.12)";
 
-// alpha helper: appends 8-bit hex alpha to a #rrggbb color
 function withAlpha(hex, aHex) {
   if (typeof hex !== "string" || hex[0] !== "#" || hex.length !== 7) return hex;
   return hex + aHex;
@@ -76,8 +70,6 @@ function withAlpha(hex, aHex) {
 function eurAxis() {
   return { color: "#7a7466", callback: (v) => "€" + v };
 }
-
-// dashboard ----------------------------------------------------------
 
 function categoryDonut(canvas, items) {
   if (!items || !items.length) return emptyState(canvas, "no expenses logged");
@@ -101,9 +93,7 @@ function categoryDonut(canvas, items) {
       plugins: {
         datasetGlow: { enabled: true, blur: 20, color: "rgba(232, 185, 35, 0.65)" },
         legend: { position: "right", labels: { boxWidth: 8, boxHeight: 8 } },
-        tooltip: {
-          callbacks: { label: (ctx) => ctx.label + ": " + fmtEuro(ctx.parsed) },
-        },
+        tooltip: { callbacks: { label: (ctx) => ctx.label + ": " + fmtEuro(ctx.parsed) } },
       },
     },
   });
@@ -146,15 +136,11 @@ function bankBar(canvas, items) {
       plugins: {
         datasetGlow: { enabled: true, blur: 14 },
         legend: { position: "top", align: "end" },
-        tooltip: {
-          callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) },
-        },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) } },
       },
     },
   });
 }
-
-// analytics ----------------------------------------------------------
 
 function trendLine(canvas, data) {
   if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no trend data");
@@ -203,9 +189,7 @@ function trendLine(canvas, data) {
       plugins: {
         datasetGlow: { enabled: true, blur: 16 },
         legend: { position: "top", align: "end" },
-        tooltip: {
-          callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) },
-        },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) } },
       },
     },
   });
@@ -245,9 +229,7 @@ function dowBar(canvas, data) {
 }
 
 function evolutionStack(canvas, data) {
-  if (!data || !data.datasets || !data.datasets.length) {
-    return emptyState(canvas, "no category data yet");
-  }
+  if (!data || !data.datasets || !data.datasets.length) return emptyState(canvas, "no category data yet");
   return new Chart(canvas, {
     type: "line",
     data: {
@@ -278,9 +260,7 @@ function evolutionStack(canvas, data) {
       plugins: {
         datasetGlow: { enabled: true, blur: 12 },
         legend: { position: "top", align: "end" },
-        tooltip: {
-          callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) },
-        },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) } },
       },
     },
   });
@@ -318,36 +298,198 @@ function topHorizontalBar(canvas, data) {
   });
 }
 
-// init ---------------------------------------------------------------
+function monthlyDonut(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no expenses this month");
+  return new Chart(canvas, {
+    type: "doughnut",
+    data: {
+      labels: data.labels,
+      datasets: [{
+        data: data.values,
+        backgroundColor: data.colors.map(c => withAlpha(c, "55")),
+        borderColor: data.colors,
+        borderWidth: 2.5,
+        hoverOffset: 14,
+        hoverBorderWidth: 3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "62%",
+      plugins: {
+        datasetGlow: { enabled: true, blur: 20, color: "rgba(232, 185, 35, 0.65)" },
+        legend: { position: "right", labels: { boxWidth: 8, boxHeight: 8 } },
+        tooltip: { callbacks: { label: (ctx) => ctx.label + ": " + fmtEuro(ctx.parsed) } },
+      },
+    },
+  });
+}
+
+function catComparison(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no data yet");
+  return new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          label: "last month",
+          data: data.last_month,
+          backgroundColor: "rgba(122, 116, 102, 0.15)",
+          borderColor: "#7a7466",
+          borderWidth: 2,
+          borderRadius: 1,
+        },
+        {
+          label: "this month",
+          data: data.this_month,
+          backgroundColor: "rgba(252, 211, 77, 0.15)",
+          borderColor: "#fcd34d",
+          borderWidth: 2,
+          borderRadius: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: GRID_X }, ticks: { color: "#7a7466" } },
+        y: { grid: { color: GRID_Y }, ticks: eurAxis() },
+      },
+      plugins: {
+        datasetGlow: { enabled: true, blur: 12 },
+        legend: { position: "top", align: "end" },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
+function dailyBars(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no daily data");
+  return new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: data.labels,
+      datasets: [{
+        data: data.values,
+        backgroundColor: "rgba(252, 211, 77, 0.10)",
+        borderColor: "#fcd34d",
+        borderWidth: 2,
+        borderRadius: 1,
+        hoverBackgroundColor: "rgba(252, 211, 77, 0.25)",
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: GRID_X }, ticks: { color: "#7a7466", maxRotation: 0, maxTicksLimit: 15 } },
+        y: { grid: { color: GRID_Y }, ticks: eurAxis() },
+      },
+      plugins: {
+        datasetGlow: { enabled: true, blur: 14, color: "rgba(252, 211, 77, 0.5)" },
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => "Day " + ctx.label + ": " + fmtEuro(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
+function burnRate(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no burn data");
+  return new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          label: "actual",
+          data: data.cumulative,
+          borderColor: "#fcd34d",
+          backgroundColor: "rgba(252, 211, 77, 0.08)",
+          tension: 0.2,
+          fill: true,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          pointBackgroundColor: "#fcd34d",
+          pointBorderColor: "#0a0a0a",
+          pointBorderWidth: 1,
+        },
+        {
+          label: "projected",
+          data: data.projected,
+          borderColor: "rgba(122, 116, 102, 0.45)",
+          borderDash: [5, 4],
+          tension: 0,
+          fill: false,
+          borderWidth: 1.5,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointBackgroundColor: "#7a7466",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: GRID_X }, ticks: { color: "#7a7466", maxTicksLimit: 10 } },
+        y: { grid: { color: GRID_Y }, ticks: eurAxis() },
+      },
+      plugins: {
+        datasetGlow: { enabled: true, blur: 16, color: "rgba(252, 211, 77, 0.5)" },
+        legend: { position: "top", align: "end" },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ": " + fmtEuro(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
+const __charts = {};
+
+function killOld() {
+  Object.keys(__charts).forEach(id => {
+    if (__charts[id]) __charts[id].destroy();
+    delete __charts[id];
+  });
+}
+
+function track(id, c) { if (c) __charts[id] = c; }
+
+var _themeSet = false;
 
 function initCharts() {
   if (typeof Chart === "undefined") return;
-  Chart.register(datasetGlow);
-  monexTheme();
+  if (!_themeSet) { Chart.register(datasetGlow); monexTheme(); _themeSet = true; }
+  killOld();
 
-  const dataEl = document.getElementById("chart-data");
-  if (!dataEl) return;
-  const data = JSON.parse(dataEl.textContent);
+  var data = window.__chartData;
+  if (!data) return;
 
-  // dashboard
-  const cat = document.getElementById("chart-category");
-  if (cat) categoryDonut(cat, data.by_category || []);
-  const bank = document.getElementById("chart-bank");
-  if (bank) bankBar(bank, data.by_bank || []);
-
-  // analytics
-  const trend = document.getElementById("chart-trend");
-  if (trend) trendLine(trend, data.trend || {});
-  const dow = document.getElementById("chart-dow");
-  if (dow) dowBar(dow, data.dow || {});
-  const evo = document.getElementById("chart-evolution");
-  if (evo) evolutionStack(evo, data.evolution || {});
-  const top = document.getElementById("chart-top");
-  if (top) topHorizontalBar(top, data.top || {});
+  track("cat", document.getElementById("chart-category") && categoryDonut(document.getElementById("chart-category"), data.by_category || []));
+  track("bank", document.getElementById("chart-bank") && bankBar(document.getElementById("chart-bank"), data.by_bank || []));
+  track("trend", document.getElementById("chart-trend") && trendLine(document.getElementById("chart-trend"), data.trend || {}));
+  track("dow", document.getElementById("chart-dow") && dowBar(document.getElementById("chart-dow"), data.dow || {}));
+  track("evo", document.getElementById("chart-evolution") && evolutionStack(document.getElementById("chart-evolution"), data.evolution || {}));
+  track("top", document.getElementById("chart-top") && topHorizontalBar(document.getElementById("chart-top"), data.top || {}));
+  track("donut", document.getElementById("chart-monthly-donut") && monthlyDonut(document.getElementById("chart-monthly-donut"), data.monthly_donut || {}));
+  track("comp", document.getElementById("chart-cat-comparison") && catComparison(document.getElementById("chart-cat-comparison"), data.cat_comparison || {}));
+  track("daily", document.getElementById("chart-daily-bars") && dailyBars(document.getElementById("chart-daily-bars"), data.daily_bars || {}));
+  track("burn", document.getElementById("chart-burn-rate") && burnRate(document.getElementById("chart-burn-rate"), data.burn_rate || {}));
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCharts);
+  document.addEventListener("DOMContentLoaded", function() { setTimeout(initCharts, 100); });
 } else {
-  initCharts();
+  setTimeout(initCharts, 100);
 }
+
+document.body.addEventListener("htmx:afterSwap", function(e) {
+  if (e.detail.target.id === "content") {
+    setTimeout(initCharts, 50);
+  }
+});

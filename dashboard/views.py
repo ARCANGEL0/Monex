@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 from django.db.models import Sum
@@ -46,7 +47,7 @@ def home(request):
         "savings_rate": savings_rate,
         "gauge_pct": gauge_pct,
         "tx_count": tx_count,
-        "chart_data": chart_data,
+        "chart_data_json": json.dumps(chart_data),
         "budget": _budget_status(request.user, selected, expense),
     })
 

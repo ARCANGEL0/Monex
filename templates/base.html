@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
   <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -43,6 +43,7 @@
     <div id="modal-slot"></div>
   </div>
   {% block body_extra %}{% endblock %}
+  <script src="{% static 'js/charts.js' %}"></script>
   <script>
     document.addEventListener('focusin', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.add('focused') });
     document.addEventListener('focusout', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.remove('focused') });

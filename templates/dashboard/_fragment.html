@@ -119,6 +119,4 @@
   </div>
 </div>
 
-{{ chart_data|json_script:"chart-data" }}
-
-<script src="{% static 'js/charts.js' %}"></script>
+<script>window.__chartData = {{ chart_data_json|safe }}; if(typeof initCharts==='function')initCharts();</script>
