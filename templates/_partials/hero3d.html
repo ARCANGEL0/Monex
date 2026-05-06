@@ -1,0 +1,35 @@
+<div class="hero3d">
+  <canvas id="hero-3d"></canvas>
+  <div class="hero3d__overlay">
+    <div class="hero3d__title">{{ hero_title }}</div>
+    <div class="hero3d__sub">
+      {{ request.user.username }} · {{ hero_prefix }}{% if hero_value %} {{ hero_value }}{% endif %}
+    </div>
+  </div>
+  <div class="hero3d__month">
+    <form method="get"
+          id="{{ hero_form_id }}"
+          action="{{ hero_action }}"
+          hx-get="{{ hero_action }}"
+          hx-target="#{{ hero_body_id }}"
+          hx-select="#{{ hero_body_id }}"
+          hx-swap="outerHTML"
+          hx-push-url="{{ hero_push_url }}">
+      {% if hero_hidden_name %}
+        <input type="hidden" name="{{ hero_hidden_name }}" value="{{ hero_hidden_value }}">
+      {% endif %}
+      <div class="select-wrap"><select name="month"
+                                       class="select"
+                                       hx-trigger="change"
+                                       hx-get="{{ hero_action }}"
+                                       hx-target="#{{ hero_body_id }}"
+                                       hx-select="#{{ hero_body_id }}"
+                                       hx-swap="outerHTML"
+                                       hx-push-url="{{ hero_push_url }}">
+        {% for m in month_options %}
+          <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
+        {% endfor %}
+      </select></div>
+    </form>
+  </div>
+</div>

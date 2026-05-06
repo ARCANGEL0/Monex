@@ -11,21 +11,9 @@
   <a class="btn btn--ghost btn--sm" href="/_/t/export.pdf?month={{ selected|date:'Y-m' }}">PDF</a>
 </div>
 
-<div class="page-head">
-  <div class="page-head__left">
-    <div class="month-picker">
-      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form hx-get="/_/t/" hx-target="#content" hx-push-url="false" id="txMonthForm" style="margin:0;">
-        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('txMonthForm').submit()">
-          {% for m in month_options %}
-            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
-          {% endfor %}
-        </select></div>
-      </form>
-    </div>
-  </div>
-</div>
+{% include "_partials/hero3d.html" with hero_title="// transaction ledger" hero_prefix="cycle" hero_value=selected|date:'M Y'|lower hero_form_id="txMonthForm" hero_action="/_/t/" hero_body_id="transactions-body" hero_push_url="false" %}
 
+<div id="transactions-body">
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
     <div class="kpi__label">Income</div>
@@ -99,3 +87,4 @@
   <p class="dim">no transactions for {{ selected|date:'F Y' }}</p>
 </div>
 {% endif %}
+</div>

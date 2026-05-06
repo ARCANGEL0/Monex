@@ -3,22 +3,10 @@
 <div hx-swap-oob="innerHTML:.topbar__title">analytics / patterns</div>
 <div hx-swap-oob="innerHTML:.topbar__actions"></div>
 
-<div class="page-head">
-  <div class="page-head__left">
-    <div class="month-picker">
-      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form hx-get="/_/a/" hx-target="#content" hx-push-url="false" id="anMonthForm" style="margin:0;">
-        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('anMonthForm').submit()">
-          {% for m in month_options %}
-            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
-          {% endfor %}
-        </select></div>
-      </form>
-    </div>
-  </div>
-</div>
+{% include "_partials/hero3d.html" with hero_title="// pattern scan" hero_prefix="flow diagnostics" hero_form_id="anMonthForm" hero_action="/_/a/" hero_body_id="analytics-body" hero_push_url="false" %}
 
-<div class="grid grid--4" style="margin-bottom:18px;">
+<div id="analytics-body">
+<div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
     <div class="kpi__label">Total Expenses</div>
     <div class="kpi__value kpi__value--expense">{{ currency_symbol }}{{ total_expense|floatformat:2|intcomma }}</div>
@@ -39,26 +27,64 @@
     <div class="kpi__value kpi__value--text">{{ tx_count }}</div>
     <div class="kpi__sub">events logged</div>
   </div>
+  <div class="kpi kpi--queue">
+    <div class="kpi__label">Recurring Queue</div>
+    <div class="kpi__value kpi__value--text">{{ pending_count }}</div>
+    <div class="kpi__sub">{% if is_current_cycle %}payments left this cycle{% else %}current cycle only{% endif %}</div>
+    <div class="kpi__meta">
+      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}</span>
+    </div>
+    <div class="kpi__note">
+      {% if pending %}
+        {% for rule in pending %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
+      {% elif is_current_cycle %}
+        all clear
+      {% else %}
+        no live queue
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 <div class="grid grid--2" style="margin-bottom:18px;">
-  <div class="card">
-    <div class="card__header">
-      <h3 class="card__title">spending breakdown</h3>
-      <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
+  <div class="card" style="text-align:center;">
+    <div class="card__header" style="justify-content:center;"><h3 class="card__title">savings rate</h3></div>
+    <div class="gauge">
+      <svg class="gauge__svg" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon class="gauge__hex" points="50,4 88,27 88,73 50,96 12,73 12,27"/>
+        <circle class="gauge__track" cx="50" cy="50" r="42" pathLength="100"/>
+        <circle class="gauge__fill {% if savings_rate < 0 %}gauge__fill--low{% endif %}"
+                cx="50" cy="50" r="42" pathLength="100"
+                stroke-dasharray="{{ gauge_pct|floatformat:2 }} 100"/>
+      </svg>
+      <div class="gauge__center">
+        <div>
+          <div class="gauge__pct {% if savings_rate < 0 %}gauge__pct--neg{% endif %}">{{ savings_rate|floatformat:0 }}%</div>
+          <div class="gauge__sub">of income retained</div>
+        </div>
+      </div>
     </div>
-    <div style="height: 300px; position: relative;">
-      <canvas id="chart-monthly-donut"></canvas>
-    </div>
+    <p class="dim mono" style="font-size:0.78rem;margin-top:4px;">net {{ currency_symbol }}{{ net|floatformat:2|intcomma }} / in {{ currency_symbol }}{{ total_income|floatformat:2|intcomma }}</p>
   </div>
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">category evolution</h3>
-      <span class="dim mono" style="font-size:0.72rem;">top {{ evo_count }} · 12 months</span>
+      <h3 class="card__title">weekly spend</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
     </div>
     <div style="height: 300px; position: relative;">
-      <canvas id="chart-evolution"></canvas>
+      <canvas id="chart-weekly"></canvas>
     </div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:18px;">
+  <div class="card__header">
+    <h3 class="card__title">category evolution</h3>
+    <span class="dim mono" style="font-size:0.72rem;">top {{ evo_count }} · 12 months</span>
+  </div>
+  <div style="height: 300px; position: relative;">
+    <canvas id="chart-evolution"></canvas>
   </div>
 </div>
 
@@ -73,12 +99,12 @@
 </div>
 
 <div class="card" style="margin-bottom:18px;">
-  <div class="card__header">
-    <h3 class="card__title">daily spending</h3>
-    <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'F Y' }}</span>
-  </div>
+    <div class="card__header">
+      <h3 class="card__title">category movers</h3>
+      <span class="dim mono" style="font-size:0.72rem;">vs last month</span>
+    </div>
   <div style="height: 260px; position: relative;">
-    <canvas id="chart-daily-bars"></canvas>
+    <canvas id="chart-movers"></canvas>
   </div>
 </div>
 
@@ -106,22 +132,92 @@
 <div class="grid grid--2">
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">day-of-week patterns</h3>
-      <span class="dim mono" style="font-size:0.72rem;">all-time</span>
+      <h3 class="card__title">top spending days</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{{ selected|date:'M Y' }}</span>
     </div>
-    <div style="height: 260px; position: relative;">
-      <canvas id="chart-dow"></canvas>
-    </div>
+    {% if top_days %}
+      <ul class="spend-days">
+        {% for item in top_days|slice:":5" %}
+          <li class="spend-day-item">
+            <span class="spend-day-date">{{ item.day|floatformat:0 }}</span>
+            <span class="spend-day-bar" style="width: {{ item.pct }}%; background: linear-gradient(90deg, rgba(252, 211, 77, 0.9), rgba(110, 86, 20, 0.8));"></span>
+            <span class="spend-day-amt">{{ currency_symbol }}{{ item.amount|floatformat:2 }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty" style="padding:20px;">
+        <div class="empty__icon">○</div>
+        <p class="dim">no spending days</p>
+      </div>
+    {% endif %}
   </div>
   <div class="card">
     <div class="card__header">
-      <h3 class="card__title">top categories</h3>
-      <span class="dim mono" style="font-size:0.72rem;">selected month</span>
+      <h3 class="card__title">payment queue</h3>
+      <span class="dim mono" style="font-size:0.72rem;">{% if is_current_cycle %}remaining this cycle{% else %}current cycle only{% endif %}</span>
     </div>
-    <div style="height: 260px; position: relative;">
-      <canvas id="chart-top"></canvas>
-    </div>
+    {% if pending %}
+      <ul class="pending-list">
+        {% for rule in pending %}
+          <li class="pending-item">
+            <span class="pending-dot" style="background:{{ rule.bank.color }};"></span>
+            <span class="pending-name">{{ rule.name }}</span>
+            <span class="pending-amt">{{ currency_symbol }}{{ rule.amount|floatformat:2 }}</span>
+            <span class="pending-day dim mono">day {{ rule.day_of_month }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="pending-total">
+        total: {{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}
+      </div>
+    {% else %}
+      <div class="empty" style="padding:20px;">
+        <div class="empty__icon">✓</div>
+        <p class="dim">{% if is_current_cycle %}all recurring payments cleared{% else %}no live payment queue for this cycle{% endif %}</p>
+      </div>
+    {% endif %}
   </div>
 </div>
 
-<script>window.__chartData = {{ chart_data_json|safe }}; if(typeof initCharts==='function')initCharts();</script>
+<div class="card" style="margin-top:18px;">
+  <div class="card__header">
+    <h3 class="card__title">largest outflows</h3>
+    <span class="dim mono" style="font-size:0.72rem;">selected cycle</span>
+  </div>
+  {% if largest_expenses %}
+    <table class="table table--compact">
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>category</th>
+          <th>date</th>
+          <th class="text-right">amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx in largest_expenses %}
+          <tr>
+            <td>{{ tx.name }}</td>
+            <td><span class="dim">{{ tx.category.name|default:"—" }}</span></td>
+            <td class="mono">{{ tx.occurred_on|date:"M d" }}</td>
+            <td class="mono text-right expense">{{ currency_symbol }}{{ tx.amount|floatformat:2 }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty" style="padding:20px;">
+      <div class="empty__icon">○</div>
+      <p class="dim">no expense outflows this cycle</p>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+window.__chartData = {{ chart_data_json|safe }};
+if (typeof initCharts === 'function') {
+  initCharts();
+}
+</script>
+</div>

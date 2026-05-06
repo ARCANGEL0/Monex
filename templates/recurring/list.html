@@ -12,21 +12,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-head">
-  <div class="page-head__left">
-    <div class="month-picker">
-      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form method="get" id="monthForm" style="margin:0;">
-        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
-          {% for m in month_options %}
-            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
-          {% endfor %}
-        </select></div>
-      </form>
-    </div>
-  </div>
-</div>
+{% include "_partials/hero3d.html" with hero_title="// recurring queue" hero_prefix="scheduled flow" hero_value=selected|date:'M Y'|lower hero_form_id="monthForm" hero_action="/_/r/" hero_body_id="recurring-body" hero_push_url="true" %}
 
+<div id="recurring-body">
 <div class="grid grid--3" style="margin-bottom:18px;">
   <div class="kpi">
     <div class="kpi__label">To Pay</div>
@@ -42,6 +30,22 @@
     <div class="kpi__label">Net Remaining</div>
     <div class="kpi__value">{{ currency_symbol }}{{ net_remaining|floatformat:2|intcomma }}</div>
     <div class="kpi__sub">income − expense (pending)</div>
+  </div>
+  <div class="kpi kpi--queue">
+    <div class="kpi__label">Payments Left</div>
+    <div class="kpi__value kpi__value--text">{{ pending_expense_count }}</div>
+    <div class="kpi__sub">pending recurring expenses</div>
+    <div class="kpi__meta">
+      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ to_pay|floatformat:2|intcomma }}</span>
+    </div>
+    <div class="kpi__note">
+      {% if pending_expense_rules %}
+        {% for rule in pending_expense_rules %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
+      {% else %}
+        all clear
+      {% endif %}
+    </div>
   </div>
 </div>
 
@@ -117,5 +121,5 @@
   <p class="dim">subscriptions, rent, salary — anything that hits monthly. add one to start tracking.</p>
 </div>
 {% endif %}
-
+</div>
 {% endblock %}

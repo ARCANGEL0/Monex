@@ -3,29 +3,9 @@
 <div hx-swap-oob="innerHTML:.topbar__title">dashboard / overview</div>
 <div hx-swap-oob="innerHTML:.topbar__actions"></div>
 
-<div class="hero3d">
-  <canvas id="hero-3d"></canvas>
-  <div class="hero3d__overlay">
-    <div class="hero3d__title">// system online</div>
-    <div class="hero3d__sub">{{ request.user.username }} · cycle {{ selected|date:'M Y'|lower }}</div>
-  </div>
-</div>
+{% include "_partials/hero3d.html" with hero_title="// system online" hero_prefix="cycle" hero_value=selected|date:'M Y'|lower hero_form_id="dashMonthForm" hero_action="/_/d/" hero_body_id="dashboard-body" hero_push_url="false" %}
 
-<div class="page-head">
-  <div class="page-head__left">
-    <div class="month-picker">
-      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form hx-get="/_/d/" hx-target="#content" hx-push-url="false" id="dashMonthForm" style="margin:0;">
-        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('dashMonthForm').submit()">
-          {% for m in month_options %}
-            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
-          {% endfor %}
-        </select></div>
-      </form>
-    </div>
-  </div>
-</div>
-
+<div id="dashboard-body">
 {% if budget %}
   {% if budget.over %}
     <div class="warn-bar">
@@ -59,7 +39,7 @@
   </div>
 {% endif %}
 
-<div class="grid grid--4">
+<div class="grid grid--3">
   <div class="kpi">
     <div class="kpi__label">Income</div>
     <div class="kpi__value kpi__value--income">{{ currency_symbol }}{{ income|floatformat:2|intcomma }}</div>
@@ -80,43 +60,40 @@
     <div class="kpi__value kpi__value--text">{{ tx_count }}</div>
     <div class="kpi__sub">events this cycle</div>
   </div>
+  <div class="kpi kpi--queue">
+    <div class="kpi__label">Recurring Queue</div>
+    <div class="kpi__value kpi__value--text">{{ pending_count }}</div>
+    <div class="kpi__sub">payments left this cycle</div>
+    <div class="kpi__meta">
+      <span class="kpi__meta-label">amount left</span>
+      <span class="kpi__meta-value kpi__meta-value--expense">{{ currency_symbol }}{{ pending_total|floatformat:2|intcomma }}</span>
+    </div>
+    <div class="kpi__note">
+      {% if pending %}
+        {% for rule in pending %}{% if not forloop.first %} · {% endif %}{{ rule.name }}{% endfor %}
+      {% else %}
+        all clear
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 <div class="hexrule"></div>
 
 <div class="grid grid--2" style="margin-top:18px;">
-  <div class="card" style="text-align:center;">
-    <div class="card__header" style="justify-content:center;"><h3 class="card__title">savings rate</h3></div>
-    <div class="gauge">
-      <svg class="gauge__svg" viewBox="0 0 100 100" aria-hidden="true">
-        <polygon class="gauge__hex" points="50,4 88,27 88,73 50,96 12,73 12,27"/>
-        <circle class="gauge__track" cx="50" cy="50" r="42" pathLength="100"/>
-        <circle class="gauge__fill {% if savings_rate < 0 %}gauge__fill--low{% endif %}"
-                cx="50" cy="50" r="42" pathLength="100"
-                stroke-dasharray="{{ gauge_pct|floatformat:2 }} 100"/>
-      </svg>
-      <div class="gauge__center">
-        <div>
-          <div class="gauge__pct {% if savings_rate < 0 %}gauge__pct--neg{% endif %}">{{ savings_rate|floatformat:0 }}%</div>
-          <div class="gauge__sub">of income retained</div>
-        </div>
-      </div>
-    </div>
-    <p class="dim mono" style="font-size:0.78rem;margin-top:4px;">net {{ currency_symbol }}{{ net|floatformat:2|intcomma }} / in {{ currency_symbol }}{{ income|floatformat:2|intcomma }}</p>
-  </div>
   <div class="card">
     <div class="card__header"><h3 class="card__title">expenses by category</h3></div>
     <div style="height: 280px; position: relative;">
       <canvas id="chart-category"></canvas>
     </div>
   </div>
-</div>
-
-<div class="card" style="margin-top:16px;">
-  <div class="card__header"><h3 class="card__title">bank movement</h3></div>
-  <div style="height: 280px; position: relative;">
-    <canvas id="chart-bank"></canvas>
+  <div class="card">
+    <div class="card__header"><h3 class="card__title">bank movement</h3></div>
+    <div style="height: 280px; position: relative;">
+      <canvas id="chart-bank"></canvas>
+    </div>
   </div>
 </div>
 
 <script>window.__chartData = {{ chart_data_json|safe }}; if(typeof initCharts==='function')initCharts();</script>
+</div>

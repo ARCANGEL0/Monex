@@ -1,33 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load humanize static %}
 
 {% block title %}dashboard{% endblock %}
 {% block topbar_title %}dashboard / overview{% endblock %}
 
 {% block content %}
-<div class="hero3d">
-  <canvas id="hero-3d"></canvas>
-  <div class="hero3d__overlay">
-    <div class="hero3d__title">// system online</div>
-    <div class="hero3d__sub">{{ request.user.username }} · cycle {{ selected|date:'M Y'|lower }}</div>
-  </div>
-</div>
+{% include "_partials/hero3d.html" with hero_title="// system online" hero_prefix="cycle" hero_value=selected|date:'M Y'|lower hero_form_id="monthForm" hero_action="/_/d/" hero_body_id="dashboard-body" hero_push_url="true" hero_hidden_name="tab" hero_hidden_value="dashboard" %}
 
-<div class="page-head">
-  <div class="page-head__left">
-    <div class="month-picker">
-      <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding-left:6px;">cycle</span>
-      <form method="get" id="monthForm" style="margin:0;">
-        <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
-          {% for m in month_options %}
-            <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
-          {% endfor %}
-        </select></div>
-      </form>
-    </div>
-  </div>
-</div>
-
+<div id="dashboard-body">
 {% if budget %}
   {% if budget.over %}
     <div class="warn-bar">
@@ -86,7 +66,36 @@
 
 <div class="hexrule"></div>
 
-<div class="grid grid--2" style="margin-top:18px;">
+{% if period_progress is not None %}
+<div class="card" style="margin-bottom:16px;">
+  <div class="card__header">
+    <h3 class="card__title">cycle progress</h3>
+    <span class="dim mono" style="font-size:0.7rem;">day {{ period_progress|floatformat:0 }} of {{ selected|date:"t"|date:"d" }}</span>
+  </div>
+  <div class="progress" style="margin-bottom:8px;">
+    <div class="progress__fill" style="width: {{ period_progress|floatformat:1 }}%;"></div>
+  </div>
+  <p class="dim mono" style="font-size:0.72rem;">{{ period_progress|floatformat:0 }}% of cycle elapsed</p>
+</div>
+{% endif %}
+
+{% if biggest %}
+<div class="card" style="margin-bottom:16px;">
+  <div class="card__header">
+    <h3 class="card__title">biggest expense</h3>
+    <span class="dim mono" style="font-size:0.7rem;">this cycle</span>
+  </div>
+  <div style="padding: 12px 16px;">
+    <div style="font-size:1.1rem; color: var(--expense); font-weight:600;">{{ currency_symbol }}{{ biggest.amount|floatformat:2 }}</div>
+    <div style="font-size:0.85rem; color: var(--text); margin-top:4px;">{{ biggest.name }}</div>
+    <div style="font-size:0.72rem; color: var(--text-muted); margin-top:2px;">
+      {{ biggest.occurred_on|date:"M d" }} · {{ biggest.category.name|default:"Uncategorized" }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="grid grid--2" style="margin-top:16px;">
   <div class="card" style="text-align:center;">
     <div class="card__header" style="justify-content:center;"><h3 class="card__title">savings rate</h3></div>
     <div class="gauge">
@@ -107,30 +116,69 @@
     <p class="dim mono" style="font-size:0.78rem;margin-top:4px;">net {{ currency_symbol }}{{ net|floatformat:2|intcomma }} / in {{ currency_symbol }}{{ income|floatformat:2|intcomma }}</p>
   </div>
   <div class="card">
-    <div class="card__header"><h3 class="card__title">expenses by category</h3></div>
-    <div style="height: 280px; position: relative;">
-      <canvas id="chart-category"></canvas>
+    <div class="card__header">
+      <h3 class="card__title">pending payments</h3>
+      <span class="dim mono" style="font-size:0.7rem;">{{ pending|length }} due this cycle</span>
     </div>
-  </div>
+      {% if pending %}
+        <ul class="pending-list">
+          {% for r in pending %}
+            <li class="pending-item">
+              <span class="pending-dot" style="background:{{ r.bank.color }};"></span>
+              <span class="pending-name">{{ r.name }}</span>
+              <span class="pending-amt">{{ currency_symbol }}{{ r.amount|floatformat:2 }}</span>
+              <span class="pending-day dim mono">day {{ r.day_of_month }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        {% with total=pending|sum:'amount' %}
+          <div class="pending-total">
+            total: {{ currency_symbol }}{{ total|floatformat:2 }}
+          </div>
+        {% endwith %}
+      {% else %}
+        <div class="empty" style="padding:20px;">
+          <div class="empty__icon">✓</div>
+          <p class="dim">all clear — no pending payments</p>
+        </div>
+      {% endif %}
+    </div>
 </div>
 
 <div class="card" style="margin-top:16px;">
-  <div class="card__header"><h3 class="card__title">bank movement</h3></div>
-  <div style="height: 280px; position: relative;">
-    <canvas id="chart-bank"></canvas>
+  <div class="card__header">
+    <h3 class="card__title">recent transactions</h3>
+    <span class="dim mono" style="font-size:0.7rem;">last {{ recent|length }}</span>
   </div>
+  {% if recent %}
+    <table class="table table--compact">
+      <thead>
+        <tr>
+          <th>date</th>
+          <th>name</th>
+          <th>category</th>
+          <th class="text-right">amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx in recent %}
+          <tr>
+            <td class="mono">{{ tx.occurred_on|date:"M d" }}</td>
+            <td>{{ tx.name }}</td>
+            <td><span class="dim">{{ tx.category.name|default:"—" }}</span></td>
+            <td class="mono text-right {% if tx.kind == 'income' %}income{% else %}expense{% endif %}">
+            {{ currency_symbol }}{{ tx.amount|floatformat:2 }}
+          </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty" style="padding:20px;">
+      <div class="empty__icon">○</div>
+      <p class="dim">no transactions yet</p>
+    </div>
+  {% endif %}
 </div>
 
-{{ chart_data|json_script:"chart-data" }}
-{% endblock %}
-
-{% block body_extra %}
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-    }
-  }
-  </script>
-  <script type="module" src="{% static 'js/hero3d.js' %}"></script>
 {% endblock %}
