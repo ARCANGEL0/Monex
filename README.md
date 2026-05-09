@@ -62,8 +62,8 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 python main.py migrate
-python main.py setup_admin
-python main.py seed_defaults
+python main.py setup_admin       # creates admin / admin
+python main.py seed_defaults     # banks + categories
 python main.py runserver
 ```
 </details>

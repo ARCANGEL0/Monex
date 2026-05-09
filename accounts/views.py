@@ -39,6 +39,13 @@ def _has_real_email():
     return bool(user) and bool(pw)
 
 
+def _is_configured():
+    return (
+        User.objects.filter(is_superuser=True).exclude(email="").exists()
+        and _has_real_email()
+    )
+
+
 def _send_code(email, code):
     from django.core.mail import get_connection
 
@@ -68,7 +75,7 @@ def _send_code(email, code):
 
 @login_not_required
 def first_run(request):
-    if User.objects.filter(is_superuser=True).exists():
+    if _is_configured():
         return redirect("accounts:login")
 
     if not _has_real_email():
@@ -135,7 +142,7 @@ def first_run_setup_email(request):
 @login_not_required
 @require_http_methods(["POST"])
 def first_run_create(request):
-    if User.objects.filter(is_superuser=True).exists():
+    if _is_configured():
         return redirect("accounts:login")
 
     username = (request.POST.get("username") or "").strip()
@@ -193,7 +200,7 @@ def first_run_resend(request):
 @login_not_required
 @require_http_methods(["POST"])
 def first_run_verify(request):
-    if User.objects.filter(is_superuser=True).exists():
+    if _is_configured():
         return redirect("accounts:login")
 
     email = request.session.get("first_run_email", "")
@@ -218,18 +225,27 @@ def first_run_verify(request):
     email = request.session.pop("first_run_email")
     password = request.session.pop("first_run_password")
 
-    try:
-        User.objects.create_superuser(username=username, email=email, password=password)
-    except IntegrityError:
-        request.session["first_run_username"] = username
-        request.session["first_run_email"] = email
-        request.session["first_run_password"] = password
-        return render(request, "accounts/first_run.html", {
-            "step": "code",
-            "errors": ["that operator id already exists. pick another."],
-            "email": email,
-            "username": username,
-        })
+    existing = User.objects.filter(is_superuser=True).first()
+    if existing:
+        existing.username = username
+        existing.email = email
+        existing.is_staff = True
+        existing.is_superuser = True
+        existing.set_password(password)
+        existing.save()
+    else:
+        try:
+            User.objects.create_superuser(username=username, email=email, password=password)
+        except IntegrityError:
+            request.session["first_run_username"] = username
+            request.session["first_run_email"] = email
+            request.session["first_run_password"] = password
+            return render(request, "accounts/first_run.html", {
+                "step": "code",
+                "errors": ["that operator id already exists. pick another."],
+                "email": email,
+                "username": username,
+            })
 
     request.session.pop("first_run_step", None)
     return render(request, "accounts/first_run_success.html", {"username": username})

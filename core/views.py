@@ -3,7 +3,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_not_required
 from django.db.models import Exists, OuterRef, Sum
 from django.shortcuts import redirect, render
 
@@ -16,10 +16,12 @@ OTHER_COLOR = "#7a7466"
 User = get_user_model()
 
 
-@login_required
+@login_not_required
 def root(request):
-    if not User.objects.filter(is_superuser=True).exists():
-        return redirect("accounts:first_run")
+    if not request.user.is_authenticated:
+        if not User.objects.filter(is_superuser=True).exists():
+            return redirect("accounts:first_run")
+        return redirect("accounts:login")
     return render(request, "core/shell.html", _dashboard_ctx(request))
 
 
