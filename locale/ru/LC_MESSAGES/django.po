@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "current passcode"
+msgstr "текущий код"
+
+msgid "new passcode"
+msgstr "новый код"
+
+msgid "confirm passcode"
+msgstr "подтвердите код"
+
+msgid "incorrect current passcode"
+msgstr "неверный текущий код"
+
+msgid "passcodes do not match"
+msgstr "коды не совпадают"
+
+msgid "e.g. spotify"
+msgstr "напр. spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "оставьте пустым, чтобы сохранить текущий код"
+
+msgid "superadmin only"
+msgstr "только для суперадмина"
+
+msgid "budget updated."
+msgstr "бюджет обновлен."
+
+msgid "Finance Tracker"
+msgstr "Финансовый трекер"
+
+msgid "Dashboard"
+msgstr "Панель"
+
+msgid "Transactions"
+msgstr "Транзакции"
+
+msgid "Analytics"
+msgstr "Аналитика"
+
+msgid "Recurring"
+msgstr "Регулярные"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "operator"
+msgstr "оператор"
+
+msgid "Change Passcode"
+msgstr "Сменить код"
+
+msgid "Disconnect"
+msgstr "Отключиться"
+
+msgid "developed by"
+msgstr "разработано"
+
+msgid "reset passcode"
+msgstr "сбросить код"
+
+msgid "close"
+msgstr "закрыть"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// введите email. мы отправим 6-значный код подтверждения."
+
+msgid "email"
+msgstr "email"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Send Code"
+msgstr "Отправить код"
+
+msgid "change passcode"
+msgstr "сменить код"
+
+msgid "confirm new passcode"
+msgstr "подтвердите новый код"
+
+msgid "// forgot your passcode?"
+msgstr "// забыли код?"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "auth"
+msgstr "auth"
+
+msgid "tracker"
+msgstr "трекер"
+
+msgid "language"
+msgstr "язык"
+
+msgid "identify yourself"
+msgstr "идентифицируйтесь"
+
+msgid "access denied. invalid credentials."
+msgstr "доступ запрещен. неверные учетные данные."
+
+msgid "operator id"
+msgstr "id оператора"
+
+msgid "passcode"
+msgstr "код"
+
+msgid "keep me logged in"
+msgstr "оставаться в системе"
+
+msgid "Authenticate"
+msgstr "Авторизоваться"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "аналитика / паттерны"
+
+msgid "// pattern scan"
+msgstr "// сканирование паттернов"
+
+msgid "flow diagnostics"
+msgstr "диагностика потока"
+
+msgid "Total Expenses"
+msgstr "Общие расходы"
+
+msgid "outflow this cycle"
+msgstr "отток в этом цикле"
+
+msgid "Total Income"
+msgstr "Общий доход"
+
+msgid "inflow this cycle"
+msgstr "приток в этом цикле"
+
+msgid "Avg / Day"
+msgstr "Средн. / День"
+
+msgid "daily burn rate"
+msgstr "дневная скорость трат"
+
+msgid "Entries"
+msgstr "Записи"
+
+msgid "events logged"
+msgstr "события записаны"
+
+msgid "Recurring Queue"
+msgstr "Очередь регулярных"
+
+msgid "payments left this cycle"
+msgstr "платежей осталось в этом цикле"
+
+msgid "current cycle only"
+msgstr "только текущий цикл"
+
+msgid "amount left"
+msgstr "осталось суммы"
+
+msgid "all clear"
+msgstr "все чисто"
+
+msgid "no live queue"
+msgstr "нет активной очереди"
+
+msgid "savings rate"
+msgstr "норма сбережений"
+
+msgid "of income retained"
+msgstr "сохранено от дохода"
+
+msgid "weekly spend"
+msgstr "расходы по неделям"
+
+msgid "category evolution"
+msgstr "эволюция категорий"
+
+msgid "this vs last month"
+msgstr "этот месяц vs прошлый месяц"
+
+msgid "category comparison"
+msgstr "сравнение категорий"
+
+msgid "category movers"
+msgstr "движение категорий"
+
+msgid "vs last month"
+msgstr "vs прошлый месяц"
+
+msgid "spending velocity"
+msgstr "скорость расходов"
+
+msgid "cumulative vs projected"
+msgstr "накопленное vs прогноз"
+
+msgid "12-month flow"
+msgstr "поток за 12 месяцев"
+
+msgid "income vs expense"
+msgstr "доход vs расход"
+
+msgid "top spending days"
+msgstr "дни с наибольшими расходами"
+
+msgid "no spending days"
+msgstr "нет дней с расходами"
+
+msgid "payment queue"
+msgstr "очередь платежей"
+
+msgid "remaining this cycle"
+msgstr "осталось в этом цикле"
+
+msgid "day"
+msgstr "день"
+
+msgid "total"
+msgstr "итого"
+
+msgid "all recurring payments cleared"
+msgstr "все регулярные платежи закрыты"
+
+msgid "no live payment queue for this cycle"
+msgstr "нет активной очереди платежей для этого цикла"
+
+msgid "largest outflows"
+msgstr "крупнейшие оттоки"
+
+msgid "selected cycle"
+msgstr "выбранный цикл"
+
+msgid "name"
+msgstr "название"
+
+msgid "category"
+msgstr "категория"
+
+msgid "date"
+msgstr "дата"
+
+msgid "amount"
+msgstr "сумма"
+
+msgid "no expense outflows this cycle"
+msgstr "в этом цикле нет расходных оттоков"
+
+msgid "home"
+msgstr "главная"
+
+msgid "toggle menu"
+msgstr "переключить меню"
+
+msgid "dashboard"
+msgstr "панель"
+
+msgid "dashboard / overview"
+msgstr "панель / обзор"
+
+msgid "// system online"
+msgstr "// система онлайн"
+
+msgid "cycle"
+msgstr "цикл"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "сверх бюджета — использовано %(pct)s%% лимита %(symbol)s%(amount)s"
+
+msgid "monthly cap"
+msgstr "месячный лимит"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// перерасход на %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// %(symbol)s%(remaining)s осталось в цикле"
+
+msgid "no spend cap set for this cycle"
+msgstr "для этого цикла не задан лимит расходов"
+
+msgid "configure budget"
+msgstr "настроить бюджет"
+
+msgid "Income"
+msgstr "Доход"
+
+msgid "credits in"
+msgstr "поступления"
+
+msgid "Expense"
+msgstr "Расход"
+
+msgid "debits out"
+msgstr "списания"
+
+msgid "Net"
+msgstr "Итог"
+
+msgid "balance delta"
+msgstr "изменение баланса"
+
+msgid "events this cycle"
+msgstr "события в этом цикле"
+
+msgid "expenses by category"
+msgstr "расходы по категориям"
+
+msgid "bank movement"
+msgstr "движение по банкам"
+
+msgid "recurring / scheduled"
+msgstr "регулярные / по расписанию"
+
+msgid "// recurring queue"
+msgstr "// очередь регулярных"
+
+msgid "scheduled flow"
+msgstr "плановый поток"
+
+msgid "New Rule"
+msgstr "Новое правило"
+
+msgid "To Pay"
+msgstr "К оплате"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "оплачено %(symbol)s%(amount)s на данный момент"
+
+msgid "To Receive"
+msgstr "К получению"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "получено %(symbol)s%(amount)s на данный момент"
+
+msgid "Net Remaining"
+msgstr "Остаток нетто"
+
+msgid "income − expense (pending)"
+msgstr "доход − расход (в ожидании)"
+
+msgid "Payments Left"
+msgstr "Осталось платежей"
+
+msgid "pending recurring expenses"
+msgstr "ожидающие регулярные расходы"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Kind"
+msgstr "Тип"
+
+msgid "Day"
+msgstr "День"
+
+msgid "Bank"
+msgstr "Банк"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Amount"
+msgstr "Сумма"
+
+msgid "received"
+msgstr "получено"
+
+msgid "pending"
+msgstr "в ожидании"
+
+msgid "paid"
+msgstr "оплачено"
+
+msgid "pay"
+msgstr "оплатить"
+
+msgid "paused"
+msgstr "на паузе"
+
+msgid "edit"
+msgstr "редактировать"
+
+msgid "no recurring rules"
+msgstr "нет регулярных правил"
+
+msgid "settings / config"
+msgstr "настройки / конфиг"
+
+msgid "Budget"
+msgstr "Бюджет"
+
+msgid "Banks"
+msgstr "Банки"
+
+msgid "Categories"
+msgstr "Категории"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "currency"
+msgstr "валюта"
+
+msgid "overall monthly cap"
+msgstr "общий месячный лимит"
+
+msgid "cap"
+msgstr "лимит"
+
+msgid "leave empty for no cap"
+msgstr "оставьте пустым для отсутствия лимита"
+
+msgid "Save Budget"
+msgstr "Сохранить бюджет"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// когда расходы превышают этот порог, панель становится красной."
+
+msgid "per-category caps"
+msgstr "лимиты по категориям"
+
+msgid "Cap"
+msgstr "Лимит"
+
+msgid "New Bank"
+msgstr "Новый банк"
+
+msgid "New Category"
+msgstr "Новая категория"
+
+msgid "New Operator"
+msgstr "Новый оператор"
+
+msgid "transactions / ledger"
+msgstr "транзакции / журнал"
+
+msgid "// transaction ledger"
+msgstr "// журнал транзакций"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "no entries logged"
+msgstr "нет записей"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "нет транзакций за %(selected_month)s"
+
+msgid "e.g. groceries lidl"
+msgstr "напр. покупки lidl"

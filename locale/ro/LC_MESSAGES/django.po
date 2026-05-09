@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+
+msgid "current passcode"
+msgstr "cod actual"
+
+msgid "new passcode"
+msgstr "cod nou"
+
+msgid "confirm passcode"
+msgstr "confirmă codul"
+
+msgid "incorrect current passcode"
+msgstr "codul actual este incorect"
+
+msgid "passcodes do not match"
+msgstr "codurile nu se potrivesc"
+
+msgid "e.g. spotify"
+msgstr "ex. spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "lasă gol pentru a păstra codul existent"
+
+msgid "superadmin only"
+msgstr "doar superadmin"
+
+msgid "budget updated."
+msgstr "buget actualizat."
+
+msgid "Finance Tracker"
+msgstr "Tracker Financiar"
+
+msgid "Dashboard"
+msgstr "Tablou de bord"
+
+msgid "Transactions"
+msgstr "Tranzacții"
+
+msgid "Analytics"
+msgstr "Analitice"
+
+msgid "Recurring"
+msgstr "Recurente"
+
+msgid "Settings"
+msgstr "Setări"
+
+msgid "operator"
+msgstr "operator"
+
+msgid "Change Passcode"
+msgstr "Schimbă codul"
+
+msgid "Disconnect"
+msgstr "Deconectează"
+
+msgid "developed by"
+msgstr "dezvoltat de"
+
+msgid "reset passcode"
+msgstr "resetează codul"
+
+msgid "close"
+msgstr "închide"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// introdu emailul. vom trimite un cod de verificare din 6 cifre."
+
+msgid "email"
+msgstr "email"
+
+msgid "Cancel"
+msgstr "Anulează"
+
+msgid "Send Code"
+msgstr "Trimite codul"
+
+msgid "change passcode"
+msgstr "schimbă codul"
+
+msgid "confirm new passcode"
+msgstr "confirmă noul cod"
+
+msgid "// forgot your passcode?"
+msgstr "// ai uitat codul?"
+
+msgid "Save"
+msgstr "Salvează"
+
+msgid "auth"
+msgstr "auth"
+
+msgid "tracker"
+msgstr "tracker"
+
+msgid "language"
+msgstr "limbă"
+
+msgid "identify yourself"
+msgstr "identifică-te"
+
+msgid "access denied. invalid credentials."
+msgstr "acces refuzat. credențiale invalide."
+
+msgid "operator id"
+msgstr "id operator"
+
+msgid "passcode"
+msgstr "cod"
+
+msgid "keep me logged in"
+msgstr "păstrează-mă autentificat"
+
+msgid "Authenticate"
+msgstr "Autentifică"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "analitice / modele"
+
+msgid "// pattern scan"
+msgstr "// scanare modele"
+
+msgid "flow diagnostics"
+msgstr "diagnostic flux"
+
+msgid "Total Expenses"
+msgstr "Cheltuieli totale"
+
+msgid "outflow this cycle"
+msgstr "ieșiri în acest ciclu"
+
+msgid "Total Income"
+msgstr "Venit total"
+
+msgid "inflow this cycle"
+msgstr "intrări în acest ciclu"
+
+msgid "Avg / Day"
+msgstr "Medie / Zi"
+
+msgid "daily burn rate"
+msgstr "ritm zilnic de cheltuire"
+
+msgid "Entries"
+msgstr "Intrări"
+
+msgid "events logged"
+msgstr "evenimente înregistrate"
+
+msgid "Recurring Queue"
+msgstr "Coadă recurentă"
+
+msgid "payments left this cycle"
+msgstr "plăți rămase în acest ciclu"
+
+msgid "current cycle only"
+msgstr "doar ciclul curent"
+
+msgid "amount left"
+msgstr "sumă rămasă"
+
+msgid "all clear"
+msgstr "totul este în regulă"
+
+msgid "no live queue"
+msgstr "fără coadă activă"
+
+msgid "savings rate"
+msgstr "rată de economisire"
+
+msgid "of income retained"
+msgstr "din venit păstrat"
+
+msgid "weekly spend"
+msgstr "cheltuială săptămânală"
+
+msgid "category evolution"
+msgstr "evoluția categoriilor"
+
+msgid "this vs last month"
+msgstr "luna aceasta vs luna trecută"
+
+msgid "category comparison"
+msgstr "comparație categorii"
+
+msgid "category movers"
+msgstr "mișcări pe categorii"
+
+msgid "vs last month"
+msgstr "vs luna trecută"
+
+msgid "spending velocity"
+msgstr "viteza cheltuielilor"
+
+msgid "cumulative vs projected"
+msgstr "cumulat vs proiectat"
+
+msgid "12-month flow"
+msgstr "flux pe 12 luni"
+
+msgid "income vs expense"
+msgstr "venit vs cheltuială"
+
+msgid "top spending days"
+msgstr "zilele cu cele mai mari cheltuieli"
+
+msgid "no spending days"
+msgstr "fără zile de cheltuieli"
+
+msgid "payment queue"
+msgstr "coadă de plăți"
+
+msgid "remaining this cycle"
+msgstr "rămas în acest ciclu"
+
+msgid "day"
+msgstr "zi"
+
+msgid "total"
+msgstr "total"
+
+msgid "all recurring payments cleared"
+msgstr "toate plățile recurente sunt achitate"
+
+msgid "no live payment queue for this cycle"
+msgstr "nu există coadă activă de plăți pentru acest ciclu"
+
+msgid "largest outflows"
+msgstr "cele mai mari ieșiri"
+
+msgid "selected cycle"
+msgstr "ciclul selectat"
+
+msgid "name"
+msgstr "nume"
+
+msgid "category"
+msgstr "categorie"
+
+msgid "date"
+msgstr "dată"
+
+msgid "amount"
+msgstr "sumă"
+
+msgid "no expense outflows this cycle"
+msgstr "fără ieșiri de cheltuieli în acest ciclu"
+
+msgid "home"
+msgstr "acasă"
+
+msgid "toggle menu"
+msgstr "comută meniul"
+
+msgid "dashboard"
+msgstr "tablou de bord"
+
+msgid "dashboard / overview"
+msgstr "tablou de bord / prezentare"
+
+msgid "// system online"
+msgstr "// sistem online"
+
+msgid "cycle"
+msgstr "ciclu"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "peste buget — %(pct)s%% din plafonul de %(symbol)s%(amount)s consumat"
+
+msgid "monthly cap"
+msgstr "plafon lunar"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// depășit cu %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// %(symbol)s%(remaining)s rămași în acest ciclu"
+
+msgid "no spend cap set for this cycle"
+msgstr "nu există plafon de cheltuieli setat pentru acest ciclu"
+
+msgid "configure budget"
+msgstr "configurează bugetul"
+
+msgid "Income"
+msgstr "Venit"
+
+msgid "credits in"
+msgstr "credite intrate"
+
+msgid "Expense"
+msgstr "Cheltuială"
+
+msgid "debits out"
+msgstr "debite ieșite"
+
+msgid "Net"
+msgstr "Net"
+
+msgid "balance delta"
+msgstr "diferență sold"
+
+msgid "events this cycle"
+msgstr "evenimente în acest ciclu"
+
+msgid "expenses by category"
+msgstr "cheltuieli pe categorii"
+
+msgid "bank movement"
+msgstr "mișcare bancară"
+
+msgid "recurring / scheduled"
+msgstr "recurente / programate"
+
+msgid "// recurring queue"
+msgstr "// coadă recurentă"
+
+msgid "scheduled flow"
+msgstr "flux programat"
+
+msgid "New Rule"
+msgstr "Regulă nouă"
+
+msgid "To Pay"
+msgstr "De plătit"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "plătit %(symbol)s%(amount)s până acum"
+
+msgid "To Receive"
+msgstr "De primit"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "primit %(symbol)s%(amount)s până acum"
+
+msgid "Net Remaining"
+msgstr "Net rămas"
+
+msgid "income − expense (pending)"
+msgstr "venit − cheltuială (în așteptare)"
+
+msgid "Payments Left"
+msgstr "Plăți rămase"
+
+msgid "pending recurring expenses"
+msgstr "cheltuieli recurente în așteptare"
+
+msgid "Name"
+msgstr "Nume"
+
+msgid "Kind"
+msgstr "Tip"
+
+msgid "Day"
+msgstr "Zi"
+
+msgid "Bank"
+msgstr "Bancă"
+
+msgid "Category"
+msgstr "Categorie"
+
+msgid "Amount"
+msgstr "Sumă"
+
+msgid "received"
+msgstr "primit"
+
+msgid "pending"
+msgstr "în așteptare"
+
+msgid "paid"
+msgstr "plătit"
+
+msgid "pay"
+msgstr "plătește"
+
+msgid "paused"
+msgstr "pus pe pauză"
+
+msgid "edit"
+msgstr "editează"
+
+msgid "no recurring rules"
+msgstr "fără reguli recurente"
+
+msgid "settings / config"
+msgstr "setări / config"
+
+msgid "Budget"
+msgstr "Buget"
+
+msgid "Banks"
+msgstr "Bănci"
+
+msgid "Categories"
+msgstr "Categorii"
+
+msgid "Users"
+msgstr "Utilizatori"
+
+msgid "currency"
+msgstr "monedă"
+
+msgid "overall monthly cap"
+msgstr "plafon lunar general"
+
+msgid "cap"
+msgstr "plafon"
+
+msgid "leave empty for no cap"
+msgstr "lasă gol pentru fără plafon"
+
+msgid "Save Budget"
+msgstr "Salvează bugetul"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// când cheltuielile depășesc acest prag, tabloul de bord devine roșu."
+
+msgid "per-category caps"
+msgstr "plafoane pe categorii"
+
+msgid "Cap"
+msgstr "Plafon"
+
+msgid "New Bank"
+msgstr "Bancă nouă"
+
+msgid "New Category"
+msgstr "Categorie nouă"
+
+msgid "New Operator"
+msgstr "Operator nou"
+
+msgid "transactions / ledger"
+msgstr "tranzacții / registru"
+
+msgid "// transaction ledger"
+msgstr "// registru tranzacții"
+
+msgid "Add"
+msgstr "Adaugă"
+
+msgid "Date"
+msgstr "Dată"
+
+msgid "no entries logged"
+msgstr "nu există intrări înregistrate"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "nu există tranzacții pentru %(selected_month)s"
+
+msgid "e.g. groceries lidl"
+msgstr "ex. cumpărături lidl"

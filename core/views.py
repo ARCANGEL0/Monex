@@ -1,12 +1,14 @@
 import json
+from datetime import date
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Exists, OuterRef, Sum
 from django.shortcuts import redirect, render
 
 from core.utils import month_bounds, month_options, selected_month
+from recurring.models import RecurringTransaction
 from transactions.models import Budget, Transaction
 
 CATEGORY_DONUT_TOP = 7
@@ -36,6 +38,24 @@ def _dashboard_ctx(request):
     savings_rate = (net / income * 100) if income > 0 else Decimal("0")
     gauge_pct = max(0.0, min(100.0, float(savings_rate)))
     tx_count = qs.count()
+    today = date.today()
+    if selected.year == today.year and selected.month == today.month:
+        pending = RecurringTransaction.objects.filter(
+            owner=request.user,
+            active=True,
+            kind=RecurringTransaction.EXPENSE,
+        ).exclude(
+            Exists(Transaction.objects.filter(
+                owner=request.user,
+                recurring=OuterRef("pk"),
+                occurred_on__gte=start,
+                occurred_on__lt=end,
+            ))
+        ).select_related("bank", "category")
+    else:
+        pending = RecurringTransaction.objects.none()
+    pending_count = pending.count()
+    pending_total = sum((rule.amount for rule in pending), Decimal("0"))
 
     chart_data = {
         "by_category": _by_category(qs),
@@ -51,6 +71,9 @@ def _dashboard_ctx(request):
         "savings_rate": savings_rate,
         "gauge_pct": gauge_pct,
         "tx_count": tx_count,
+        "pending": pending,
+        "pending_count": pending_count,
+        "pending_total": pending_total,
         "chart_data_json": json.dumps(chart_data),
         "budget": _budget_status(request.user, selected, expense),
     }

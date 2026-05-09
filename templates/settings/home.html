@@ -17,28 +17,32 @@
   </div>
 
   {# ---- BUDGET ---- #}
-  <div x-show="tab==='budget'">
+  <div x-show="tab=='budget'" id="budget-tab">
     <form method="get" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
       <input type="hidden" name="tab" value="budget">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">cycle</span>
-      <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <div class="select-wrap"><select name="month" class="select" onchange="this.form.requestSubmit()">
         {% for m in month_options %}
           <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
         {% endfor %}
       </select></div>
     </form>
 
-    <form method="post" action="{% url 'settings_app:budget_save' %}">
+    <form method="post" hx-post="{% url 'settings_app:budget_save' %}" hx-target="#content" hx-swap="innerHTML">
       {% csrf_token %}
       <input type="hidden" name="month" value="{{ selected|date:'Y-m' }}">
+      <input type="hidden" name="tab" value="budget">
 
       <div class="card" style="margin-bottom:14px;">
         <div class="card__header"><h3 class="card__title">overall monthly cap</h3></div>
         <div class="field" style="margin:0;">
           <label class="field__label" for="overall_cap">cap ({{ currency_symbol }})</label>
-          <input type="number" name="overall_cap" id="overall_cap" class="input"
-                 value="{{ budget.overall_cap|default_if_none:'' }}"
-                 step="0.01" min="0" placeholder="leave empty for no cap" style="max-width:280px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <input type="number" name="overall_cap" id="overall_cap" class="input input--deus"
+                    value="{{ budget.overall_cap|default_if_none:'' }}"
+                    step="0.01" min="0" placeholder="leave empty for no cap" style="max-width:280px;">
+            <button type="submit" class="btn btn--primary btn--sm">Save Budget</button>
+          </div>
           <p class="dim" style="font-size:0.72rem;margin-top:6px;">// when expenses exceed this, the dashboard goes red.</p>
         </div>
       </div>
@@ -59,24 +63,20 @@
                   <span class="chip" style="border-color:{{ cat.color }};color:{{ cat.color }}">{{ cat.name }}</span>
                 </td>
                 <td class="num">
-                  <input type="number" name="cap_{{ cat.pk }}" class="input"
-                         value="{{ current|default_if_none:'' }}"
-                         step="0.01" min="0" placeholder="—"
-                         style="max-width: 200px; text-align: right;">
+                  <input type="number" name="cap_{{ cat.pk }}" class="input input--deus"
+                          value="{{ current|default_if_none:'' }}"
+                          step="0.01" min="0" placeholder="—"
+                          style="max-width: 200px; text-align: right;">
                 </td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
-      <div style="margin-top:18px;display:flex;justify-content:flex-end;">
-        <button type="submit" class="btn btn--primary">Save Budget</button>
-      </div>
     </form>
-  </div>
+   </div>
 
-  {# ---- BANKS ---- #}
+   {# ---- BANKS ---- #}
   <div x-show="tab==='banks'" x-cloak>
     <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
       <a href="#" class="btn btn--primary"

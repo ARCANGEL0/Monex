@@ -39,6 +39,7 @@ def _ctx(request):
     to_receive = active.filter(kind=RecurringTransaction.INCOME, done=False).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     paid_so_far = active.filter(kind=RecurringTransaction.EXPENSE, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
     received_so_far = active.filter(kind=RecurringTransaction.INCOME, done=True).aggregate(s=Sum("amount"))["s"] or Decimal("0")
+    pending_expense_rules = list(active.filter(kind=RecurringTransaction.EXPENSE, done=False))
     return {
         "rules": rules,
         "selected": selected,
@@ -47,6 +48,8 @@ def _ctx(request):
         "to_receive": to_receive,
         "paid_so_far": paid_so_far,
         "received_so_far": received_so_far,
+        "pending_expense_rules": pending_expense_rules,
+        "pending_expense_count": len(pending_expense_rules),
         "net_remaining": to_receive - to_pay,
     }
 
@@ -157,4 +160,3 @@ def toggle_done(request, pk):
             rule.save(update_fields=["last_materialized_on"])
 
     return _refresh(request)
-

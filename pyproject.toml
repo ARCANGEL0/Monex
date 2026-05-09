@@ -1,7 +1,7 @@
 [project]
 name = "MonEX"
 version = "0.1.0"
-description = "personal expense tracker, deus ex flavored"
+description = "Augmented Dashboard for personal finance tracking, heavily inspired in deus ex aesthetics"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

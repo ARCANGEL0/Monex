@@ -7,14 +7,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "tracker"
-msgstr "rastreador"
+msgid "current passcode"
+msgstr "código actual"
 
-msgid "language"
-msgstr "idioma"
+msgid "new passcode"
+msgstr "nuevo código"
 
-msgid "toggle menu"
-msgstr "abrir menú"
+msgid "confirm passcode"
+msgstr "confirmar código"
+
+msgid "incorrect current passcode"
+msgstr "código actual incorrecto"
+
+msgid "passcodes do not match"
+msgstr "los códigos no coinciden"
+
+msgid "e.g. spotify"
+msgstr "p. ej. spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "déjalo en blanco para conservar el código actual"
+
+msgid "superadmin only"
+msgstr "solo superadministrador"
+
+msgid "budget updated."
+msgstr "presupuesto actualizado."
 
 msgid "Finance Tracker"
 msgstr "Rastreador Financiero"
@@ -46,68 +64,65 @@ msgstr "Desconectar"
 msgid "developed by"
 msgstr "desarrollado por"
 
-msgid "dashboard"
-msgstr "panel"
+msgid "reset passcode"
+msgstr "restablecer código"
 
-msgid "dashboard / overview"
-msgstr "panel / resumen"
+msgid "close"
+msgstr "cerrar"
 
-msgid "// system online"
-msgstr "// sistema en línea"
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// introduce tu correo. enviaremos un código de verificación de 6 dígitos."
 
-msgid "cycle"
-msgstr "ciclo"
+msgid "email"
+msgstr "correo"
 
-msgid "monthly cap"
-msgstr "límite mensual"
+msgid "Cancel"
+msgstr "Cancelar"
 
-msgid "no spend cap set for this cycle"
-msgstr "no hay límite de gasto para este ciclo"
+msgid "Send Code"
+msgstr "Enviar código"
 
-msgid "configure budget"
-msgstr "configurar presupuesto"
+msgid "change passcode"
+msgstr "cambiar código"
 
-msgid "Income"
-msgstr "Ingresos"
+msgid "confirm new passcode"
+msgstr "confirmar nuevo código"
 
-msgid "credits in"
-msgstr "créditos entrantes"
+msgid "// forgot your passcode?"
+msgstr "// ¿olvidaste tu código?"
 
-msgid "Expense"
-msgstr "Gasto"
+msgid "Save"
+msgstr "Guardar"
 
-msgid "debits out"
-msgstr "débitos salientes"
+msgid "auth"
+msgstr "acceso"
 
-msgid "Net"
-msgstr "Neto"
+msgid "tracker"
+msgstr "rastreador"
 
-msgid "balance delta"
-msgstr "delta de balance"
+msgid "language"
+msgstr "idioma"
 
-msgid "Entries"
-msgstr "Registros"
+msgid "identify yourself"
+msgstr "identifícate"
 
-msgid "events this cycle"
-msgstr "eventos este ciclo"
+msgid "access denied. invalid credentials."
+msgstr "acceso denegado. credenciales no válidas."
 
-msgid "Recurring Queue"
-msgstr "Cola Recurrente"
+msgid "operator id"
+msgstr "id de operador"
 
-msgid "payments left this cycle"
-msgstr "pagos restantes este ciclo"
+msgid "passcode"
+msgstr "código"
 
-msgid "amount left"
-msgstr "importe restante"
+msgid "keep me logged in"
+msgstr "mantener sesión iniciada"
 
-msgid "all clear"
-msgstr "todo al día"
+msgid "Authenticate"
+msgstr "Autenticar"
 
-msgid "expenses by category"
-msgstr "gastos por categoría"
-
-msgid "bank movement"
-msgstr "movimiento bancario"
+msgid "MonEx"
+msgstr "MonEx"
 
 msgid "analytics / patterns"
 msgstr "analítica / patrones"
@@ -136,11 +151,26 @@ msgstr "Prom. / Día"
 msgid "daily burn rate"
 msgstr "ritmo diario de gasto"
 
+msgid "Entries"
+msgstr "Registros"
+
 msgid "events logged"
 msgstr "eventos registrados"
 
+msgid "Recurring Queue"
+msgstr "Cola Recurrente"
+
+msgid "payments left this cycle"
+msgstr "pagos restantes este ciclo"
+
 msgid "current cycle only"
 msgstr "solo ciclo actual"
+
+msgid "amount left"
+msgstr "importe restante"
+
+msgid "all clear"
+msgstr "todo al día"
 
 msgid "no live queue"
 msgstr "sin cola activa"
@@ -226,41 +256,68 @@ msgstr "importe"
 msgid "no expense outflows this cycle"
 msgstr "sin salidas de gasto en este ciclo"
 
-msgid "transactions / ledger"
-msgstr "transacciones / libro"
+msgid "home"
+msgstr "inicio"
 
-msgid "// transaction ledger"
-msgstr "// libro de transacciones"
+msgid "toggle menu"
+msgstr "abrir menú"
 
-msgid "Add"
-msgstr "Añadir"
+msgid "dashboard"
+msgstr "panel"
 
-msgid "Date"
-msgstr "Fecha"
+msgid "dashboard / overview"
+msgstr "panel / resumen"
 
-msgid "Name"
-msgstr "Nombre"
+msgid "// system online"
+msgstr "// sistema en línea"
 
-msgid "Kind"
-msgstr "Tipo"
+msgid "cycle"
+msgstr "ciclo"
 
-msgid "Bank"
-msgstr "Banco"
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "sobrepresupuesto — %(pct)s%% del tope de %(symbol)s%(amount)s consumido"
 
-msgid "Category"
-msgstr "Categoría"
+msgid "monthly cap"
+msgstr "límite mensual"
 
-msgid "Amount"
-msgstr "Importe"
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// excedido por %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
 
-msgid "edit"
-msgstr "editar"
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// %(symbol)s%(remaining)s restantes en el ciclo"
 
-msgid "no entries logged"
-msgstr "sin registros"
+msgid "no spend cap set for this cycle"
+msgstr "no hay límite de gasto para este ciclo"
 
-msgid "no transactions for %(selected_month)s"
-msgstr "sin transacciones para %(selected_month)s"
+msgid "configure budget"
+msgstr "configurar presupuesto"
+
+msgid "Income"
+msgstr "Ingresos"
+
+msgid "credits in"
+msgstr "créditos entrantes"
+
+msgid "Expense"
+msgstr "Gasto"
+
+msgid "debits out"
+msgstr "débitos salientes"
+
+msgid "Net"
+msgstr "Neto"
+
+msgid "balance delta"
+msgstr "delta de balance"
+
+msgid "events this cycle"
+msgstr "eventos este ciclo"
+
+msgid "expenses by category"
+msgstr "gastos por categoría"
+
+msgid "bank movement"
+msgstr "movimiento bancario"
 
 msgid "recurring / scheduled"
 msgstr "recurrentes / programado"
@@ -277,8 +334,14 @@ msgstr "Nueva regla"
 msgid "To Pay"
 msgstr "Por pagar"
 
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "pagado %(symbol)s%(amount)s hasta ahora"
+
 msgid "To Receive"
 msgstr "Por recibir"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "recibido %(symbol)s%(amount)s hasta ahora"
 
 msgid "Net Remaining"
 msgstr "Neto restante"
@@ -291,6 +354,24 @@ msgstr "Pagos pendientes"
 
 msgid "pending recurring expenses"
 msgstr "gastos recurrentes pendientes"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Kind"
+msgstr "Tipo"
+
+msgid "Day"
+msgstr "Día"
+
+msgid "Bank"
+msgstr "Banco"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Amount"
+msgstr "Importe"
 
 msgid "received"
 msgstr "recibido"
@@ -307,17 +388,11 @@ msgstr "pagar"
 msgid "paused"
 msgstr "pausado"
 
-msgid "Status"
-msgstr "Estado"
-
-msgid "Day"
-msgstr "Día"
+msgid "edit"
+msgstr "editar"
 
 msgid "no recurring rules"
 msgstr "sin reglas recurrentes"
-
-msgid "subscriptions, rent, salary — anything that hits monthly. add one to start tracking."
-msgstr "suscripciones, alquiler, salario: cualquier cosa que ocurra cada mes. añade una para empezar a seguirla."
 
 msgid "settings / config"
 msgstr "ajustes / configuración"
@@ -367,77 +442,23 @@ msgstr "Nueva categoría"
 msgid "New Operator"
 msgstr "Nuevo operador"
 
-msgid "auth"
-msgstr "acceso"
+msgid "transactions / ledger"
+msgstr "transacciones / libro"
 
-msgid "identify yourself"
-msgstr "identifícate"
+msgid "// transaction ledger"
+msgstr "// libro de transacciones"
 
-msgid "access denied. invalid credentials."
-msgstr "acceso denegado. credenciales no válidas."
+msgid "Add"
+msgstr "Añadir"
 
-msgid "operator id"
-msgstr "id de operador"
+msgid "Date"
+msgstr "Fecha"
 
-msgid "passcode"
-msgstr "código"
+msgid "no entries logged"
+msgstr "sin registros"
 
-msgid "keep me logged in"
-msgstr "mantener sesión iniciada"
+msgid "no transactions for %(selected_month)s"
+msgstr "sin transacciones para %(selected_month)s"
 
-msgid "Authenticate"
-msgstr "Autenticar"
-
-msgid "// forgot your passcode?"
-msgstr "// ¿olvidaste tu código?"
-
-msgid "reset passcode"
-msgstr "restablecer código"
-
-msgid "close"
-msgstr "cerrar"
-
-msgid "// enter your email. we'll send a 6-digit verification code."
-msgstr "// introduce tu correo. enviaremos un código de verificación de 6 dígitos."
-
-msgid "email"
-msgstr "correo"
-
-msgid "Cancel"
-msgstr "Cancelar"
-
-msgid "Send Code"
-msgstr "Enviar código"
-
-msgid "change passcode"
-msgstr "cambiar código"
-
-msgid "current passcode"
-msgstr "código actual"
-
-msgid "new passcode"
-msgstr "nuevo código"
-
-msgid "confirm new passcode"
-msgstr "confirmar nuevo código"
-
-msgid "Save"
-msgstr "Guardar"
-
-msgid "e.g. spotify"
-msgstr "p. ej. spotify"
-
-msgid "leave blank to keep existing passcode"
-msgstr "déjalo en blanco para conservar el código actual"
-
-msgid "superadmin only"
-msgstr "solo superadministrador"
-
-msgid "budget updated."
-msgstr "presupuesto actualizado."
-
-msgid "incorrect current passcode"
-msgstr "código actual incorrecto"
-
-msgid "passcodes do not match"
-msgstr "los códigos no coinciden"
+msgid "e.g. groceries lidl"
+msgstr "p. ej. compras lidl"

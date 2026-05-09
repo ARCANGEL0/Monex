@@ -1,115 +1,283 @@
 import * as THREE from "three";
 
-// hud-style hex field + spinning sigil that lives in the dashboard hero strip
+const SPINNER_SIZE = 226;
+const SPINNER_CENTER = { x: 113, y: 150.65 };
+const ROTATION_MS = (288 / 30) * 1000;
+const CYCLE_MS = (92 / 30) * 1000;
+const PHASE_WINDOW = 0.5;
+const OPACITY_OFFSET = 12 / 96;
+const FILL_OFFSET = 30 / 96;
+const INSET_DELAY = 0.5;
 
-(function () {
-  const canvas = document.getElementById("hero-3d");
-  if (!canvas) return;
+const GOLD = 0xd4af37;
+
+const TRIANGLES = [
+  { phase: 0, points: [[22.5, 180.1], [0, 225.1], [45, 225.1]] },
+  { phase: 1, points: [[67.6, 180.1], [45.1, 225.1], [90.1, 225.1]] },
+  { phase: 2, points: [[45.07, 225.099], [22.57, 180.099], [67.57, 180.099]] },
+  { phase: 3, points: [[90.07, 225.099], [67.57, 180.099], [112.57, 180.099]] },
+  { phase: 4, points: [[112.6, 180.1], [90.1, 225.1], [135.1, 225.1]] },
+  { phase: 5, points: [[135.07, 225.099], [112.57, 180.099], [157.57, 180.099]] },
+  { phase: 6, points: [[45.07, 135.1], [67.57, 180.1], [22.57, 180.1]] },
+  { phase: 7, points: [[157.6, 180.1], [135.1, 225.1], [180.1, 225.1]] },
+  { phase: 8, points: [[180.07, 225.099], [157.57, 180.099], [202.57, 180.099]] },
+  { phase: 9, points: [[202.6, 180.1], [180.1, 225.1], [225.1, 225.1]] },
+  { phase: 10, points: [[67.6, 180.099], [90.1, 135.099], [45.1, 135.099]] },
+  { phase: 11, points: [[180.07, 135.1], [202.57, 180.1], [157.57, 180.1]] },
+  { phase: 12, points: [[67.6, 90.1], [90.1, 135.1], [45.1, 135.1]] },
+  { phase: 13, points: [[157.6, 180.099], [135.1, 135.099], [180.1, 135.099]] },
+  { phase: 14, points: [[157.6, 90.1], [180.1, 135.1], [135.1, 135.1]] },
+  { phase: 15, points: [[90.07, 135.099], [112.57, 90.099], [67.57, 90.099]] },
+  { phase: 15, points: [[135.07, 135.099], [112.57, 90.099], [157.57, 90.099]] },
+  { phase: 16, points: [[135.07, 45], [157.57, 90], [112.57, 90]] },
+  { phase: 17, points: [[90.07, 45], [112.57, 90], [67.57, 90]] },
+  { phase: 18, points: [[135.07, 45], [90.07, 45], [112.57, 90]] },
+  { phase: 19, points: [[112.6, 0.1], [135.1, 45.1], [90.1, 45.1]] },
+];
+
+let activeHero = null;
+let mountTimer = 0;
+let mountFrame = 0;
+
+function buildTriangle(points) {
+  const [a, b, c] = points;
+  const centroid = {
+    x: (a[0] + b[0] + c[0]) / 3,
+    y: (a[1] + b[1] + c[1]) / 3,
+  };
+  const vertices = [a, b, c].map(([x, y]) => new THREE.Vector3(x - centroid.x, -(y - centroid.y), 0));
+  return {
+    centroid,
+    geometry: new THREE.BufferGeometry().setFromPoints(vertices),
+  };
+}
+
+function createLayer() {
+  const group = new THREE.Group();
+  const triangles = TRIANGLES.map(({ phase, points }) => {
+    const meshGroup = new THREE.Group();
+    const { centroid, geometry } = buildTriangle(points);
+    meshGroup.position.set(centroid.x - SPINNER_CENTER.x, SPINNER_CENTER.y - centroid.y, 0);
+
+    const shellMaterial = new THREE.LineBasicMaterial({
+      color: GOLD,
+      transparent: true,
+      opacity: 0,
+    });
+    const shell = new THREE.LineLoop(geometry, shellMaterial);
+    shell.renderOrder = 2;
+    meshGroup.add(shell);
+
+    const trailMaterial = new THREE.LineBasicMaterial({
+      color: GOLD,
+      transparent: true,
+      opacity: 0,
+    });
+    const trail = new THREE.LineLoop(geometry.clone(), trailMaterial);
+    trail.position.z = 0.02;
+    trail.renderOrder = 1;
+    meshGroup.add(trail);
+
+    group.add(meshGroup);
+    return { geometry, phase, shell, trail };
+  });
+
+  return { group, triangles };
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function easeInOut(t) {
+  const clamped = Math.min(1, Math.max(0, t));
+  return 0.5 - (Math.cos(Math.PI * clamped) * 0.5);
+}
+
+function layerScale(progress) {
+  if (progress < 0.5) {
+    return lerp(1, 0.4, easeInOut(progress / 0.5));
+  }
+  return lerp(0.4, 0.16, easeInOut((progress - 0.5) / 0.5));
+}
+
+function shellOpacity(progress, phase) {
+  const base = (phase / 19) * PHASE_WINDOW;
+  if (progress <= base) return 0;
+  if (progress < base + OPACITY_OFFSET) {
+    return easeInOut((progress - base) / OPACITY_OFFSET);
+  }
+  return 1;
+}
+
+function trailProgress(progress, phase) {
+  const base = (phase / 19) * PHASE_WINDOW;
+  if (progress <= base) return 1;
+  if (progress < base + FILL_OFFSET) {
+    return 1 - easeInOut((progress - base) / FILL_OFFSET);
+  }
+  return 0;
+}
+
+function createHero(canvas) {
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+    powerPreference: "high-performance",
+  });
+  renderer.setClearAlpha(0);
 
   const scene = new THREE.Scene();
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
+  camera.position.z = 10;
 
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-  camera.position.set(0, 0, 12);
+  const root = new THREE.Group();
+  const layerA = createLayer();
+  const layerB = createLayer();
+  root.add(layerA.group);
+  root.add(layerB.group);
+  scene.add(root);
+
+  const resizeObserver = new ResizeObserver(() => resize());
+  resizeObserver.observe(canvas);
+  if (canvas.parentElement) resizeObserver.observe(canvas.parentElement);
+
+  let frameId = 0;
+  let destroyed = false;
+  const startedAt = performance.now();
 
   function resize() {
-    const r = canvas.getBoundingClientRect();
-    if (r.width === 0 || r.height === 0) return;
-    renderer.setSize(r.width, r.height, false);
-    camera.aspect = r.width / r.height;
-    camera.updateProjectionMatrix();
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  const GOLD = 0xfcd34d;
-  const HOT = 0xf59e0b;
-
-  // ambient hex field - pulses at random phases
-  const field = new THREE.Group();
-  const hexGeo = new THREE.RingGeometry(0.5, 0.55, 6, 1);
-  const hexes = [];
-  for (let x = -18; x <= 18; x += 1.8) {
-    for (let y = -3.2; y <= 3.2; y += 1.5) {
-      const mat = new THREE.MeshBasicMaterial({
-        color: GOLD,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.15 + Math.random() * 0.3,
-      });
-      const h = new THREE.Mesh(hexGeo, mat);
-      h.position.set(
-        x + (Math.random() - 0.5) * 0.4,
-        y + (Math.random() - 0.5) * 0.4,
-        -2 - Math.random() * 3
-      );
-      h.rotation.z = Math.PI / 2;
-      h.userData = {
-        phase: Math.random() * Math.PI * 2,
-        speed: 0.4 + Math.random() * 0.6,
-      };
-      hexes.push(h);
-      field.add(h);
-    }
-  }
-  scene.add(field);
-
-  // central spinning sigil - 3 nested hex rings + bright core
-  const sigil = new THREE.Group();
-  sigil.position.x = 6;
-  const rings = [];
-  for (let i = 0; i < 3; i++) {
-    const r = 0.7 + i * 0.42;
-    const g = new THREE.RingGeometry(r, r + 0.05, 6, 1);
-    const m = new THREE.MeshBasicMaterial({
-      color: i === 0 ? HOT : GOLD,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.9 - i * 0.18,
-    });
-    const ring = new THREE.Mesh(g, m);
-    ring.rotation.z = Math.PI / 2;
-    ring.userData = { dir: i % 2 ? 1 : -1, speedMult: i + 1 };
-    rings.push(ring);
-    sigil.add(ring);
-  }
-  // bright hex core
-  const coreGeo = new THREE.CircleGeometry(0.25, 6);
-  const coreMat = new THREE.MeshBasicMaterial({ color: GOLD, transparent: true, opacity: 0.95 });
-  const core = new THREE.Mesh(coreGeo, coreMat);
-  core.rotation.z = Math.PI / 2;
-  sigil.add(core);
-  scene.add(sigil);
-
-  // mouse parallax
-  let mouseX = 0;
-  canvas.parentElement.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
-    mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-  });
-  canvas.parentElement.addEventListener("mouseleave", () => { mouseX = 0; });
+    if (!rect.width || !rect.height) return;
 
-  let t = 0;
-  function tick() {
-    t += 0.016;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(rect.width, rect.height, false);
 
-    rings.forEach((r) => {
-      r.rotation.z += 0.008 * r.userData.dir * r.userData.speedMult;
+    camera.left = -rect.width / 2;
+    camera.right = rect.width / 2;
+    camera.top = rect.height / 2;
+    camera.bottom = -rect.height / 2;
+    camera.updateProjectionMatrix();
+
+    const heroScale = Math.min((rect.height * 0.9) / SPINNER_SIZE, (rect.width * (rect.width < 720 ? 0.38 : 0.24)) / SPINNER_SIZE);
+    root.scale.setScalar(heroScale);
+    root.position.set(rect.width * (rect.width < 720 ? 0.16 : 0.27), 0, 0);
+  }
+
+  function render(now) {
+    if (destroyed) return;
+    if (!canvas.isConnected) {
+      destroy();
+      return;
+    }
+
+    const elapsed = now - startedAt;
+    const rotateProgress = (elapsed % ROTATION_MS) / ROTATION_MS;
+    const cycleProgress = (elapsed % CYCLE_MS) / CYCLE_MS;
+
+    root.rotation.z = -rotateProgress * Math.PI * 2;
+
+    [
+      { layer: layerA, phase: INSET_DELAY },
+      { layer: layerB, phase: 0 },
+    ].forEach(({ layer, phase }) => {
+      const progress = (cycleProgress + phase) % 1;
+      const scale = layerScale(progress);
+
+      layer.group.scale.setScalar(scale);
+      layer.triangles.forEach((triangle) => {
+        const reveal = shellOpacity(progress, triangle.phase);
+        triangle.shell.material.opacity = reveal;
+
+        const trail = trailProgress(progress, triangle.phase);
+        triangle.trail.scale.setScalar(0.16 + (0.84 * trail));
+        triangle.trail.material.opacity = reveal * trail * 0.42;
+      });
     });
-    core.material.opacity = 0.65 + 0.3 * Math.sin(t * 2.2);
-
-    hexes.forEach((h) => {
-      const p = h.userData.phase;
-      h.material.opacity = 0.1 + 0.28 * Math.abs(Math.sin(t * h.userData.speed + p));
-    });
-
-    // gentle parallax sway
-    field.position.x = Math.sin(t * 0.18) * 0.5 + mouseX * 0.4;
-    sigil.position.y = Math.sin(t * 0.6) * 0.12;
 
     renderer.render(scene, camera);
-    requestAnimationFrame(tick);
+    frameId = window.requestAnimationFrame(render);
   }
-  tick();
-})();
+
+  function destroy() {
+    if (destroyed) return;
+    destroyed = true;
+    window.cancelAnimationFrame(frameId);
+    resizeObserver.disconnect();
+
+    [layerA, layerB].forEach((layer) => {
+      layer.triangles.forEach((triangle) => {
+        triangle.geometry.dispose();
+        triangle.trail.geometry.dispose();
+        triangle.shell.material.dispose();
+        triangle.trail.material.dispose();
+      });
+    });
+    renderer.forceContextLoss();
+    renderer.dispose();
+  }
+
+  resize();
+  frameId = window.requestAnimationFrame(render);
+
+  return { canvas, destroy };
+}
+
+function mountHero() {
+  const canvas = document.getElementById("hero-3d");
+
+  if (!canvas) {
+    if (activeHero && !activeHero.canvas.isConnected) {
+      activeHero.destroy();
+      activeHero = null;
+    }
+    return;
+  }
+
+  if (activeHero?.canvas === canvas) return;
+
+  if (activeHero) {
+    activeHero.destroy();
+    activeHero = null;
+  }
+
+  try {
+    activeHero = createHero(canvas);
+  } catch (error) {
+    console.error("Failed to initialize hero spinner", error);
+  }
+}
+
+function queueMountHero() {
+  window.clearTimeout(mountTimer);
+  window.cancelAnimationFrame(mountFrame);
+  mountFrame = window.requestAnimationFrame(() => {
+    mountFrame = window.requestAnimationFrame(() => {
+      mountHero();
+    });
+  });
+  mountTimer = window.setTimeout(() => {
+    mountHero();
+  }, 80);
+}
+
+document.addEventListener("DOMContentLoaded", queueMountHero);
+document.body.addEventListener("htmx:afterSwap", (event) => {
+  if (event.detail?.target?.id === "content") {
+    queueMountHero();
+  }
+});
+document.body.addEventListener("htmx:afterSettle", (event) => {
+  if (event.detail?.target?.id === "content") {
+    queueMountHero();
+  }
+});
+window.addEventListener("pagehide", () => {
+  window.clearTimeout(mountTimer);
+  window.cancelAnimationFrame(mountFrame);
+  if (activeHero) {
+    activeHero.destroy();
+    activeHero = null;
+  }
+});

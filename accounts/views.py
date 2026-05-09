@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_not_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import HttpResponse
@@ -19,7 +19,7 @@ from .models import VerificationCode
 User = get_user_model()
 
 
-class LoginView(LoginView):
+class LoginView(DjangoLoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
 

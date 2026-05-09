@@ -87,6 +87,16 @@ LANGUAGES = [
     ("es", "Español"),
     ("pt", "Português"),
     ("pl", "Polski"),
+    ("fr", "Français"),
+    ("de", "Deutsch"),
+    ("it", "Italiano"),
+    ("ro", "Română"),
+    ("ru", "Русский"),
+    ("ja", "日本語"),
+    ("ko", "한국어"),
+    ("zh-hans", "简体中文"),
+    ("zh-hant", "繁體中文"),
+    ("ar", "العربية"),
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Europe/Lisbon"

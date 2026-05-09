@@ -47,6 +47,11 @@ def _tx_ctx(request):
 def _refresh_tx(request):
     return render(request, "transactions/_fragment.html", _tx_ctx(request))
 
+def _refresh_with_target(request, target="#content"):
+    response = render(request, "transactions/_fragment.html", _tx_ctx(request))
+    response['HX-Retarget'] = target
+    return response
+
 
 def _tx_err(request, modal_html):
     ctx = _tx_ctx(request)
@@ -70,7 +75,7 @@ def transaction_create(request):
             tx = form.save(commit=False)
             tx.owner = request.user
             tx.save()
-            return _refresh_tx(request)
+            return _refresh_with_target(request, "#content")
         return _tx_err(request, render(request, "transactions/_form_modal.html", {
             "form": form,
             "title": "log entry",
@@ -98,7 +103,7 @@ def transaction_edit(request, pk):
         form = TransactionForm(request.POST, instance=t)
         if form.is_valid():
             form.save()
-            return _refresh_tx(request)
+            return _refresh_with_target(request, "#content")
         return _tx_err(request, render(request, "transactions/_form_modal.html", {
             "form": form,
             "title": "edit entry",
@@ -181,7 +186,7 @@ def transaction_delete(request, pk):
     t = get_object_or_404(_user_tx(request), pk=pk)
     if request.method == "POST":
         t.delete()
-        return _refresh_tx(request)
+        return _refresh_with_target(request, "#content")
     return render(request, "transactions/_delete_modal.html", {
         "transaction": t,
         "submit_url": request.path,

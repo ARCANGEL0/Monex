@@ -20,7 +20,12 @@
     <form hx-get="/_/s/" hx-target="#content" hx-push-url="false" style="display:inline-flex;gap:8px;align-items:center;margin-bottom:14px;" id="monthForm">
       <input type="hidden" name="tab" value="budget">
       <span class="dim mono" style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;">{% trans "cycle" %}</span>
-      <div class="select-wrap"><select name="month" class="select" onchange="document.getElementById('monthForm').submit()">
+      <div class="select-wrap"><select name="month"
+                                       class="select"
+                                       hx-trigger="change"
+                                       hx-get="/_/s/"
+                                       hx-target="#content"
+                                       hx-push-url="false">
         {% for m in month_options %}
           <option value="{{ m|date:'Y-m' }}" {% if m == selected %}selected{% endif %}>{{ m|date:'F Y' }}</option>
         {% endfor %}

@@ -398,6 +398,37 @@ function dailyBars(canvas, data) {
   });
 }
 
+function weeklyBars(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no weekly data");
+  return new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: data.labels,
+      datasets: [{
+        data: data.values,
+        backgroundColor: "rgba(252, 211, 77, 0.12)",
+        borderColor: "#fcd34d",
+        borderWidth: 2,
+        borderRadius: 2,
+        hoverBackgroundColor: "rgba(252, 211, 77, 0.28)",
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: GRID_X }, ticks: { color: "#7a7466" } },
+        y: { grid: { color: GRID_Y }, ticks: eurAxis() },
+      },
+      plugins: {
+        datasetGlow: { enabled: true, blur: 16, color: "rgba(252, 211, 77, 0.5)" },
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => ctx.label + ": " + fmtEuro(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
 function burnRate(canvas, data) {
   if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no burn data");
   return new Chart(canvas, {
@@ -449,6 +480,37 @@ function burnRate(canvas, data) {
   });
 }
 
+function categoryMovers(canvas, data) {
+  if (!data || !data.labels || !data.labels.length) return emptyState(canvas, "no mover data");
+  return new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: data.labels,
+      datasets: [{
+        label: "change",
+        data: data.deltas,
+        backgroundColor: data.deltas.map(d => d >= 0 ? "rgba(220, 38, 38, 0.18)" : "rgba(122, 154, 71, 0.18)"),
+        borderColor: data.deltas.map(d => d >= 0 ? "#dc2626" : "#9bb84d"),
+        borderWidth: 2,
+        borderRadius: 2,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: GRID_X }, ticks: { color: "#7a7466" } },
+        y: { grid: { color: GRID_Y }, ticks: Object.assign(eurAxis(), { callback: v => (v >= 0 ? "+" : "") + fmtEuro(v) } ) },
+      },
+      plugins: {
+        datasetGlow: { enabled: true, blur: 14 },
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => (ctx.parsed.y >= 0 ? "+" : "") + fmtEuro(ctx.parsed.y) } },
+      },
+    },
+  });
+}
+
 const __charts = {};
 
 function killOld() {
@@ -463,33 +525,57 @@ function track(id, c) { if (c) __charts[id] = c; }
 var _themeSet = false;
 
 function initCharts() {
-  if (typeof Chart === "undefined") return;
-  if (!_themeSet) { Chart.register(datasetGlow); monexTheme(); _themeSet = true; }
-  killOld();
-
-  var data = window.__chartData;
-  if (!data) return;
-
-  track("cat", document.getElementById("chart-category") && categoryDonut(document.getElementById("chart-category"), data.by_category || []));
-  track("bank", document.getElementById("chart-bank") && bankBar(document.getElementById("chart-bank"), data.by_bank || []));
-  track("trend", document.getElementById("chart-trend") && trendLine(document.getElementById("chart-trend"), data.trend || {}));
-  track("dow", document.getElementById("chart-dow") && dowBar(document.getElementById("chart-dow"), data.dow || {}));
-  track("evo", document.getElementById("chart-evolution") && evolutionStack(document.getElementById("chart-evolution"), data.evolution || {}));
-  track("top", document.getElementById("chart-top") && topHorizontalBar(document.getElementById("chart-top"), data.top || {}));
-  track("donut", document.getElementById("chart-monthly-donut") && monthlyDonut(document.getElementById("chart-monthly-donut"), data.monthly_donut || {}));
-  track("comp", document.getElementById("chart-cat-comparison") && catComparison(document.getElementById("chart-cat-comparison"), data.cat_comparison || {}));
-  track("daily", document.getElementById("chart-daily-bars") && dailyBars(document.getElementById("chart-daily-bars"), data.daily_bars || {}));
-  track("burn", document.getElementById("chart-burn-rate") && burnRate(document.getElementById("chart-burn-rate"), data.burn_rate || {}));
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", function() { setTimeout(initCharts, 100); });
-} else {
-  setTimeout(initCharts, 100);
-}
-
-document.body.addEventListener("htmx:afterSwap", function(e) {
-  if (e.detail.target.id === "content") {
-    setTimeout(initCharts, 50);
+  if (typeof Chart === "undefined") {
+    console.error("Chart.js not loaded");
+    return;
   }
-});
+  try {
+    if (!_themeSet) { 
+      Chart.register(datasetGlow);
+      monexTheme(); 
+      _themeSet = true;
+    }
+    killOld();
+
+    var data = window.__chartData;
+    if (!data) {
+      console.error("No chart data");
+      return;
+    }
+
+    // Create charts with error handling
+    var chartIds = [
+      { id: "chart-trend", fn: trendLine, chartData: data.trend },
+      { id: "chart-evolution", fn: evolutionStack, chartData: data.evolution },
+      { id: "chart-top", fn: topHorizontalBar, chartData: data.top },
+      { id: "chart-cat-comparison", fn: catComparison, chartData: data.cat_comparison },
+      { id: "chart-burn-rate", fn: burnRate, chartData: data.burn_rate },
+      { id: "chart-weekly", fn: weeklyBars, chartData: data.weekly },
+      { id: "chart-movers", fn: categoryMovers, chartData: data.movers },
+    ];
+
+    chartIds.forEach(function(cfg) {
+      var canvas = document.getElementById(cfg.id);
+      if (!canvas) {
+        return;
+      }
+      try {
+        if (cfg.chartData && ((cfg.chartData.labels && cfg.chartData.labels.length) || (cfg.chartData.values && cfg.chartData.values.length) || (cfg.chartData.datasets && cfg.chartData.datasets.length))) {
+          var chart = cfg.fn(canvas, cfg.chartData);
+          track(cfg.id, chart);
+          if (chart) {
+            console.log("Chart created: " + cfg.id);
+          }
+        } else {
+          emptyState(canvas, "no data");
+        }
+      } catch(e) {
+        console.error("Error creating chart " + cfg.id + ":", e);
+      }
+    });
+  } catch(e) {
+    console.error("initCharts error:", e);
+  }
+}
+
+// Charts are initialized by inline scripts in fragments after chart data is set

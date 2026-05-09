@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "current passcode"
+msgstr "現在のパスコード"
+
+msgid "new passcode"
+msgstr "新しいパスコード"
+
+msgid "confirm passcode"
+msgstr "パスコードを確認"
+
+msgid "incorrect current passcode"
+msgstr "現在のパスコードが正しくありません"
+
+msgid "passcodes do not match"
+msgstr "パスコードが一致しません"
+
+msgid "e.g. spotify"
+msgstr "例: spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "現在のパスコードを維持するには空欄のままにしてください"
+
+msgid "superadmin only"
+msgstr "superadmin のみ"
+
+msgid "budget updated."
+msgstr "予算を更新しました。"
+
+msgid "Finance Tracker"
+msgstr "ファイナンストラッカー"
+
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+msgid "Transactions"
+msgstr "取引"
+
+msgid "Analytics"
+msgstr "分析"
+
+msgid "Recurring"
+msgstr "定期"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "operator"
+msgstr "オペレーター"
+
+msgid "Change Passcode"
+msgstr "パスコードを変更"
+
+msgid "Disconnect"
+msgstr "切断"
+
+msgid "developed by"
+msgstr "開発者"
+
+msgid "reset passcode"
+msgstr "パスコードをリセット"
+
+msgid "close"
+msgstr "閉じる"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// メールアドレスを入力してください。6桁の確認コードを送信します。"
+
+msgid "email"
+msgstr "メール"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Send Code"
+msgstr "コードを送信"
+
+msgid "change passcode"
+msgstr "パスコードを変更"
+
+msgid "confirm new passcode"
+msgstr "新しいパスコードを確認"
+
+msgid "// forgot your passcode?"
+msgstr "// パスコードを忘れましたか？"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "auth"
+msgstr "認証"
+
+msgid "tracker"
+msgstr "トラッカー"
+
+msgid "language"
+msgstr "言語"
+
+msgid "identify yourself"
+msgstr "本人確認してください"
+
+msgid "access denied. invalid credentials."
+msgstr "アクセス拒否。認証情報が無効です。"
+
+msgid "operator id"
+msgstr "オペレーターID"
+
+msgid "passcode"
+msgstr "パスコード"
+
+msgid "keep me logged in"
+msgstr "ログイン状態を保持"
+
+msgid "Authenticate"
+msgstr "認証"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "分析 / パターン"
+
+msgid "// pattern scan"
+msgstr "// パターンスキャン"
+
+msgid "flow diagnostics"
+msgstr "フロー診断"
+
+msgid "Total Expenses"
+msgstr "総支出"
+
+msgid "outflow this cycle"
+msgstr "このサイクルの流出"
+
+msgid "Total Income"
+msgstr "総収入"
+
+msgid "inflow this cycle"
+msgstr "このサイクルの流入"
+
+msgid "Avg / Day"
+msgstr "平均 / 日"
+
+msgid "daily burn rate"
+msgstr "1日あたりの消費ペース"
+
+msgid "Entries"
+msgstr "件数"
+
+msgid "events logged"
+msgstr "記録されたイベント"
+
+msgid "Recurring Queue"
+msgstr "定期キュー"
+
+msgid "payments left this cycle"
+msgstr "このサイクルで残っている支払い"
+
+msgid "current cycle only"
+msgstr "現在のサイクルのみ"
+
+msgid "amount left"
+msgstr "残額"
+
+msgid "all clear"
+msgstr "すべて完了"
+
+msgid "no live queue"
+msgstr "アクティブなキューはありません"
+
+msgid "savings rate"
+msgstr "貯蓄率"
+
+msgid "of income retained"
+msgstr "保持された収入の割合"
+
+msgid "weekly spend"
+msgstr "週間支出"
+
+msgid "category evolution"
+msgstr "カテゴリ推移"
+
+msgid "this vs last month"
+msgstr "今月 vs 先月"
+
+msgid "category comparison"
+msgstr "カテゴリ比較"
+
+msgid "category movers"
+msgstr "カテゴリ変動"
+
+msgid "vs last month"
+msgstr "vs 先月"
+
+msgid "spending velocity"
+msgstr "支出速度"
+
+msgid "cumulative vs projected"
+msgstr "累計 vs 予測"
+
+msgid "12-month flow"
+msgstr "12か月フロー"
+
+msgid "income vs expense"
+msgstr "収入 vs 支出"
+
+msgid "top spending days"
+msgstr "支出が多い日"
+
+msgid "no spending days"
+msgstr "支出日なし"
+
+msgid "payment queue"
+msgstr "支払いキュー"
+
+msgid "remaining this cycle"
+msgstr "このサイクルの残り"
+
+msgid "day"
+msgstr "日"
+
+msgid "total"
+msgstr "合計"
+
+msgid "all recurring payments cleared"
+msgstr "すべての定期支払いは完了しました"
+
+msgid "no live payment queue for this cycle"
+msgstr "このサイクルにアクティブな支払いキューはありません"
+
+msgid "largest outflows"
+msgstr "最大の流出"
+
+msgid "selected cycle"
+msgstr "選択中のサイクル"
+
+msgid "name"
+msgstr "名前"
+
+msgid "category"
+msgstr "カテゴリ"
+
+msgid "date"
+msgstr "日付"
+
+msgid "amount"
+msgstr "金額"
+
+msgid "no expense outflows this cycle"
+msgstr "このサイクルに支出の流出はありません"
+
+msgid "home"
+msgstr "ホーム"
+
+msgid "toggle menu"
+msgstr "メニュー切替"
+
+msgid "dashboard"
+msgstr "ダッシュボード"
+
+msgid "dashboard / overview"
+msgstr "ダッシュボード / 概要"
+
+msgid "// system online"
+msgstr "// システムオンライン"
+
+msgid "cycle"
+msgstr "サイクル"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "予算超過 — 上限 %(symbol)s%(amount)s の %(pct)s%% を消費"
+
+msgid "monthly cap"
+msgstr "月間上限"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// 超過額 %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// このサイクルの残り %(symbol)s%(remaining)s"
+
+msgid "no spend cap set for this cycle"
+msgstr "このサイクルには支出上限が設定されていません"
+
+msgid "configure budget"
+msgstr "予算を設定"
+
+msgid "Income"
+msgstr "収入"
+
+msgid "credits in"
+msgstr "入金"
+
+msgid "Expense"
+msgstr "支出"
+
+msgid "debits out"
+msgstr "出金"
+
+msgid "Net"
+msgstr "純額"
+
+msgid "balance delta"
+msgstr "残高差分"
+
+msgid "events this cycle"
+msgstr "このサイクルのイベント"
+
+msgid "expenses by category"
+msgstr "カテゴリ別支出"
+
+msgid "bank movement"
+msgstr "銀行の動き"
+
+msgid "recurring / scheduled"
+msgstr "定期 / 予定"
+
+msgid "// recurring queue"
+msgstr "// 定期キュー"
+
+msgid "scheduled flow"
+msgstr "予定フロー"
+
+msgid "New Rule"
+msgstr "新しいルール"
+
+msgid "To Pay"
+msgstr "支払予定"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "これまでに %(symbol)s%(amount)s 支払い済み"
+
+msgid "To Receive"
+msgstr "受取予定"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "これまでに %(symbol)s%(amount)s 受取済み"
+
+msgid "Net Remaining"
+msgstr "残り純額"
+
+msgid "income − expense (pending)"
+msgstr "収入 − 支出（保留中）"
+
+msgid "Payments Left"
+msgstr "残り支払い"
+
+msgid "pending recurring expenses"
+msgstr "保留中の定期支出"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Kind"
+msgstr "種別"
+
+msgid "Day"
+msgstr "日"
+
+msgid "Bank"
+msgstr "銀行"
+
+msgid "Category"
+msgstr "カテゴリ"
+
+msgid "Amount"
+msgstr "金額"
+
+msgid "received"
+msgstr "受取済み"
+
+msgid "pending"
+msgstr "保留中"
+
+msgid "paid"
+msgstr "支払済み"
+
+msgid "pay"
+msgstr "支払う"
+
+msgid "paused"
+msgstr "一時停止"
+
+msgid "edit"
+msgstr "編集"
+
+msgid "no recurring rules"
+msgstr "定期ルールはありません"
+
+msgid "settings / config"
+msgstr "設定 / 構成"
+
+msgid "Budget"
+msgstr "予算"
+
+msgid "Banks"
+msgstr "銀行"
+
+msgid "Categories"
+msgstr "カテゴリ"
+
+msgid "Users"
+msgstr "ユーザー"
+
+msgid "currency"
+msgstr "通貨"
+
+msgid "overall monthly cap"
+msgstr "全体の月間上限"
+
+msgid "cap"
+msgstr "上限"
+
+msgid "leave empty for no cap"
+msgstr "上限なしにするには空欄"
+
+msgid "Save Budget"
+msgstr "予算を保存"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// 支出がこの値を超えると、ダッシュボードは赤になります。"
+
+msgid "per-category caps"
+msgstr "カテゴリごとの上限"
+
+msgid "Cap"
+msgstr "上限"
+
+msgid "New Bank"
+msgstr "新しい銀行"
+
+msgid "New Category"
+msgstr "新しいカテゴリ"
+
+msgid "New Operator"
+msgstr "新しいオペレーター"
+
+msgid "transactions / ledger"
+msgstr "取引 / 台帳"
+
+msgid "// transaction ledger"
+msgstr "// 取引台帳"
+
+msgid "Add"
+msgstr "追加"
+
+msgid "Date"
+msgstr "日付"
+
+msgid "no entries logged"
+msgstr "記録された項目はありません"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "%(selected_month)s の取引はありません"
+
+msgid "e.g. groceries lidl"
+msgstr "例: lidl の食料品"

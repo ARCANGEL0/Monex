@@ -7,14 +7,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-msgid "tracker"
-msgstr "monitor"
+msgid "current passcode"
+msgstr "obecny kod"
 
-msgid "language"
-msgstr "język"
+msgid "new passcode"
+msgstr "nowy kod"
 
-msgid "toggle menu"
-msgstr "otwórz menu"
+msgid "confirm passcode"
+msgstr "potwierdź kod"
+
+msgid "incorrect current passcode"
+msgstr "nieprawidłowy obecny kod"
+
+msgid "passcodes do not match"
+msgstr "kody nie są zgodne"
+
+msgid "e.g. spotify"
+msgstr "np. spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "pozostaw puste, aby zachować obecny kod"
+
+msgid "superadmin only"
+msgstr "tylko superadministrator"
+
+msgid "budget updated."
+msgstr "budżet zaktualizowany."
 
 msgid "Finance Tracker"
 msgstr "Monitor Finansów"
@@ -46,68 +64,65 @@ msgstr "Rozłącz"
 msgid "developed by"
 msgstr "stworzone przez"
 
-msgid "dashboard"
-msgstr "panel"
+msgid "reset passcode"
+msgstr "zresetuj kod"
 
-msgid "dashboard / overview"
-msgstr "panel / przegląd"
+msgid "close"
+msgstr "zamknij"
 
-msgid "// system online"
-msgstr "// system online"
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// wpisz swój e-mail. wyślemy 6-cyfrowy kod weryfikacyjny."
 
-msgid "cycle"
-msgstr "cykl"
+msgid "email"
+msgstr "e-mail"
 
-msgid "monthly cap"
-msgstr "miesięczny limit"
+msgid "Cancel"
+msgstr "Anuluj"
 
-msgid "no spend cap set for this cycle"
-msgstr "brak limitu wydatków dla tego cyklu"
+msgid "Send Code"
+msgstr "Wyślij kod"
 
-msgid "configure budget"
-msgstr "skonfiguruj budżet"
+msgid "change passcode"
+msgstr "zmień kod"
 
-msgid "Income"
-msgstr "Przychody"
+msgid "confirm new passcode"
+msgstr "potwierdź nowy kod"
 
-msgid "credits in"
-msgstr "wpływy"
+msgid "// forgot your passcode?"
+msgstr "// nie pamiętasz kodu?"
 
-msgid "Expense"
-msgstr "Wydatek"
+msgid "Save"
+msgstr "Zapisz"
 
-msgid "debits out"
-msgstr "wypływy"
+msgid "auth"
+msgstr "logowanie"
 
-msgid "Net"
-msgstr "Netto"
+msgid "tracker"
+msgstr "monitor"
 
-msgid "balance delta"
-msgstr "zmiana salda"
+msgid "language"
+msgstr "język"
 
-msgid "Entries"
-msgstr "Wpisy"
+msgid "identify yourself"
+msgstr "zidentyfikuj się"
 
-msgid "events this cycle"
-msgstr "zdarzenia w tym cyklu"
+msgid "access denied. invalid credentials."
+msgstr "dostęp zabroniony. nieprawidłowe dane logowania."
 
-msgid "Recurring Queue"
-msgstr "Kolejka Cykliczna"
+msgid "operator id"
+msgstr "identyfikator operatora"
 
-msgid "payments left this cycle"
-msgstr "płatności pozostałe w tym cyklu"
+msgid "passcode"
+msgstr "kod"
 
-msgid "amount left"
-msgstr "pozostała kwota"
+msgid "keep me logged in"
+msgstr "pozostań zalogowany"
 
-msgid "all clear"
-msgstr "wszystko opłacone"
+msgid "Authenticate"
+msgstr "Zaloguj"
 
-msgid "expenses by category"
-msgstr "wydatki według kategorii"
-
-msgid "bank movement"
-msgstr "ruch bankowy"
+msgid "MonEx"
+msgstr "MonEx"
 
 msgid "analytics / patterns"
 msgstr "analityka / wzorce"
@@ -136,11 +151,26 @@ msgstr "Śr. / Dzień"
 msgid "daily burn rate"
 msgstr "dzienne tempo wydatków"
 
+msgid "Entries"
+msgstr "Wpisy"
+
 msgid "events logged"
 msgstr "zapisane zdarzenia"
 
+msgid "Recurring Queue"
+msgstr "Kolejka Cykliczna"
+
+msgid "payments left this cycle"
+msgstr "płatności pozostałe w tym cyklu"
+
 msgid "current cycle only"
 msgstr "tylko bieżący cykl"
+
+msgid "amount left"
+msgstr "pozostała kwota"
+
+msgid "all clear"
+msgstr "wszystko opłacone"
 
 msgid "no live queue"
 msgstr "brak aktywnej kolejki"
@@ -226,41 +256,68 @@ msgstr "kwota"
 msgid "no expense outflows this cycle"
 msgstr "brak wypływów wydatków w tym cyklu"
 
-msgid "transactions / ledger"
-msgstr "transakcje / rejestr"
+msgid "home"
+msgstr "start"
 
-msgid "// transaction ledger"
-msgstr "// rejestr transakcji"
+msgid "toggle menu"
+msgstr "otwórz menu"
 
-msgid "Add"
-msgstr "Dodaj"
+msgid "dashboard"
+msgstr "panel"
 
-msgid "Date"
-msgstr "Data"
+msgid "dashboard / overview"
+msgstr "panel / przegląd"
 
-msgid "Name"
-msgstr "Nazwa"
+msgid "// system online"
+msgstr "// system online"
 
-msgid "Kind"
-msgstr "Typ"
+msgid "cycle"
+msgstr "cykl"
 
-msgid "Bank"
-msgstr "Bank"
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "ponad budżet — wykorzystano %(pct)s%% limitu %(symbol)s%(amount)s"
 
-msgid "Category"
-msgstr "Kategoria"
+msgid "monthly cap"
+msgstr "miesięczny limit"
 
-msgid "Amount"
-msgstr "Kwota"
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// przekroczono o %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
 
-msgid "edit"
-msgstr "edytuj"
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// %(symbol)s%(remaining)s pozostało w cyklu"
 
-msgid "no entries logged"
-msgstr "brak zapisanych wpisów"
+msgid "no spend cap set for this cycle"
+msgstr "brak limitu wydatków dla tego cyklu"
 
-msgid "no transactions for %(selected_month)s"
-msgstr "brak transakcji dla %(selected_month)s"
+msgid "configure budget"
+msgstr "skonfiguruj budżet"
+
+msgid "Income"
+msgstr "Przychody"
+
+msgid "credits in"
+msgstr "wpływy"
+
+msgid "Expense"
+msgstr "Wydatek"
+
+msgid "debits out"
+msgstr "wypływy"
+
+msgid "Net"
+msgstr "Netto"
+
+msgid "balance delta"
+msgstr "zmiana salda"
+
+msgid "events this cycle"
+msgstr "zdarzenia w tym cyklu"
+
+msgid "expenses by category"
+msgstr "wydatki według kategorii"
+
+msgid "bank movement"
+msgstr "ruch bankowy"
 
 msgid "recurring / scheduled"
 msgstr "cykliczne / zaplanowane"
@@ -277,8 +334,14 @@ msgstr "Nowa reguła"
 msgid "To Pay"
 msgstr "Do zapłaty"
 
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "opłacono %(symbol)s%(amount)s do tej pory"
+
 msgid "To Receive"
 msgstr "Do otrzymania"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "otrzymano %(symbol)s%(amount)s do tej pory"
 
 msgid "Net Remaining"
 msgstr "Pozostałe netto"
@@ -291,6 +354,24 @@ msgstr "Pozostałe płatności"
 
 msgid "pending recurring expenses"
 msgstr "oczekujące wydatki cykliczne"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Kind"
+msgstr "Typ"
+
+msgid "Day"
+msgstr "Dzień"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "Category"
+msgstr "Kategoria"
+
+msgid "Amount"
+msgstr "Kwota"
 
 msgid "received"
 msgstr "otrzymano"
@@ -307,17 +388,11 @@ msgstr "zapłać"
 msgid "paused"
 msgstr "wstrzymane"
 
-msgid "Status"
-msgstr "Status"
-
-msgid "Day"
-msgstr "Dzień"
+msgid "edit"
+msgstr "edytuj"
 
 msgid "no recurring rules"
 msgstr "brak reguł cyklicznych"
-
-msgid "subscriptions, rent, salary — anything that hits monthly. add one to start tracking."
-msgstr "subskrypcje, czynsz, pensja — wszystko, co pojawia się co miesiąc. dodaj regułę, aby zacząć śledzić."
 
 msgid "settings / config"
 msgstr "ustawienia / konfiguracja"
@@ -367,77 +442,23 @@ msgstr "Nowa kategoria"
 msgid "New Operator"
 msgstr "Nowy operator"
 
-msgid "auth"
-msgstr "logowanie"
+msgid "transactions / ledger"
+msgstr "transakcje / rejestr"
 
-msgid "identify yourself"
-msgstr "zidentyfikuj się"
+msgid "// transaction ledger"
+msgstr "// rejestr transakcji"
 
-msgid "access denied. invalid credentials."
-msgstr "dostęp zabroniony. nieprawidłowe dane logowania."
+msgid "Add"
+msgstr "Dodaj"
 
-msgid "operator id"
-msgstr "identyfikator operatora"
+msgid "Date"
+msgstr "Data"
 
-msgid "passcode"
-msgstr "kod"
+msgid "no entries logged"
+msgstr "brak zapisanych wpisów"
 
-msgid "keep me logged in"
-msgstr "pozostań zalogowany"
+msgid "no transactions for %(selected_month)s"
+msgstr "brak transakcji dla %(selected_month)s"
 
-msgid "Authenticate"
-msgstr "Zaloguj"
-
-msgid "// forgot your passcode?"
-msgstr "// nie pamiętasz kodu?"
-
-msgid "reset passcode"
-msgstr "zresetuj kod"
-
-msgid "close"
-msgstr "zamknij"
-
-msgid "// enter your email. we'll send a 6-digit verification code."
-msgstr "// wpisz swój e-mail. wyślemy 6-cyfrowy kod weryfikacyjny."
-
-msgid "email"
-msgstr "e-mail"
-
-msgid "Cancel"
-msgstr "Anuluj"
-
-msgid "Send Code"
-msgstr "Wyślij kod"
-
-msgid "change passcode"
-msgstr "zmień kod"
-
-msgid "current passcode"
-msgstr "obecny kod"
-
-msgid "new passcode"
-msgstr "nowy kod"
-
-msgid "confirm new passcode"
-msgstr "potwierdź nowy kod"
-
-msgid "Save"
-msgstr "Zapisz"
-
-msgid "e.g. spotify"
-msgstr "np. spotify"
-
-msgid "leave blank to keep existing passcode"
-msgstr "pozostaw puste, aby zachować obecny kod"
-
-msgid "superadmin only"
-msgstr "tylko superadministrator"
-
-msgid "budget updated."
-msgstr "budżet zaktualizowany."
-
-msgid "incorrect current passcode"
-msgstr "nieprawidłowy obecny kod"
-
-msgid "passcodes do not match"
-msgstr "kody nie są zgodne"
+msgid "e.g. groceries lidl"
+msgstr "np. zakupy lidl"

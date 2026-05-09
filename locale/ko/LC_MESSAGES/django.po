@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "current passcode"
+msgstr "현재 패스코드"
+
+msgid "new passcode"
+msgstr "새 패스코드"
+
+msgid "confirm passcode"
+msgstr "패스코드 확인"
+
+msgid "incorrect current passcode"
+msgstr "현재 패스코드가 올바르지 않습니다"
+
+msgid "passcodes do not match"
+msgstr "패스코드가 일치하지 않습니다"
+
+msgid "e.g. spotify"
+msgstr "예: spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "기존 패스코드를 유지하려면 비워 두세요"
+
+msgid "superadmin only"
+msgstr "슈퍼관리자 전용"
+
+msgid "budget updated."
+msgstr "예산이 업데이트되었습니다."
+
+msgid "Finance Tracker"
+msgstr "재무 추적기"
+
+msgid "Dashboard"
+msgstr "대시보드"
+
+msgid "Transactions"
+msgstr "거래"
+
+msgid "Analytics"
+msgstr "분석"
+
+msgid "Recurring"
+msgstr "반복"
+
+msgid "Settings"
+msgstr "설정"
+
+msgid "operator"
+msgstr "운영자"
+
+msgid "Change Passcode"
+msgstr "패스코드 변경"
+
+msgid "Disconnect"
+msgstr "연결 해제"
+
+msgid "developed by"
+msgstr "개발"
+
+msgid "reset passcode"
+msgstr "패스코드 재설정"
+
+msgid "close"
+msgstr "닫기"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// 이메일을 입력하세요. 6자리 확인 코드를 보냅니다."
+
+msgid "email"
+msgstr "이메일"
+
+msgid "Cancel"
+msgstr "취소"
+
+msgid "Send Code"
+msgstr "코드 보내기"
+
+msgid "change passcode"
+msgstr "패스코드 변경"
+
+msgid "confirm new passcode"
+msgstr "새 패스코드 확인"
+
+msgid "// forgot your passcode?"
+msgstr "// 패스코드를 잊으셨나요?"
+
+msgid "Save"
+msgstr "저장"
+
+msgid "auth"
+msgstr "인증"
+
+msgid "tracker"
+msgstr "추적기"
+
+msgid "language"
+msgstr "언어"
+
+msgid "identify yourself"
+msgstr "본인 확인"
+
+msgid "access denied. invalid credentials."
+msgstr "접근이 거부되었습니다. 자격 증명이 올바르지 않습니다."
+
+msgid "operator id"
+msgstr "운영자 ID"
+
+msgid "passcode"
+msgstr "패스코드"
+
+msgid "keep me logged in"
+msgstr "로그인 상태 유지"
+
+msgid "Authenticate"
+msgstr "인증"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "분석 / 패턴"
+
+msgid "// pattern scan"
+msgstr "// 패턴 스캔"
+
+msgid "flow diagnostics"
+msgstr "흐름 진단"
+
+msgid "Total Expenses"
+msgstr "총 지출"
+
+msgid "outflow this cycle"
+msgstr "이 사이클의 유출"
+
+msgid "Total Income"
+msgstr "총 수입"
+
+msgid "inflow this cycle"
+msgstr "이 사이클의 유입"
+
+msgid "Avg / Day"
+msgstr "평균 / 일"
+
+msgid "daily burn rate"
+msgstr "일일 소진 속도"
+
+msgid "Entries"
+msgstr "항목 수"
+
+msgid "events logged"
+msgstr "기록된 이벤트"
+
+msgid "Recurring Queue"
+msgstr "반복 큐"
+
+msgid "payments left this cycle"
+msgstr "이 사이클에 남은 결제"
+
+msgid "current cycle only"
+msgstr "현재 사이클만"
+
+msgid "amount left"
+msgstr "남은 금액"
+
+msgid "all clear"
+msgstr "모두 완료"
+
+msgid "no live queue"
+msgstr "활성 큐 없음"
+
+msgid "savings rate"
+msgstr "저축률"
+
+msgid "of income retained"
+msgstr "유지된 수입 비율"
+
+msgid "weekly spend"
+msgstr "주간 지출"
+
+msgid "category evolution"
+msgstr "카테고리 변화"
+
+msgid "this vs last month"
+msgstr "이번 달 vs 지난달"
+
+msgid "category comparison"
+msgstr "카테고리 비교"
+
+msgid "category movers"
+msgstr "카테고리 변동"
+
+msgid "vs last month"
+msgstr "vs 지난달"
+
+msgid "spending velocity"
+msgstr "지출 속도"
+
+msgid "cumulative vs projected"
+msgstr "누적 vs 예상"
+
+msgid "12-month flow"
+msgstr "12개월 흐름"
+
+msgid "income vs expense"
+msgstr "수입 vs 지출"
+
+msgid "top spending days"
+msgstr "지출이 큰 날"
+
+msgid "no spending days"
+msgstr "지출한 날 없음"
+
+msgid "payment queue"
+msgstr "결제 큐"
+
+msgid "remaining this cycle"
+msgstr "이 사이클의 남은 항목"
+
+msgid "day"
+msgstr "일"
+
+msgid "total"
+msgstr "총계"
+
+msgid "all recurring payments cleared"
+msgstr "모든 반복 결제가 완료되었습니다"
+
+msgid "no live payment queue for this cycle"
+msgstr "이 사이클에 활성 결제 큐가 없습니다"
+
+msgid "largest outflows"
+msgstr "가장 큰 유출"
+
+msgid "selected cycle"
+msgstr "선택한 사이클"
+
+msgid "name"
+msgstr "이름"
+
+msgid "category"
+msgstr "카테고리"
+
+msgid "date"
+msgstr "날짜"
+
+msgid "amount"
+msgstr "금액"
+
+msgid "no expense outflows this cycle"
+msgstr "이 사이클에는 지출 유출이 없습니다"
+
+msgid "home"
+msgstr "홈"
+
+msgid "toggle menu"
+msgstr "메뉴 전환"
+
+msgid "dashboard"
+msgstr "대시보드"
+
+msgid "dashboard / overview"
+msgstr "대시보드 / 개요"
+
+msgid "// system online"
+msgstr "// 시스템 온라인"
+
+msgid "cycle"
+msgstr "사이클"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "예산 초과 — 한도 %(symbol)s%(amount)s 의 %(pct)s%% 사용됨"
+
+msgid "monthly cap"
+msgstr "월간 한도"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// 초과 금액 %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// 이 사이클에 %(symbol)s%(remaining)s 남음"
+
+msgid "no spend cap set for this cycle"
+msgstr "이 사이클에는 지출 한도가 설정되지 않았습니다"
+
+msgid "configure budget"
+msgstr "예산 설정"
+
+msgid "Income"
+msgstr "수입"
+
+msgid "credits in"
+msgstr "입금"
+
+msgid "Expense"
+msgstr "지출"
+
+msgid "debits out"
+msgstr "출금"
+
+msgid "Net"
+msgstr "순액"
+
+msgid "balance delta"
+msgstr "잔액 변화"
+
+msgid "events this cycle"
+msgstr "이 사이클의 이벤트"
+
+msgid "expenses by category"
+msgstr "카테고리별 지출"
+
+msgid "bank movement"
+msgstr "은행 움직임"
+
+msgid "recurring / scheduled"
+msgstr "반복 / 예약"
+
+msgid "// recurring queue"
+msgstr "// 반복 큐"
+
+msgid "scheduled flow"
+msgstr "예정 흐름"
+
+msgid "New Rule"
+msgstr "새 규칙"
+
+msgid "To Pay"
+msgstr "결제 예정"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "지금까지 %(symbol)s%(amount)s 결제됨"
+
+msgid "To Receive"
+msgstr "수령 예정"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "지금까지 %(symbol)s%(amount)s 수령됨"
+
+msgid "Net Remaining"
+msgstr "남은 순액"
+
+msgid "income − expense (pending)"
+msgstr "수입 − 지출(대기 중)"
+
+msgid "Payments Left"
+msgstr "남은 결제"
+
+msgid "pending recurring expenses"
+msgstr "대기 중인 반복 지출"
+
+msgid "Name"
+msgstr "이름"
+
+msgid "Kind"
+msgstr "종류"
+
+msgid "Day"
+msgstr "일"
+
+msgid "Bank"
+msgstr "은행"
+
+msgid "Category"
+msgstr "카테고리"
+
+msgid "Amount"
+msgstr "금액"
+
+msgid "received"
+msgstr "수령됨"
+
+msgid "pending"
+msgstr "대기 중"
+
+msgid "paid"
+msgstr "결제됨"
+
+msgid "pay"
+msgstr "결제"
+
+msgid "paused"
+msgstr "일시중지"
+
+msgid "edit"
+msgstr "수정"
+
+msgid "no recurring rules"
+msgstr "반복 규칙이 없습니다"
+
+msgid "settings / config"
+msgstr "설정 / 구성"
+
+msgid "Budget"
+msgstr "예산"
+
+msgid "Banks"
+msgstr "은행"
+
+msgid "Categories"
+msgstr "카테고리"
+
+msgid "Users"
+msgstr "사용자"
+
+msgid "currency"
+msgstr "통화"
+
+msgid "overall monthly cap"
+msgstr "전체 월간 한도"
+
+msgid "cap"
+msgstr "한도"
+
+msgid "leave empty for no cap"
+msgstr "한도 없으면 비워 두세요"
+
+msgid "Save Budget"
+msgstr "예산 저장"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// 지출이 이 값을 넘으면 대시보드가 빨간색으로 바뀝니다."
+
+msgid "per-category caps"
+msgstr "카테고리별 한도"
+
+msgid "Cap"
+msgstr "한도"
+
+msgid "New Bank"
+msgstr "새 은행"
+
+msgid "New Category"
+msgstr "새 카테고리"
+
+msgid "New Operator"
+msgstr "새 운영자"
+
+msgid "transactions / ledger"
+msgstr "거래 / 원장"
+
+msgid "// transaction ledger"
+msgstr "// 거래 원장"
+
+msgid "Add"
+msgstr "추가"
+
+msgid "Date"
+msgstr "날짜"
+
+msgid "no entries logged"
+msgstr "기록된 항목이 없습니다"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "%(selected_month)s 에 대한 거래가 없습니다"
+
+msgid "e.g. groceries lidl"
+msgstr "예: lidl 식료품"

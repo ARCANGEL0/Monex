@@ -13,7 +13,7 @@
     </p>
     <p class="dim" style="font-size: 0.72rem; margin-top: 14px;">// this cannot be undone.</p>
 
-    <form method="post" hx-post="{{ submit_url }}" hx-target="#modal-backdrop" hx-swap="outerHTML">
+    <form method="post" hx-post="{{ submit_url }}" hx-target="#content" hx-swap="innerHTML">
       {% csrf_token %}
       <div class="modal__actions">
         <button type="button" class="btn btn--ghost" @click="$root.remove()">Cancel</button>

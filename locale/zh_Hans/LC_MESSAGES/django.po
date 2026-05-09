@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: zh-hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "current passcode"
+msgstr "当前密码"
+
+msgid "new passcode"
+msgstr "新密码"
+
+msgid "confirm passcode"
+msgstr "确认密码"
+
+msgid "incorrect current passcode"
+msgstr "当前密码不正确"
+
+msgid "passcodes do not match"
+msgstr "密码不匹配"
+
+msgid "e.g. spotify"
+msgstr "例如：spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "留空以保留现有密码"
+
+msgid "superadmin only"
+msgstr "仅限超级管理员"
+
+msgid "budget updated."
+msgstr "预算已更新。"
+
+msgid "Finance Tracker"
+msgstr "财务追踪器"
+
+msgid "Dashboard"
+msgstr "仪表盘"
+
+msgid "Transactions"
+msgstr "交易"
+
+msgid "Analytics"
+msgstr "分析"
+
+msgid "Recurring"
+msgstr "周期项目"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "operator"
+msgstr "操作员"
+
+msgid "Change Passcode"
+msgstr "更改密码"
+
+msgid "Disconnect"
+msgstr "断开连接"
+
+msgid "developed by"
+msgstr "开发者"
+
+msgid "reset passcode"
+msgstr "重置密码"
+
+msgid "close"
+msgstr "关闭"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// 输入你的邮箱。我们会发送一个 6 位验证码。"
+
+msgid "email"
+msgstr "邮箱"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Send Code"
+msgstr "发送验证码"
+
+msgid "change passcode"
+msgstr "更改密码"
+
+msgid "confirm new passcode"
+msgstr "确认新密码"
+
+msgid "// forgot your passcode?"
+msgstr "// 忘记密码？"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "auth"
+msgstr "认证"
+
+msgid "tracker"
+msgstr "追踪器"
+
+msgid "language"
+msgstr "语言"
+
+msgid "identify yourself"
+msgstr "请进行身份验证"
+
+msgid "access denied. invalid credentials."
+msgstr "访问被拒绝。凭据无效。"
+
+msgid "operator id"
+msgstr "操作员 ID"
+
+msgid "passcode"
+msgstr "密码"
+
+msgid "keep me logged in"
+msgstr "保持登录"
+
+msgid "Authenticate"
+msgstr "认证"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "分析 / 模式"
+
+msgid "// pattern scan"
+msgstr "// 模式扫描"
+
+msgid "flow diagnostics"
+msgstr "流向诊断"
+
+msgid "Total Expenses"
+msgstr "总支出"
+
+msgid "outflow this cycle"
+msgstr "本周期流出"
+
+msgid "Total Income"
+msgstr "总收入"
+
+msgid "inflow this cycle"
+msgstr "本周期流入"
+
+msgid "Avg / Day"
+msgstr "日均"
+
+msgid "daily burn rate"
+msgstr "每日支出速率"
+
+msgid "Entries"
+msgstr "条目"
+
+msgid "events logged"
+msgstr "已记录事件"
+
+msgid "Recurring Queue"
+msgstr "周期队列"
+
+msgid "payments left this cycle"
+msgstr "本周期剩余付款"
+
+msgid "current cycle only"
+msgstr "仅当前周期"
+
+msgid "amount left"
+msgstr "剩余金额"
+
+msgid "all clear"
+msgstr "已全部完成"
+
+msgid "no live queue"
+msgstr "没有活动队列"
+
+msgid "savings rate"
+msgstr "储蓄率"
+
+msgid "of income retained"
+msgstr "保留收入占比"
+
+msgid "weekly spend"
+msgstr "每周支出"
+
+msgid "category evolution"
+msgstr "类别演变"
+
+msgid "this vs last month"
+msgstr "本月 vs 上月"
+
+msgid "category comparison"
+msgstr "类别对比"
+
+msgid "category movers"
+msgstr "类别变动"
+
+msgid "vs last month"
+msgstr "vs 上月"
+
+msgid "spending velocity"
+msgstr "支出速度"
+
+msgid "cumulative vs projected"
+msgstr "累计 vs 预测"
+
+msgid "12-month flow"
+msgstr "12 个月流向"
+
+msgid "income vs expense"
+msgstr "收入 vs 支出"
+
+msgid "top spending days"
+msgstr "支出最高日期"
+
+msgid "no spending days"
+msgstr "没有支出日期"
+
+msgid "payment queue"
+msgstr "付款队列"
+
+msgid "remaining this cycle"
+msgstr "本周期剩余"
+
+msgid "day"
+msgstr "天"
+
+msgid "total"
+msgstr "总计"
+
+msgid "all recurring payments cleared"
+msgstr "所有周期付款已结清"
+
+msgid "no live payment queue for this cycle"
+msgstr "本周期没有活动付款队列"
+
+msgid "largest outflows"
+msgstr "最大流出"
+
+msgid "selected cycle"
+msgstr "所选周期"
+
+msgid "name"
+msgstr "名称"
+
+msgid "category"
+msgstr "类别"
+
+msgid "date"
+msgstr "日期"
+
+msgid "amount"
+msgstr "金额"
+
+msgid "no expense outflows this cycle"
+msgstr "本周期没有支出流出"
+
+msgid "home"
+msgstr "首页"
+
+msgid "toggle menu"
+msgstr "切换菜单"
+
+msgid "dashboard"
+msgstr "仪表盘"
+
+msgid "dashboard / overview"
+msgstr "仪表盘 / 概览"
+
+msgid "// system online"
+msgstr "// 系统在线"
+
+msgid "cycle"
+msgstr "周期"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "超出预算 — 已消耗 %(symbol)s%(amount)s 上限的 %(pct)s%%"
+
+msgid "monthly cap"
+msgstr "月度上限"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// 超支 %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// 本周期剩余 %(symbol)s%(remaining)s"
+
+msgid "no spend cap set for this cycle"
+msgstr "本周期未设置支出上限"
+
+msgid "configure budget"
+msgstr "配置预算"
+
+msgid "Income"
+msgstr "收入"
+
+msgid "credits in"
+msgstr "收入流入"
+
+msgid "Expense"
+msgstr "支出"
+
+msgid "debits out"
+msgstr "支出流出"
+
+msgid "Net"
+msgstr "净额"
+
+msgid "balance delta"
+msgstr "余额变化"
+
+msgid "events this cycle"
+msgstr "本周期事件"
+
+msgid "expenses by category"
+msgstr "按类别支出"
+
+msgid "bank movement"
+msgstr "银行变动"
+
+msgid "recurring / scheduled"
+msgstr "周期 / 计划"
+
+msgid "// recurring queue"
+msgstr "// 周期队列"
+
+msgid "scheduled flow"
+msgstr "计划流向"
+
+msgid "New Rule"
+msgstr "新规则"
+
+msgid "To Pay"
+msgstr "待支付"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "目前已支付 %(symbol)s%(amount)s"
+
+msgid "To Receive"
+msgstr "待收取"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "目前已收取 %(symbol)s%(amount)s"
+
+msgid "Net Remaining"
+msgstr "剩余净额"
+
+msgid "income − expense (pending)"
+msgstr "收入 − 支出（待处理）"
+
+msgid "Payments Left"
+msgstr "剩余付款"
+
+msgid "pending recurring expenses"
+msgstr "待处理的周期支出"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Kind"
+msgstr "类型"
+
+msgid "Day"
+msgstr "日"
+
+msgid "Bank"
+msgstr "银行"
+
+msgid "Category"
+msgstr "类别"
+
+msgid "Amount"
+msgstr "金额"
+
+msgid "received"
+msgstr "已收取"
+
+msgid "pending"
+msgstr "待处理"
+
+msgid "paid"
+msgstr "已支付"
+
+msgid "pay"
+msgstr "支付"
+
+msgid "paused"
+msgstr "已暂停"
+
+msgid "edit"
+msgstr "编辑"
+
+msgid "no recurring rules"
+msgstr "没有周期规则"
+
+msgid "settings / config"
+msgstr "设置 / 配置"
+
+msgid "Budget"
+msgstr "预算"
+
+msgid "Banks"
+msgstr "银行"
+
+msgid "Categories"
+msgstr "类别"
+
+msgid "Users"
+msgstr "用户"
+
+msgid "currency"
+msgstr "货币"
+
+msgid "overall monthly cap"
+msgstr "整体月度上限"
+
+msgid "cap"
+msgstr "上限"
+
+msgid "leave empty for no cap"
+msgstr "留空表示无上限"
+
+msgid "Save Budget"
+msgstr "保存预算"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// 当支出超过此值时，仪表盘会变红。"
+
+msgid "per-category caps"
+msgstr "分类上限"
+
+msgid "Cap"
+msgstr "上限"
+
+msgid "New Bank"
+msgstr "新银行"
+
+msgid "New Category"
+msgstr "新类别"
+
+msgid "New Operator"
+msgstr "新操作员"
+
+msgid "transactions / ledger"
+msgstr "交易 / 台账"
+
+msgid "// transaction ledger"
+msgstr "// 交易台账"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "no entries logged"
+msgstr "没有已记录条目"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "%(selected_month)s 没有交易"
+
+msgid "e.g. groceries lidl"
+msgstr "例如：lidl 杂货"

@@ -28,19 +28,69 @@ CURRENCIES = {
     "SAR": "﷼",
 }
 
-LANGUAGE_OPTIONS = [
-    {"code": "en", "label": "English", "flag": "🇺🇸"},
-    {"code": "es", "label": "Español", "flag": "🇪🇸"},
-    {"code": "pt", "label": "Português", "flag": "🇵🇹"},
-    {"code": "pl", "label": "Polski", "flag": "🇵🇱"},
-]
+LANGUAGE_FLAGS = {
+    "en": "🇺🇸",
+    "es": "🇪🇸",
+    "pt": "🇵🇹",
+    "pl": "🇵🇱",
+    "fr": "🇫🇷",
+    "de": "🇩🇪",
+    "it": "🇮🇹",
+    "ro": "🇷🇴",
+    "ru": "🇷🇺",
+    "uk": "🇺🇦",
+    "nl": "🇳🇱",
+    "sv": "🇸🇪",
+    "nb": "🇳🇴",
+    "da": "🇩🇰",
+    "fi": "🇫🇮",
+    "cs": "🇨🇿",
+    "sk": "🇸🇰",
+    "hu": "🇭🇺",
+    "tr": "🇹🇷",
+    "el": "🇬🇷",
+    "bg": "🇧🇬",
+    "sr": "🇷🇸",
+    "hr": "🇭🇷",
+    "sl": "🇸🇮",
+    "et": "🇪🇪",
+    "lv": "🇱🇻",
+    "lt": "🇱🇹",
+    "ja": "🇯🇵",
+    "ko": "🇰🇷",
+    "zh-hans": "🇨🇳",
+    "zh-hant": "🇹🇼",
+    "ar": "🇸🇦",
+    "he": "🇮🇱",
+    "hi": "🇮🇳",
+    "bn": "🇧🇩",
+    "ur": "🇵🇰",
+    "fa": "🇮🇷",
+    "id": "🇮🇩",
+    "ms": "🇲🇾",
+    "th": "🇹🇭",
+    "vi": "🇻🇳",
+    "tl": "🇵🇭",
+    "sw": "🇰🇪",
+    "ca": "🏴",
+    "eu": "🏴",
+    "gl": "🏴",
+    "is": "🇮🇸",
+    "ga": "🇮🇪",
+    "mt": "🇲🇹",
+    "sq": "🇦🇱",
+}
 
 def currency_ctx(request):
     sym = request.session.get("currency", settings.CURRENCY_SYMBOL)
     code = request.session.get("currency_code", settings.CURRENCY_CODE)
+    language_options = [
+        {"code": lang_code, "label": lang_label, "flag": LANGUAGE_FLAGS.get(lang_code, "🌐")}
+        for lang_code, lang_label in settings.LANGUAGES
+    ]
     return {
         "currency_symbol": sym,
         "currency_code": code,
         "currencies": CURRENCIES,
-        "language_options": LANGUAGE_OPTIONS,
+        "language_options": language_options,
     }

@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonEx\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "current passcode"
+msgstr "رمز المرور الحالي"
+
+msgid "new passcode"
+msgstr "رمز مرور جديد"
+
+msgid "confirm passcode"
+msgstr "تأكيد رمز المرور"
+
+msgid "incorrect current passcode"
+msgstr "رمز المرور الحالي غير صحيح"
+
+msgid "passcodes do not match"
+msgstr "رموز المرور غير متطابقة"
+
+msgid "e.g. spotify"
+msgstr "مثال: spotify"
+
+msgid "leave blank to keep existing passcode"
+msgstr "اتركه فارغًا للاحتفاظ برمز المرور الحالي"
+
+msgid "superadmin only"
+msgstr "للمشرف الأعلى فقط"
+
+msgid "budget updated."
+msgstr "تم تحديث الميزانية."
+
+msgid "Finance Tracker"
+msgstr "متعقب مالي"
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Transactions"
+msgstr "المعاملات"
+
+msgid "Analytics"
+msgstr "التحليلات"
+
+msgid "Recurring"
+msgstr "المتكرر"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "operator"
+msgstr "المشغل"
+
+msgid "Change Passcode"
+msgstr "تغيير رمز المرور"
+
+msgid "Disconnect"
+msgstr "قطع الاتصال"
+
+msgid "developed by"
+msgstr "تم التطوير بواسطة"
+
+msgid "reset passcode"
+msgstr "إعادة تعيين رمز المرور"
+
+msgid "close"
+msgstr "إغلاق"
+
+msgid "// enter your email. we'll send a 6-digit verification code."
+msgstr "// أدخل بريدك الإلكتروني. سنرسل رمز تحقق مكوّنًا من 6 أرقام."
+
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Send Code"
+msgstr "إرسال الرمز"
+
+msgid "change passcode"
+msgstr "تغيير رمز المرور"
+
+msgid "confirm new passcode"
+msgstr "تأكيد رمز المرور الجديد"
+
+msgid "// forgot your passcode?"
+msgstr "// هل نسيت رمز المرور؟"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "auth"
+msgstr "المصادقة"
+
+msgid "tracker"
+msgstr "المتعقب"
+
+msgid "language"
+msgstr "اللغة"
+
+msgid "identify yourself"
+msgstr "عرّف نفسك"
+
+msgid "access denied. invalid credentials."
+msgstr "تم رفض الوصول. بيانات الاعتماد غير صالحة."
+
+msgid "operator id"
+msgstr "معرّف المشغل"
+
+msgid "passcode"
+msgstr "رمز المرور"
+
+msgid "keep me logged in"
+msgstr "أبقني مسجلاً"
+
+msgid "Authenticate"
+msgstr "مصادقة"
+
+msgid "MonEx"
+msgstr "MonEx"
+
+msgid "analytics / patterns"
+msgstr "التحليلات / الأنماط"
+
+msgid "// pattern scan"
+msgstr "// فحص الأنماط"
+
+msgid "flow diagnostics"
+msgstr "تشخيص التدفق"
+
+msgid "Total Expenses"
+msgstr "إجمالي المصروفات"
+
+msgid "outflow this cycle"
+msgstr "التدفق الخارج في هذه الدورة"
+
+msgid "Total Income"
+msgstr "إجمالي الدخل"
+
+msgid "inflow this cycle"
+msgstr "التدفق الداخل في هذه الدورة"
+
+msgid "Avg / Day"
+msgstr "المتوسط / اليوم"
+
+msgid "daily burn rate"
+msgstr "معدل الحرق اليومي"
+
+msgid "Entries"
+msgstr "المدخلات"
+
+msgid "events logged"
+msgstr "الأحداث المسجلة"
+
+msgid "Recurring Queue"
+msgstr "قائمة المتكرر"
+
+msgid "payments left this cycle"
+msgstr "المدفوعات المتبقية في هذه الدورة"
+
+msgid "current cycle only"
+msgstr "الدورة الحالية فقط"
+
+msgid "amount left"
+msgstr "المبلغ المتبقي"
+
+msgid "all clear"
+msgstr "تم كل شيء"
+
+msgid "no live queue"
+msgstr "لا توجد قائمة نشطة"
+
+msgid "savings rate"
+msgstr "معدل الادخار"
+
+msgid "of income retained"
+msgstr "من الدخل المحتفظ به"
+
+msgid "weekly spend"
+msgstr "الإنفاق الأسبوعي"
+
+msgid "category evolution"
+msgstr "تطور الفئات"
+
+msgid "this vs last month"
+msgstr "هذا الشهر مقابل الشهر الماضي"
+
+msgid "category comparison"
+msgstr "مقارنة الفئات"
+
+msgid "category movers"
+msgstr "تحركات الفئات"
+
+msgid "vs last month"
+msgstr "مقابل الشهر الماضي"
+
+msgid "spending velocity"
+msgstr "سرعة الإنفاق"
+
+msgid "cumulative vs projected"
+msgstr "التراكمي مقابل المتوقع"
+
+msgid "12-month flow"
+msgstr "تدفق 12 شهرًا"
+
+msgid "income vs expense"
+msgstr "الدخل مقابل المصروفات"
+
+msgid "top spending days"
+msgstr "أعلى أيام الإنفاق"
+
+msgid "no spending days"
+msgstr "لا توجد أيام إنفاق"
+
+msgid "payment queue"
+msgstr "قائمة المدفوعات"
+
+msgid "remaining this cycle"
+msgstr "المتبقي في هذه الدورة"
+
+msgid "day"
+msgstr "اليوم"
+
+msgid "total"
+msgstr "الإجمالي"
+
+msgid "all recurring payments cleared"
+msgstr "تمت تسوية كل المدفوعات المتكررة"
+
+msgid "no live payment queue for this cycle"
+msgstr "لا توجد قائمة مدفوعات نشطة لهذه الدورة"
+
+msgid "largest outflows"
+msgstr "أكبر التدفقات الخارجة"
+
+msgid "selected cycle"
+msgstr "الدورة المحددة"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "category"
+msgstr "الفئة"
+
+msgid "date"
+msgstr "التاريخ"
+
+msgid "amount"
+msgstr "المبلغ"
+
+msgid "no expense outflows this cycle"
+msgstr "لا توجد تدفقات خارجة للمصروفات في هذه الدورة"
+
+msgid "home"
+msgstr "الرئيسية"
+
+msgid "toggle menu"
+msgstr "تبديل القائمة"
+
+msgid "dashboard"
+msgstr "لوحة التحكم"
+
+msgid "dashboard / overview"
+msgstr "لوحة التحكم / نظرة عامة"
+
+msgid "// system online"
+msgstr "// النظام متصل"
+
+msgid "cycle"
+msgstr "الدورة"
+
+msgid "over budget — %(pct)s%% of %(symbol)s%(amount)s cap consumed"
+msgstr "فوق الميزانية — تم استهلاك %(pct)s%% من حد %(symbol)s%(amount)s"
+
+msgid "monthly cap"
+msgstr "الحد الشهري"
+
+msgid "// overspent by %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+msgstr "// تجاوز بمقدار %(symbol)s%(spent)s − %(symbol)s%(cap)s = "
+
+msgid "// %(symbol)s%(remaining)s remaining in cycle"
+msgstr "// المتبقي %(symbol)s%(remaining)s في هذه الدورة"
+
+msgid "no spend cap set for this cycle"
+msgstr "لا يوجد حد إنفاق مضبوط لهذه الدورة"
+
+msgid "configure budget"
+msgstr "ضبط الميزانية"
+
+msgid "Income"
+msgstr "الدخل"
+
+msgid "credits in"
+msgstr "ائتمانات داخلة"
+
+msgid "Expense"
+msgstr "المصروفات"
+
+msgid "debits out"
+msgstr "خصومات خارجة"
+
+msgid "Net"
+msgstr "الصافي"
+
+msgid "balance delta"
+msgstr "تغير الرصيد"
+
+msgid "events this cycle"
+msgstr "أحداث هذه الدورة"
+
+msgid "expenses by category"
+msgstr "المصروفات حسب الفئة"
+
+msgid "bank movement"
+msgstr "حركة البنوك"
+
+msgid "recurring / scheduled"
+msgstr "متكرر / مجدول"
+
+msgid "// recurring queue"
+msgstr "// قائمة المتكرر"
+
+msgid "scheduled flow"
+msgstr "التدفق المجدول"
+
+msgid "New Rule"
+msgstr "قاعدة جديدة"
+
+msgid "To Pay"
+msgstr "للدفع"
+
+msgid "paid %(symbol)s%(amount)s so far"
+msgstr "تم دفع %(symbol)s%(amount)s حتى الآن"
+
+msgid "To Receive"
+msgstr "للاستلام"
+
+msgid "received %(symbol)s%(amount)s so far"
+msgstr "تم استلام %(symbol)s%(amount)s حتى الآن"
+
+msgid "Net Remaining"
+msgstr "الصافي المتبقي"
+
+msgid "income − expense (pending)"
+msgstr "الدخل − المصروفات (قيد الانتظار)"
+
+msgid "Payments Left"
+msgstr "المدفوعات المتبقية"
+
+msgid "pending recurring expenses"
+msgstr "مصروفات متكررة قيد الانتظار"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "Kind"
+msgstr "النوع"
+
+msgid "Day"
+msgstr "اليوم"
+
+msgid "Bank"
+msgstr "البنك"
+
+msgid "Category"
+msgstr "الفئة"
+
+msgid "Amount"
+msgstr "المبلغ"
+
+msgid "received"
+msgstr "تم الاستلام"
+
+msgid "pending"
+msgstr "قيد الانتظار"
+
+msgid "paid"
+msgstr "تم الدفع"
+
+msgid "pay"
+msgstr "ادفع"
+
+msgid "paused"
+msgstr "متوقف"
+
+msgid "edit"
+msgstr "تعديل"
+
+msgid "no recurring rules"
+msgstr "لا توجد قواعد متكررة"
+
+msgid "settings / config"
+msgstr "الإعدادات / التهيئة"
+
+msgid "Budget"
+msgstr "الميزانية"
+
+msgid "Banks"
+msgstr "البنوك"
+
+msgid "Categories"
+msgstr "الفئات"
+
+msgid "Users"
+msgstr "المستخدمون"
+
+msgid "currency"
+msgstr "العملة"
+
+msgid "overall monthly cap"
+msgstr "الحد الشهري الإجمالي"
+
+msgid "cap"
+msgstr "الحد"
+
+msgid "leave empty for no cap"
+msgstr "اتركه فارغًا لعدم وجود حد"
+
+msgid "Save Budget"
+msgstr "حفظ الميزانية"
+
+msgid "// when expenses exceed this, the dashboard goes red."
+msgstr "// عندما تتجاوز المصروفات هذه القيمة، تتحول لوحة التحكم إلى اللون الأحمر."
+
+msgid "per-category caps"
+msgstr "حدود حسب الفئة"
+
+msgid "Cap"
+msgstr "الحد"
+
+msgid "New Bank"
+msgstr "بنك جديد"
+
+msgid "New Category"
+msgstr "فئة جديدة"
+
+msgid "New Operator"
+msgstr "مشغل جديد"
+
+msgid "transactions / ledger"
+msgstr "المعاملات / الدفتر"
+
+msgid "// transaction ledger"
+msgstr "// دفتر المعاملات"
+
+msgid "Add"
+msgstr "إضافة"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "no entries logged"
+msgstr "لا توجد مدخلات مسجلة"
+
+msgid "no transactions for %(selected_month)s"
+msgstr "لا توجد معاملات في %(selected_month)s"
+
+msgid "e.g. groceries lidl"
+msgstr "مثال: بقالة lidl"
