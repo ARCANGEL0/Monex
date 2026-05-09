@@ -5,55 +5,57 @@
 
 **<code>// M O N E X</code>**
 
-**personal expense tracker** · django 6 · sqlite · deus ex themed
+#### **personal expense tracker** · django 6 · sqlite · python  · alpinejs · deus ex HR inspired
 
-[![Stars](https://img.shields.io/github/stars/ARCANGEL0/Monex?style=for-the-badge&color=353535)]()
-[![Watchers](https://img.shields.io/github/watchers/ARCANGEL0/Monex?style=for-the-badge&color=353535)]()
-[![Forks](https://img.shields.io/github/forks/ARCANGEL0/Monex?style=for-the-badge&color=353535)]()
-[![Repo Views](https://komarev.com/ghpvc/?username=Monex&color=353535&style=for-the-badge&label=REPO%20VIEWS)]()
-[![AI](https://img.shields.io/badge/stack-Django_6-cyan.svg?style=for-the-badge)]()
-![Version](https://img.shields.io/badge/version-1.0-blue?style=for-the-badge&color=d4af37)
+[![Stars](https://img.shields.io/github/stars/ARCANGEL0/Monex?style=for-the-badge&color=0a0a0a&labelColor=0a0a0a&logo=github&logoColor=fad27a)]()
+[![Watchers](https://img.shields.io/github/watchers/ARCANGEL0/Monex?style=for-the-badge&color=0a0a0a&labelColor=0a0a0a&logo=eye&logoColor=fad27a)]()
+[![Forks](https://img.shields.io/github/forks/ARCANGEL0/Monex?style=for-the-badge&color=0a0a0a&labelColor=0a0a0a&logo=git&logoColor=fad27a)]()
+[![Django](https://img.shields.io/badge/DJANGO_6-fad27a?style=for-the-badge&labelColor=0a0a0a&logo=django&logoColor=0a0a0a)]()
 
-![GitHub issues](https://img.shields.io/github/issues/ARCANGEL0/Monex?style=for-the-badge&color=3f3972)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/ARCANGEL0/Monex?style=for-the-badge&color=3f3972)
-![GitHub last commit](https://img.shields.io/github/last-commit/ARCANGEL0/Monex?style=for-the-badge&color=3f3972)
+![GitHub issues](https://img.shields.io/github/issues/ARCANGEL0/Monex?style=for-the-badge&color=fad27a&labelColor=0a0a0a)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/ARCANGEL0/Monex?style=for-the-badge&color=fad27a&labelColor=0a0a0a)
+![GitHub last commit](https://img.shields.io/github/last-commit/ARCANGEL0/Monex?style=for-the-badge&color=fad27a&labelColor=0a0a0a)
 
 </div>
 
 ---
 
-<details>
-<summary><h2>⬡ 𝗔𝗯𝗼𝘂𝘁 𝗠𝗼𝗻𝗲𝘅</h2></summary>
+ ## ⬡ 𝗔𝗯𝗼𝘂𝘁 𝗠𝗼𝗻𝗲𝘅 
 
-Transaction tracker, budget manager, analytics dashboard — wrapped in a single-tenant django app with a gold-and-black deus ex: human revolution coat of paint. No saas, no javascript framework churn, just a server-rendered dashboard that works.
+MonEx is my personal finance management dashboard built with Django, featuring comprehensive transaction tracking, recurring bill management to track paid and unpaid subs, budget enforcement under a monthly cap, and detailed spending analytics. The interface provides monthly KPIs, savings metrics, category breakdowns, and trend analysis through interactive charts. Built with HTMX and Alpine.js for a responsive single-page dashboard without the overhead of a JavaScript framework. Supports SQLite and PostgreSQL, with CSV and PDF export capabilities aswell. UI heavily inspired in Deus Ex: HR.
 
-</details>
+ 
+ <h2>➤ Features </h2> 
 
-<details>
-<summary><h2>⟢ Features .ᐟ</h2></summary>
+- **Dashboard** 𐰷 Monthly kpi cards, savings rate gauge, recent transactions
+- **Transactions** 𐰷 Add / edit / delete, csv + pdf extract per month
+- **Analytics** 𐰷 Graphs with 12-month trends, day-of-week patterns, category evolution, top categories 
+- **Recurring** 𐰷 Bills and subscriptions with paid/received tracking, auto-materialize into transactions
+- **Budgets** 𐰷 Per-category and global monthly caps with over-budget warnings
+- **Auth** 𐰷 Single-tenant, passcode change, password reset, full midleware working (Needs SMTP setup with gmail)
 
-- **Dashboard** — Monthly kpi cards, savings rate gauge, recent transactions
-- **Transactions** — Add / edit / delete, csv + pdf extract per month
-- **Analytics** — 12-month trends, day-of-week patterns, category evolution, top categories
-- **Recurring** — Bills and subscriptions with paid/received tracking, auto-materialize into transactions
-- **Budgets** — Per-category and global monthly caps with over-budget warnings
-- **Auth** — Single-tenant, passcode change, password reset
 
-</details>
+<h2>🞛 Quick Start </h2>
 
-<details>
-<summary><h2>⟢ Quick Start .ᐟ</h2></summary>
+To start MonEx, run the initiator script to open the setup page and configure SMTP.
+
+```bash
+chmod +x first_run.sh
+./first_run.sh
+```
+
+It will ask you to setup a gmail and app password to be used as MonEx email middleware, after setting up the Email, you will create a master account to login and start using MonEx.
+
+For general server start, use `.start.sh` 
 
 ```bash
 chmod +x start.sh
-./start.sh
+# the script builds the venv, installs deps, runs migrations, seeds banks & categories, creates the admin user, and starts the UI.
+./start
 ```
 
-Opens at http://localhost:8000 — login `admin` / `admin`.
-
-`start.sh` builds the venv, installs deps, runs migrations, seeds banks & categories, creates the admin user, and starts gunicorn.
-
-### Manual setup
+<details> 
+  <summary> <h4> Manual setup</h4></summary>
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -64,24 +66,21 @@ python main.py setup_admin
 python main.py seed_defaults
 python main.py runserver
 ```
-
 </details>
 
-<details>
-<summary><h2>⟢ Stack .ᐟ</h2></summary>
 
+ <h2>⛛ Stack </h2> 
+ 
 | Layer | Choice |
 |---|---|
 | Backend | Python 3.12+, Django 6 |
 | Database | SQLite (swap to postgres via `DATABASE_URL`) |
-| Frontend | HTMX + Alpine.js — no spa |
-| Visuals | Chart.js, Three.js (hero), WeasyPrint (pdf) |
-| CSS | Handwritten, gold & black theme |
+| Frontend | HTMX + Alpine.js 𐰷 no spa |
+| Visuals | Chart.js, Three.js, WeasyPrint (for pdf) |
+| CSS | TailwindCSS-like & custom inspiration in Deus Ex. |
 
-</details>
-
-<details>
-<summary><h2>⟢ Env Vars .ᐟ</h2></summary>
+ 
+  <h2>ㅿ Env Vars  </h2> 
 
 | Var | Default | Note |
 |---|---|---|
@@ -92,26 +91,35 @@ python main.py runserver
 | `ADMIN_USERNAME` | `admin` | setup_admin seed |
 | `ADMIN_PASSWORD` | `admin` | setup_admin seed |
 
-</details>
+ 
 
-<details>
-<summary><h2>🗈 Project Note</h2></summary>
+ <h2>⍚ License</h2> 
 
+ <details>
+<summary><h4>MIT License</h4></summary>
+  
 ```
-I got tired of spreadsheets. Every month I'd open the same libreoffice file, 
-manually categorize my expenses, and try to figure out where all my money went. 
-There are plenty of expense trackers out there, but they're either SaaS with 
-a monthly fee, or they look like they belong in a 2008 ERP system.
+Copyright (c) 2026 MonEx - Finance Tracker
 
-So I built this. Django because it's boring and reliable. HTMX because I didn't 
-want to write a SPA for a single-user app. And the deus ex theme because if I'm 
-going to stare at a dashboard every day, it might as well look cool.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Gold on black. No tracking. No subscription. Just a django app that tracks 
-where your money goes.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
-
-</details>
+ </details>
 
 <div align="center">
 
@@ -126,6 +134,6 @@ where your money goes.
 <strong>Hack the world. Byte by byte.</strong> ⛛
 <br>
 
-**[[ꋧ]](#)**
+**[[ꋧ]](#personal-expense-tracker--django-6--sqlite--python---alpinejs--deus-ex-hr-inspired)**
 
 </div>
