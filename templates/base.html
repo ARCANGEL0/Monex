@@ -50,11 +50,6 @@
         </div>
       </header>
       <main id="content" class="content">
-        {% if messages %}
-          {% for m in messages %}
-            <div class="info-bar">{{ m }}</div>
-          {% endfor %}
-        {% endif %}
         {% block content %}{% endblock %}
       </main>
     </div>
@@ -69,9 +64,19 @@
       }
     }
   </script>
+  <div class="toast-container" id="toastContainer"></div>
   <script type="module" src="{% static 'js/hero3d.js' %}?v=deus-ex-mk-spinner-3"></script>
   <script src="{% static 'js/charts.js' %}"></script>
   <script>
+    {% if messages %}
+    var _msgs = [
+      {% for m in messages %}{tags: '{{ m.tags }}', text: '{{ m|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}
+    ];
+    _msgs.forEach(function(m) {
+      var t = m.tags.indexOf('success') !== -1 ? 'success' : m.tags.indexOf('error') !== -1 ? 'error' : m.tags.indexOf('warning') !== -1 ? 'warning' : 'info';
+      showToast(t, t.toUpperCase(), m.text);
+    });
+    {% endif %}
     const monexContent = document.getElementById('content');
     const monexLastPane = sessionStorage.getItem('monex:content-path');
     const monexSwitchingLanguage = sessionStorage.getItem('monex:language-switch') === '1';
@@ -91,12 +96,49 @@
         monexContent?.classList.remove('content--booting');
       }
     });
+    {% if messages %}
+      {% for m in messages %}
+        showToast({{ m.tags|default:'info'|json_script }}, '{{ m.level_tag|default:'INFO'|upper }}', '{{ m|escapejs }}');
+      {% endfor %}
+    {% endif %}
     document.getElementById('langSwitchForm')?.addEventListener('change', function() {
       sessionStorage.setItem('monex:language-switch', '1');
       this.submit();
     });
     document.addEventListener('focusin', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.add('focused') });
     document.addEventListener('focusout', e => { if (e.target.matches('.select')) e.target.closest('.select-wrap')?.classList.remove('focused') });
+
+    function showToast(type, title, message) {
+      const icons = { success: '✓', error: '✖', info: '◈', warning: '⚠' };
+      const c = document.getElementById('toastContainer');
+      if (!c) return;
+      const t = document.createElement('div');
+      t.className = 'toast toast-' + type;
+      t.innerHTML = '<div class="toast-icon">' + (icons[type] || '◈') + '</div><div class="toast-content"><div class="toast-title">' + title + '</div><div class="toast-message">' + message + '</div></div><button class="toast-close" onclick="this.parentElement.classList.add(\'removing\');setTimeout(()=>this.parentElement.remove(),400)">×</button><div class="toast-progress"></div>';
+      c.appendChild(t);
+      setTimeout(function() {
+        if (t && t.parentElement) { t.classList.add('removing'); setTimeout(function() { if (t.parentElement) t.remove(); }, 400); }
+      }, 4000);
+    }
+
+    document.addEventListener('htmx:afterRequest', function(e) {
+      if (e.detail.failed) {
+        if (e.detail.xhr.status === 400) {
+          showToast('error', 'BAD REQUEST', 'check your input and try again');
+        } else if (e.detail.xhr.status >= 500) {
+          showToast('error', 'SERVER ERROR', e.detail.xhr.status + ' — something broke');
+        }
+      } else if (e.detail.requestConfig.method !== 'get' && e.detail.requestConfig.method !== 'GET') {
+        var trigger = e.detail.xhr.getResponseHeader('HX-Trigger');
+        if (trigger) {
+          try { var data = JSON.parse(trigger); if (data.toast) { showToast(data.toast.type, data.toast.title, data.toast.message); } } catch(e2) {}
+        }
+      }
+    });
+
+    document.body.addEventListener('toast', function(e) {
+      showToast(e.detail.type, e.detail.title, e.detail.message);
+    });
   </script>
 </body>
 </html>

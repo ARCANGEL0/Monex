@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import LoginView as DjangoLoginView
@@ -30,6 +31,7 @@ class LoginView(DjangoLoginView):
             self.request.session.set_expiry(60 * 60 * 24 * 30)
         else:
             self.request.session.set_expiry(0)
+        messages.success(self.request, "CONNECTED")
         return response
 
 

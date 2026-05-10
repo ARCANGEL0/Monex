@@ -164,5 +164,23 @@
     <div class="auth__hint">{% trans "MonEx" %}</div>
   </form>
   <div id="modal-slot"></div>
+  <div class="toast-container" id="toastContainer"></div>
+  <script>
+    function showToast(type, title, message) {
+      const icons = { success: '✓', error: '✖', info: '◈', warning: '⚠' };
+      const c = document.getElementById('toastContainer');
+      if (!c) return;
+      const t = document.createElement('div');
+      t.className = 'toast toast-' + type;
+      t.innerHTML = '<div class="toast-icon">' + (icons[type] || '◈') + '</div><div class="toast-content"><div class="toast-title">' + title + '</div><div class="toast-message">' + message + '</div></div><button class="toast-close" onclick="this.parentElement.classList.add(\'removing\');setTimeout(()=>this.parentElement.remove(),400)">×</button><div class="toast-progress"></div>';
+      c.appendChild(t);
+      setTimeout(function() {
+        if (t && t.parentElement) { t.classList.add('removing'); setTimeout(function() { if (t.parentElement) t.remove(); }, 400); }
+      }, 4000);
+    }
+    document.body.addEventListener('toast', function(e) {
+      showToast(e.detail.type, e.detail.title, e.detail.message);
+    });
+  </script>
 </body>
 </html>

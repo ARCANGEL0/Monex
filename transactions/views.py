@@ -1,11 +1,11 @@
 import csv
+import json
 from datetime import date, datetime
 from decimal import Decimal
 
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
 from weasyprint import HTML
 
@@ -47,9 +47,11 @@ def _tx_ctx(request):
 def _refresh_tx(request):
     return render(request, "transactions/_fragment.html", _tx_ctx(request))
 
-def _refresh_with_target(request, target="#content"):
+def _refresh_with_target(request, target="#content", toast=None):
     response = render(request, "transactions/_fragment.html", _tx_ctx(request))
     response['HX-Retarget'] = target
+    if toast:
+        response['HX-Trigger'] = json.dumps({"toast": toast})
     return response
 
 
@@ -75,7 +77,7 @@ def transaction_create(request):
             tx = form.save(commit=False)
             tx.owner = request.user
             tx.save()
-            return _refresh_with_target(request, "#content")
+            return _refresh_with_target(request, "#content", {"type": "success", "title": "ENTRY LOGGED", "message": tx.name})
         return _tx_err(request, render(request, "transactions/_form_modal.html", {
             "form": form,
             "title": "log entry",
@@ -103,7 +105,7 @@ def transaction_edit(request, pk):
         form = TransactionForm(request.POST, instance=t)
         if form.is_valid():
             form.save()
-            return _refresh_with_target(request, "#content")
+            return _refresh_with_target(request, "#content", {"type": "success", "title": "ENTRY UPDATED", "message": t.name})
         return _tx_err(request, render(request, "transactions/_form_modal.html", {
             "form": form,
             "title": "edit entry",
@@ -185,8 +187,9 @@ def transaction_delete(request, pk):
         return redirect("core:root")
     t = get_object_or_404(_user_tx(request), pk=pk)
     if request.method == "POST":
+        name = t.name
         t.delete()
-        return _refresh_with_target(request, "#content")
+        return _refresh_with_target(request, "#content", {"type": "info", "title": "ENTRY DELETED", "message": name})
     return render(request, "transactions/_delete_modal.html", {
         "transaction": t,
         "submit_url": request.path,

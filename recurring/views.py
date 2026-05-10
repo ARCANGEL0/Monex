@@ -2,6 +2,8 @@ from datetime import date
 from decimal import Decimal
 
 from django.db.models import Exists, OuterRef, Sum
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
@@ -54,8 +56,11 @@ def _ctx(request):
     }
 
 
-def _refresh(request):
-    return render(request, "recurring/_fragment.html", _ctx(request))
+def _refresh(request, toast=None):
+    response = render(request, "recurring/_fragment.html", _ctx(request))
+    if toast:
+        response['HX-Trigger'] = json.dumps({"toast": toast})
+    return response
 
 
 def home(request):
@@ -74,7 +79,7 @@ def create(request):
             rule = form.save(commit=False)
             rule.owner = request.user
             rule.save()
-            return _refresh(request)
+            return _refresh(request, {"type": "success", "title": "RULE CREATED", "message": rule.name})
     else:
         form = RecurringForm(initial={"kind": RecurringTransaction.EXPENSE, "active": True, "day_of_month": 1})
 
@@ -95,7 +100,7 @@ def edit(request, pk):
         form = RecurringForm(request.POST, instance=rule)
         if form.is_valid():
             form.save()
-            return _refresh(request)
+            return _refresh(request, {"type": "success", "title": "RULE UPDATED", "message": rule.name})
     else:
         form = RecurringForm(instance=rule)
 
@@ -113,8 +118,9 @@ def delete(request, pk):
         return redirect("core:root")
     rule = get_object_or_404(_user_rules(request), pk=pk)
     if request.method == "POST":
+        name = rule.name
         rule.delete()
-        return _refresh(request)
+        return _refresh(request, {"type": "info", "title": "RULE DELETED", "message": name})
     return render(request, "recurring/_delete_modal.html", {
         "rule": rule,
         "submit_url": request.path,
@@ -159,4 +165,4 @@ def toggle_done(request, pk):
             rule.last_materialized_on = target
             rule.save(update_fields=["last_materialized_on"])
 
-    return _refresh(request)
+    return _refresh(request, {"type": "info", "title": "TOGGLED", "message": rule.name})

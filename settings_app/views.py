@@ -1,7 +1,6 @@
+import json
 from decimal import Decimal, InvalidOperation
 from functools import wraps
-
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
 from django.http import HttpResponse, HttpResponseForbidden
@@ -127,10 +126,10 @@ def budget_save(request):
                 owner=request.user, month=selected, category=cat, defaults={"cap": cap},
             )
 
-    messages.success(request, _("budget updated."))
-    # HTMX: swap just the budget tab back into #budget-tab
     ctx = _settings_ctx(request)
-    return render(request, "settings/_budget_tab.html", ctx)
+    response = render(request, "settings/_budget_tab.html", ctx)
+    response['HX-Trigger'] = json.dumps({"toast": {"type": "success", "title": "BUDGET SAVED", "message": str(selected.year) + "-" + str(selected.month)}})
+    return response
 
 
 def _parse_decimal(raw):
